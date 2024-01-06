@@ -1,0 +1,1 @@
+export const tablecolors = ["#f66d9b", "#9561e2", "#6574cd", "#3490dc", "#4dc0b5", "#22d3ee", "#84cc16", "#38c172", "#ffed4a", "#f6993f", "#e3342f", "#1aff06"]

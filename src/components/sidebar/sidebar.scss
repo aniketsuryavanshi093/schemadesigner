@@ -1,0 +1,21 @@
+.editbtn {
+  transition: 0.4s all ease;
+  opacity: 0;
+}
+
+.accordianheader {
+  &:hover .editbtn {
+    opacity: 1;
+  }
+}
+.editbtnovered {
+  opacity: 1;
+}
+
+.columninput {
+  border: 1px solid rgb(203 213 225 / 1);
+}
+
+.columnbottomwrapper {
+  border-color: rgb(203 213 225 / 1);
+}
