@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import CreateTableSidebar from './CreateTable';
-import { useAppSelector } from '@/redux/dashboardstore/hook';
+import { useAppDispatch, useAppSelector } from '@/redux/dashboardstore/hook';
 import {
     Accordion,
     AccordionHeader, AccordionBody
@@ -12,8 +12,7 @@ import AccordionSchemaBody from './AccordionSchemaBody';
 
 const SchemaSidebar = () => {
     const { tables } = useAppSelector((state) => state.schemareducer)
-    const [isOpen, sethandleOpen] = useState<number>(0)
-
+    const [isOpen, sethandleOpen] = useState<string>("")
     useEffect(() => {
         if (tables.length) {
             const temp = tables.find((elem) => elem.isEditing)
@@ -27,13 +26,15 @@ const SchemaSidebar = () => {
         <div className='w-[30%] schemawrapper'>
             <CreateTableSidebar tables={tables} />
             {
-                [...tables].reverse().map((_, index) => (
-                    <Accordion key={index} open={isOpen === _.tableIndex} icon={<Icon id={_.tableIndex!} open={isOpen} />}>
-                        <AccordionHeader onClick={() => sethandleOpen(isOpen === _.tableIndex ? 0 : _.tableIndex!)}>
-                            <AccordianTitle table={_} isOpen={isOpen} />
+                [...tables].reverse().map((table, index) => (
+                    <Accordion key={index} open={isOpen === table.tableIndex} className='directionchange' icon={<Icon id={table.tableIndex!} open={isOpen} />}>
+                        <AccordionHeader onClick={(e) => {
+                            sethandleOpen(isOpen === table.tableIndex! ? "" : table.tableIndex!);
+                        }}>
+                            <AccordianTitle table={table} isOpen={isOpen} />
                         </AccordionHeader>
                         <AccordionBody className="py-2 px-2 bg-white tablecolumnwrapper" >
-                            <AccordionSchemaBody table={_} />
+                            <AccordionSchemaBody table={table} />
                         </AccordionBody>
                     </Accordion>
                 ))
@@ -44,7 +45,7 @@ const SchemaSidebar = () => {
 
 export default SchemaSidebar
 
-const Icon: React.FC<{ id: number, open: number }> = ({ id, open }) => {
+const Icon: React.FC<{ id: string, open: string }> = ({ id, open }) => {
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"

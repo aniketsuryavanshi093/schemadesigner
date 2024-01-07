@@ -9,8 +9,9 @@ export interface columns {
 export interface Table {
     tableColor?: string
     isEditing: boolean
+    isTableOpen?: boolean
     tableName: string
     columns?: columns[]
     tableComment?: string
-    tableIndex?: number
+    tableIndex?: string
 }

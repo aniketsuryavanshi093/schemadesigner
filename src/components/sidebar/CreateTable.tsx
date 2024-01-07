@@ -1,21 +1,19 @@
-import { useAppDispatch } from '@/redux/dashboardstore/hook'
-import { addTable } from '@/redux/dashboardstore/reducer/schema/schema'
 import { Table } from '@/types'
+import { v1 as uuidv1 } from 'uuid';
 import { Button } from '@nextui-org/react'
 import React from 'react'
+import useTableHooks from '@/hooks/useTableHooks';
 
 const CreateTableSidebar: React.FC<{ tables: Table[] }> = ({ tables }) => {
-    const dispatch = useAppDispatch()
-
+    const { AddTablehelper } = useTableHooks()
     const handleCreateTable = (e: any) => {
         e.stopPropagation()
-        console.log(tables.length);
-        dispatch(addTable({
+        AddTablehelper({
             tableName: `table_${tables.length + 1}`,
             isEditing: true,
-            tableIndex: tables.length + 1,
+            tableIndex: uuidv1(),
             columns: [{ columnName: "id", columnDataType: "bigint", columnIndexType: 'none', columnIndex: 1 }]
-        }))
+        })
     }
     return (
         <div className='flex justify-between shadow-md items-center p-3 sidebartop relative'>

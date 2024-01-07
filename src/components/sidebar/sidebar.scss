@@ -19,3 +19,20 @@
 .columnbottomwrapper {
   border-color: rgb(203 213 225 / 1);
 }
+.directionchange {
+  direction: rtl;
+}
+
+.directionlefttoright {
+  direction: ltr;
+}
+
+.popoverwrapper {
+  opacity: 1;
+  background: #18181bdd;
+  right: -51%;
+  z-index: 9;
+  border-radius: 12px;
+  padding: 7px;
+  top: 8%;
+}
