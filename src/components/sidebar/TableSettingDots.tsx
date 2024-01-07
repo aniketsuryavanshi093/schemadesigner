@@ -12,15 +12,12 @@ const TableSettingDots: React.FC<{ table: Table, setPopoverOpen: (e: boolean) =>
     };
     useEffect(() => {
         const handleClickOutside = (event) => {
-
             if (popoverRef.current && !popoverRef.current.contains(event.target)) {
                 console.log("adwawwd");
                 setPopoverOpen(false);
             }
         };
-
         document.addEventListener('click', handleClickOutside);
-
         return () => {
             document.removeEventListener('click', handleClickOutside);
         };
