@@ -27,7 +27,7 @@ const TableSettingDots: React.FC<{ table: Table, setPopoverOpen: (e: boolean) =>
 
     return (
         <div ref={popoverRef} className={`w-48 py-2 absolute popoverwrapper `}>
-            <p className="text-[#94a3b8] uppercase text-md">Table Actions </p>
+            <p className="text-[#94a3b8] capitalize text-[14px]">Table Actions </p>
             <Button className="w-full text-white rounded-md" variant="light">
                 <p className="w-full text-left"> Add Comment</p>
             </Button>

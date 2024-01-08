@@ -11,11 +11,32 @@
 .editbtnovered {
   opacity: 1;
 }
+.colorindicator{
+  left: 0;
+  height: 40px;
+  width: 10px;
+}
 
+.checkedcolor{
+  color: white;
+  &::before{
+      background: #00000075;
+      border-radius: 50%;
+      padding: 3px 4px;
+  }
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%)   translateY(10px);;
+}
 .columninput {
   border: 1px solid rgb(203 213 225 / 1);
 }
-
+.sidebarschemawrtapper{
+  overflow: scroll;
+  max-height: calc(100vh - 64px);
+}
 .columnbottomwrapper {
   border-color: rgb(203 213 225 / 1);
 }

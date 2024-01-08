@@ -1,9 +1,7 @@
 import { Table } from '@/types'
 import { Button } from '@nextui-org/react'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import ThreeDotBtn from './ThreeDotBtn'
 import useTableHooks from '@/hooks/useTableHooks'
-import useColumnsHook from '@/hooks/useColumnsHook'
 import TableSettingDots from './TableSettingDots'
 
 const AccordianTitle: React.FC<{ table: Table, isOpen: string }> = ({ table, isOpen }) => {
@@ -43,14 +41,12 @@ const AccordianTitle: React.FC<{ table: Table, isOpen: string }> = ({ table, isO
         setEditTablehelper(table)
     }, [table, setEditTablehelper])
 
-
-
     return (
         <div className='flex relative justify-between gap-2 w-full directionlefttoright accordianheader items-center mx-2'>
             {
                 table?.isEditing ? (
                     <input type="text" ref={inputref} onKeyDown={handleKeyPress}
-                        onClick={handleInputClick} className='w-4/5 ps-3 z-[9999999] h-[2.5rem]' onChange={(e) => {
+                        onClick={handleInputClick} className='w-4/5 ps-3 z-[100] h-[1.8rem] text-base ' onChange={(e) => {
                             e.preventDefault()
                             setTableTitle(e.target.value)
                         }} value={TableTitle} />
@@ -59,7 +55,7 @@ const AccordianTitle: React.FC<{ table: Table, isOpen: string }> = ({ table, isO
             <div className='flex justify-between items-center gap-2'>
                 {
                     table?.isEditing ? (
-                        <Button className='w-6 gap-0 p-0 min-w-10' onClick={(e) => {
+                        <Button size='sm' color='success' variant='bordered' className='w-5 p-[13px] h-6 gap-0  min-w-8' onClick={(e) => {
                             if (table.isEditing) {
                                 handleSaveTable(e)
                                 e.preventDefault()
@@ -71,12 +67,12 @@ const AccordianTitle: React.FC<{ table: Table, isOpen: string }> = ({ table, isO
                     )
                         :
                         (
-                            <Button className={` ${isOpen === table.tableIndex && "editbtnovered"} w-6 gap-0 p-0 min-w-10 editbtn`} onClick={handleEdit} >
+                            <Button size='sm' className={` ${isOpen === table.tableIndex && "editbtnovered"} w-5 h-6 min-w-8 gap-0  p-[13px]  editbtn`} onClick={handleEdit} >
                                 <i className="fa-solid fa-pen"></i>
                             </Button>
                         )
                 }
-                <Button variant="flat" onClick={() => setPopoverOpen(!PopoverOpen)} className="w-6 gap-0 p-0 min-w-10 ">
+                <Button size='sm' variant="flat" onClick={() => setPopoverOpen(!PopoverOpen)} className="w-5 h-6 gap-0 p-[13px] min-w-8 ">
                     <i className="fa-solid fa-ellipsis-vertical"></i>
                 </Button>
                 {

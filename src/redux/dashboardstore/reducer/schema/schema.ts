@@ -3,9 +3,11 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 type initialTypes = {
   tables: Table[],
+  usedTableColors: string[]
 }
 const initialState: initialTypes = {
   tables: [],
+  usedTableColors: [],
 };
 const schemaSlice = createSlice({
   name: 'tableSchema',
@@ -42,10 +44,13 @@ const schemaSlice = createSlice({
     },
     setIsEditing: (state, action: PayloadAction<{ tableindex: string, isEdit: boolean }>) => {
       state.tables = state.tables.map((elem) => elem.tableIndex === action.payload.tableindex ? { ...elem, isEditing: action.payload.isEdit } : elem)
-    }
+    },
+    setUsedColor: (state, action: PayloadAction<string>) => {
+   state.usedTableColors.push(action.payload)
+    },
   },
 });
-export const { saveColumn, setIsEditing, deleteTable, addTable, updateSaveTable, addColumnsAction, setEditTable } =
+export const { saveColumn, setUsedColor, setIsEditing, deleteTable, addTable, updateSaveTable, addColumnsAction, setEditTable } =
   schemaSlice.actions;
 
 export const scheamReducer = schemaSlice.reducer;

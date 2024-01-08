@@ -8,7 +8,7 @@ const PopoverComponent: React.FC<{ placement: string, isOpen?: boolean, onOpenCh
             <PopoverTrigger>
                 {trigger}
             </PopoverTrigger>
-            <PopoverContent className='bg-[#18181bdd]'>
+            <PopoverContent className='bg-[#18181bdd] '>
                 {content}
             </PopoverContent>
         </Popover>

@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import CreateTableSidebar from './CreateTable';
-import { useAppDispatch, useAppSelector } from '@/redux/dashboardstore/hook';
+import {  useAppSelector } from '@/redux/dashboardstore/hook';
 import {
     Accordion,
     AccordionHeader, AccordionBody
@@ -25,10 +25,11 @@ const SchemaSidebar = () => {
     return (
         <div className='w-[30%] schemawrapper'>
             <CreateTableSidebar tables={tables} />
-            {
+            <div className='sidebarschemawrtapper'>
+                {
                 [...tables].reverse().map((table, index) => (
-                    <Accordion key={index} open={isOpen === table.tableIndex} className='directionchange' icon={<Icon id={table.tableIndex!} open={isOpen} />}>
-                        <AccordionHeader onClick={(e) => {
+                    <Accordion key={index} open={isOpen === table.tableIndex} style={{borderColor: table.tableColor}} className={`directionchange border-l-8 relative`} icon={<Icon id={table.tableIndex!} open={isOpen} />}>
+                        <AccordionHeader className='pt-[10px] pb-[10px]' onClick={(e) => {
                             sethandleOpen(isOpen === table.tableIndex! ? "" : table.tableIndex!);
                         }}>
                             <AccordianTitle table={table} isOpen={isOpen} />
@@ -39,6 +40,8 @@ const SchemaSidebar = () => {
                     </Accordion>
                 ))
             }
+            </div>
+            
         </div >
     )
 }
