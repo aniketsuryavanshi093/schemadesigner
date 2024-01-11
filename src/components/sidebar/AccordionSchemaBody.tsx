@@ -85,6 +85,7 @@ export default AccordionSchemaBody
 const AccordionBodyColumn: React.FC<{ table: Table, column: columns, isFocused: number, tableIndex: string }> = ({ table, column, isFocused, tableIndex }) => {
     const inputref = useRef<React.LegacyRef<HTMLInputElement> | undefined>()
     const [ColumnTitle, setColumnTitle] = useState<string>("")
+    const [open, setopen] = useState(false)
     const { handleSaveColumnTitle } = useColumnsHook()
     useEffect(() => {
         setColumnTitle(column.columnName)
@@ -102,7 +103,7 @@ const AccordionBodyColumn: React.FC<{ table: Table, column: columns, isFocused: 
     return (
         <div className='flex flex-[3] mb-2 items-center justify-center gap-2 '>
             <input ref={inputref} onBlur={handleSavecolumntitle} className='ps-2 columninput w-[60%] h-[1.7rem] rounded-md focus:outline-none focus:ring focus:ring-amber-700 ' value={ColumnTitle} onChange={(e) => setColumnTitle(e.target.value)} />
-            <PopoverComponent classname="px-2 py-2" placement='right' content={<ColumnTypeSelector/>} trigger={
+            <PopoverComponent popoverOpen={open} setPopover={setopen} classname="px-2 py-2 columtypewrapper" placement='right-end' content={<ColumnTypeSelector close = {()=>setopen(false)}/>} trigger={
                 <input className='ps-2 columninput w-[40%]  rounded-md focus:outline-none  h-[1.7rem] focus:ring focus:ring-amber-700' value={column.columnDataType} onChange={(e) => setColumnTitle(e.target.value)} />
             }>
             </PopoverComponent>

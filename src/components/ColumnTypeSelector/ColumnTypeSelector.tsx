@@ -1,17 +1,23 @@
-import React, { useState } from 'react'
-import Search from '../Search/Search'
-import CustomSelector from './CustomSelector'
+import React, { useState } from "react";
+import CustomSelector from "./CustomSelector";
+import { columnTypeoptions } from "@/Constants";
+import "./selector.scss";
 
-const ColumnTypeSelector = () => {
-    const [ColumnType, setColumnType] = useState("")
+const ColumnTypeSelector = ({ close }) => {
+  const [ColumnType, setColumnType] = useState("");
+    
   return (
-    <CustomSelector 
-    selectedvalue={ColumnType}
-    defaultValue={}
-    onDropdownSelect={(value) => setColumnType(value)}
-    options={}
+    <CustomSelector
+      searchable
+      selectedvalue={ColumnType}
+      defaultValue="bigint"
+      onDropdownSelect={(value) => {
+        setColumnType(value);
+        close();
+      }}
+      options={columnTypeoptions}
     />
-  )
-}
+  );
+};
 
-export default ColumnTypeSelector
+export default ColumnTypeSelector;

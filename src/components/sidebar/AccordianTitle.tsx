@@ -6,7 +6,6 @@ import TableSettingDots from './TableSettingDots'
 
 const AccordianTitle: React.FC<{ table: Table, isOpen: string }> = ({ table, isOpen }) => {
     const [TableTitle, setTableTitle] = useState<string>(table.tableName)
-    const [PopoverOpen, setPopoverOpen] = useState(false)
     const { setEditTablehelper, updateSaveTablehelper } = useTableHooks()
     const handleSaveTable = (e: any) => {
         e?.preventDefault()
@@ -55,7 +54,7 @@ const AccordianTitle: React.FC<{ table: Table, isOpen: string }> = ({ table, isO
             <div className='flex justify-between items-center gap-2'>
                 {
                     table?.isEditing ? (
-                        <Button size='sm' color='success' variant='bordered' className='w-5 p-[13px] h-6 gap-0  min-w-8' onClick={(e) => {
+                        <Button size='sm' color='success' variant='bordered' style={{padding:" 15px 11px "}} className='w-5  h-6 gap-0  min-w-8' onClick={(e) => {
                             if (table.isEditing) {
                                 handleSaveTable(e)
                                 e.preventDefault()
@@ -67,7 +66,7 @@ const AccordianTitle: React.FC<{ table: Table, isOpen: string }> = ({ table, isO
                     )
                         :
                         (
-                            <Button size='sm' className={` ${isOpen === table.tableIndex && "editbtnovered"} w-5 h-6 min-w-8 gap-0  p-[13px]  editbtn`} onClick={handleEdit} >
+                            <Button size='sm' style={{padding:" 15px 11px "}} className={` ${isOpen === table.tableIndex && "editbtnovered"} w-5 h-6 min-w-8 gap-0   editbtn`} onClick={handleEdit} >
                                 <i className="fa-solid fa-pen"></i>
                             </Button>
                         )

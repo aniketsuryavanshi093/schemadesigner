@@ -24,8 +24,9 @@ const TableSettingDots: React.FC<{
       <PopoverHandler>
         <Button
           size="sm"
+          style={{padding:" 15px 11px "}}
           variant="flat"
-          className="w-5 h-6 gap-0 p-[13px] min-w-8 "
+          className="w-5 h-6 gap-0 min-w-8 "
         >
           <i className="fa-solid fa-ellipsis-vertical"></i>
         </Button>

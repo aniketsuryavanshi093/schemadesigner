@@ -55,7 +55,7 @@ const CustomSelector: React.FC<{
     }
   };
   return (
-    <>
+    <div className="max-h-[240px] overflow-y-scroll">
       {searchable && (
         <Search
           searchiconclass="dropdownsearchicon"
@@ -72,23 +72,23 @@ const CustomSelector: React.FC<{
           onClick={() => {
             value !== selectedValue && onSelect(value, label, color);
           }}
-          className="wrapper text_primary justify-content-between"
+          className=" text-[#cbd5e1] flex items-center my-2 w-full justify-between text_primary "
         >
           {value === selectedValue ? (
             <>
-              <div className="wrapper justify-start">
-                <p className="check-selected mx-2">{label}</p>
+              <div className="fle items-center justify-start">
+                <p className="check-selected mx-4">{label}</p>
               </div>
-              <i className="fa-solid check-selected fa-check ms-2" />
+              <i className="fa-solid check-selected fa-check mr-8" />
             </>
           ) : (
-            <div className="wrapper justify-start">
-              <p className="check-selected mx-2">{label}</p>
+            <div className="fle items-center justify-start">
+              <p className="check-selected mx-4">{label}</p>
             </div>
           )}
         </div>
       ))}
-    </>
+    </div>
   );
 };
 
