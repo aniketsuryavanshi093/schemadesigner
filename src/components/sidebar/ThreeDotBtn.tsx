@@ -16,6 +16,7 @@ const ThreeDotBtn: React.FC<{ table: Table, isOutsidebtn?: boolean }> = ({ table
 
     return (
         <PopoverComponent
+        classname="px-2 py-0"
             isOpen={isOpen}
             onOpenChange={(open: boolean) => setIsOpen(open)}
             trigger={

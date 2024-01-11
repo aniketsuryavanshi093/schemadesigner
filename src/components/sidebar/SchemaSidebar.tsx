@@ -29,7 +29,7 @@ const SchemaSidebar = () => {
                 {
                 [...tables].reverse().map((table, index) => (
                     <Accordion key={index} open={isOpen === table.tableIndex} style={{borderColor: table.tableColor}} className={`directionchange border-l-8 relative`} icon={<Icon id={table.tableIndex!} open={isOpen} />}>
-                        <AccordionHeader className='pt-[10px] pb-[10px]' onClick={(e) => {
+                        <AccordionHeader className='pt-[8px] pb-[8px]' onClick={(e) => {
                             sethandleOpen(isOpen === table.tableIndex! ? "" : table.tableIndex!);
                         }}>
                             <AccordianTitle table={table} isOpen={isOpen} />

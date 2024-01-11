@@ -5,12 +5,12 @@ import React from 'react'
 import useTableHooks from '@/hooks/useTableHooks';
 import { useAppDispatch, useAppSelector } from '@/redux/dashboardstore/hook';
 import { getRandomColor } from '@/utils';
-import { setUsedColor } from '@/redux/dashboardstore/reducer/schema/schema';
+import { setUsedColor } from '@/redux/dashboardstore/reducer/colors/colorSlice';
 
 const CreateTableSidebar: React.FC<{ tables: Table[] }> = ({ tables }) => {
     const { AddTablehelper } = useTableHooks()
     const dispatch = useAppDispatch()
-    const {usedTableColors} = useAppSelector(state=>state.schemareducer)
+    const {usedTableColors} = useAppSelector(state=>state.colorreducer)
     const handleCreateTable = (e: any) => {
         e.stopPropagation()
         const color = getRandomColor(usedTableColors)

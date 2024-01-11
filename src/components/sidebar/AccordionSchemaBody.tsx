@@ -3,33 +3,34 @@
 import { tablecolors } from '@/Constants'
 import { Table, columns } from '@/types'
 import { Button, } from '@nextui-org/react'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, {  useEffect, useRef, useState } from 'react'
 import PopoverComponent from '../Popover/PopoverComponent'
 import ThreeDotBtn from './ThreeDotBtn'
 import useColumnsHook from '@/hooks/useColumnsHook'
 import { useAppDispatch, useAppSelector } from '@/redux/dashboardstore/hook'
 import useTableHooks from '@/hooks/useTableHooks'
+import { setUpdatedColors } from '@/redux/dashboardstore/reducer/colors/colorSlice'
+import ColumnTypeSelector from '../ColumnTypeSelector/ColumnTypeSelector'
 
 const AccordionSchemaBody: React.FC<{ table: Table }> = ({ table }) => {
     const { addColumns } = useColumnsHook()
     const {updateSaveTablehelper} =useTableHooks()
-    const {usedTableColors} = useAppSelector(state=>state.schemareducer)
-    const isColorContain = usedTableColors.find((elem)=> elem === table.tableColor)
+    const dispatch = useAppDispatch()
     const handleColorChange = (elm:string)=>{
         if(elm === table.tableColor){
             return
         }
-        // dispatch(setTableColorChange({...table , tablecolors}))
         updateSaveTablehelper({
             ...table , tableColor: elm
         })
+        dispatch(setUpdatedColors({currentcolor: table.tableColor! , newcolor: elm}))
     }
     const content = (
         <div className="py-2 w-[180px]  h-[auto] gap-2 justify-center items-center flex flex-wrap">
             {
                 tablecolors.map((elm) => (
-                    <div onClick={ ()=> handleColorChange(elm)} key={elm} className={`w-9 relative cursor-pointer ${elm === isColorContain && "opacity-90"} cursor-pointer h-9 rounded-lg bg-[${elm}] `} style={{ background: elm }} >
-                        {elm === isColorContain && (
+                    <div onClick={ ()=> handleColorChange(elm)} key={elm} className={`w-9 relative cursor-pointer ${elm === table.tableColor && "opacity-90"} cursor-pointer h-9 rounded-lg bg-[${elm}] `} style={{ background: elm }} >
+                        {elm === table.tableColor && (
                             <i className="fa-solid text-center fa-check absolute checkedcolor"></i>
                         )}
                     </div>
@@ -63,7 +64,7 @@ const AccordionSchemaBody: React.FC<{ table: Table }> = ({ table }) => {
             }
             <div className='border-t-small columnbottomwrapper w-full flex items-center px-2 pt-[10px]  justify-between'>
                 <div className='flex items-center justify-center gap-2'>
-                    <PopoverComponent placement='bottom-start' content={content} trigger={(
+                    <PopoverComponent classname="px-2 py-2" placement='bottom-start' content={content} trigger={(
                         <Button variant='ghost' className='w-6 gap-0 p-0 min-w-10 '  >
                             <i className="fa-solid fa-palette"></i>
                         </Button>
@@ -84,6 +85,7 @@ export default AccordionSchemaBody
 const AccordionBodyColumn: React.FC<{ table: Table, column: columns, isFocused: number, tableIndex: string }> = ({ table, column, isFocused, tableIndex }) => {
     const inputref = useRef<React.LegacyRef<HTMLInputElement> | undefined>()
     const [ColumnTitle, setColumnTitle] = useState<string>("")
+    const [open, setopen] = useState(false)
     const { handleSaveColumnTitle } = useColumnsHook()
     useEffect(() => {
         setColumnTitle(column.columnName)
@@ -101,7 +103,7 @@ const AccordionBodyColumn: React.FC<{ table: Table, column: columns, isFocused: 
     return (
         <div className='flex flex-[3] mb-2 items-center justify-center gap-2 '>
             <input ref={inputref} onBlur={handleSavecolumntitle} className='ps-2 columninput w-[60%] h-[1.7rem] rounded-md focus:outline-none focus:ring focus:ring-amber-700 ' value={ColumnTitle} onChange={(e) => setColumnTitle(e.target.value)} />
-            <PopoverComponent placement='right' content={<p>hello</p>} trigger={
+            <PopoverComponent popoverOpen={open} setPopover={setopen} classname="px-2 py-2 columtypewrapper" placement='right-end' content={<ColumnTypeSelector close = {()=>setopen(false)}/>} trigger={
                 <input className='ps-2 columninput w-[40%]  rounded-md focus:outline-none  h-[1.7rem] focus:ring focus:ring-amber-700' value={column.columnDataType} onChange={(e) => setColumnTitle(e.target.value)} />
             }>
             </PopoverComponent>
