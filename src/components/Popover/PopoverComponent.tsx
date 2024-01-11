@@ -1,14 +1,18 @@
 import React from 'react'
-import { Popover, PopoverContent, PopoverTrigger, } from '@nextui-org/react'
+import {
+    Popover,
+    PopoverContent,
+    PopoverHandler,
+  } from "@material-tailwind/react";
 
-const PopoverComponent: React.FC<{ placement: string, isOpen?: boolean, onOpenChange?: (e: boolean) => void, content: React.JSX.Element, trigger: React.JSX.Element }> = ({ onOpenChange, isOpen,
-    placement, content, trigger, }) => {
+const PopoverComponent: React.FC<{ placement: string,  classname: string, content: React.JSX.Element, trigger: React.JSX.Element }> = ({ 
+    placement, content, trigger,classname }) => {
     return (
-        <Popover isOpen={isOpen} onOpenChange={onOpenChange} placement={placement} showArrow={true}>
-            <PopoverTrigger>
+        <Popover  placement={placement} showArrow={true}>
+            <PopoverHandler>
                 {trigger}
-            </PopoverTrigger>
-            <PopoverContent className='bg-[#18181bdd] '>
+            </PopoverHandler>
+            <PopoverContent className={`bg-[#18181bdd] ${classname}  `}>
                 {content}
             </PopoverContent>
         </Popover>

@@ -72,14 +72,9 @@ const AccordianTitle: React.FC<{ table: Table, isOpen: string }> = ({ table, isO
                             </Button>
                         )
                 }
-                <Button size='sm' variant="flat" onClick={() => setPopoverOpen(!PopoverOpen)} className="w-5 h-6 gap-0 p-[13px] min-w-8 ">
-                    <i className="fa-solid fa-ellipsis-vertical"></i>
-                </Button>
-                {
-                    PopoverOpen && (
-                        <TableSettingDots table={table} PopoverOpen={PopoverOpen} setPopoverOpen={setPopoverOpen} />
-                    )
-                }
+              
+                    <TableSettingDots table={table} />
+
             </div>
         </div >
     )

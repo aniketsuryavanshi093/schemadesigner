@@ -1,0 +1,122 @@
+.dashboard-header_search {
+  &::placeholder {
+    color: var(--text-secondry);
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 400;
+    padding-left: 5px;
+    margin-bottom: 10px;
+  }
+  border-radius: 4px;
+  color: var(--text-primary);
+  background-color: var(--search-back);
+  padding: 7px 19px 7px 36px;
+  width: 100%;
+  border: none;
+  /* font-size: 15px; */
+  border-radius: 6px;
+  background-color: #F5F5F5;
+  color: black;
+}
+
+.dashboardsearch {
+  position: absolute;
+  width: 500px;
+  padding: 10px 20px;
+  min-height: 100px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(21px);
+  height: auto;
+  background: aqua;
+  background: rgba(255, 255, 255, 0.2);
+
+  p {
+    font-size: small;
+  }
+
+  img {
+    border-radius: 3px;
+    object-fit: cover;
+  }
+}
+.search {
+  position: relative;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 49%;
+  transform: translateY(-50%);
+  font-size: 20px;
+}
+
+.searchclose {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.searchresult {
+  position: absolute;
+  width: 400px;
+  padding: 10px 20px;
+  min-height: 100px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(10px);
+  height: auto;
+  background: aqua;
+  background: rgba(255, 255, 255, 0.2);
+
+  p {
+    font-size: small;
+  }
+
+  .serachimgwrapper {
+
+    height: 50px !important;
+    width: 90px;
+    margin-right: 10px;
+  }
+
+  img {
+    border-radius: 10px;
+    width: 90px;
+    object-fit: cover;
+    background-color: #919191;
+    height: 50px !important;
+  }
+}
+@media (max-width: 767px) {
+.searchresult {
+  position: absolute;
+  width: 270px;
+  padding: 10px 8px;
+  min-height: 115px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(10px);
+  height: auto;
+  background: aqua;
+  background: rgba(255, 255, 255, 0.2);
+  .serachimgwrapper {
+    margin-right: 0px;
+  }
+  a{
+    font-size: small;
+  }
+}
+.searchresult img{
+    border-radius: 10px;
+    width: 68px;
+    object-fit: contain;
+    background-color: #919191;
+    height: 46px !important;
+}
+}
