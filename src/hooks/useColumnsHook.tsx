@@ -1,5 +1,5 @@
 import { useAppDispatch } from '@/redux/dashboardstore/hook'
-import { addColumnsAction, saveColumn } from '@/redux/dashboardstore/reducer/schema/schema'
+import { addColumnsAction, saveColumn, updateColumnAction } from '@/redux/dashboardstore/reducer/schema/schema'
 import { Table, columns } from '@/types'
 
 const useColumnsHook = () => {
@@ -12,16 +12,23 @@ const useColumnsHook = () => {
         }))
     }
     const handleSaveColumnTitle = (tableIndex: string, column: columns, ColumnTitle: string) => {
-        dispatch(saveColumn({
+        dispatch(updateColumnAction({
             tableIndex,
             column: {
                 ...column, columnName: ColumnTitle
             }
         }))
     }
+    const UpdateColumn = (tableIndex: string, column: columns) => {
+        dispatch(updateColumnAction({
+            tableIndex,
+            column
+        }))
+    }
     return {
         addColumns,
-        handleSaveColumnTitle
+        handleSaveColumnTitle,
+        UpdateColumn
     }
 }
 

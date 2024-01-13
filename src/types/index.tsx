@@ -1,9 +1,11 @@
+export type columntype =  "bigint" | "boolean" | "varchar" | "char" | "int" | "flaot(8,2)" | "decimal(8,2)" | "date" | "datetime" | "enum"
+
 export interface columns {
     columnName: string
     isEditing?: boolean
     columnIndex?: number
     columnIndexType?: "primary" | "unique" | "none" | "index"
-    columnDataType?: "bigint" | "boolean" | "varchar" | "char" | "int" | "flaot(8,2)" | "decimal(8,2)" | "date" | "datetime" | "enum"
+    columnDataType?:columntype
 }
 
 export interface Table {

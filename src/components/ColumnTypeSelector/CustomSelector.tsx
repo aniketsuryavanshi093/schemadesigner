@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Search from "../Search/Search";
+import { columntype } from "@/types";
 
 export type optionstype = {
   label: string;
@@ -14,7 +15,7 @@ const CustomSelector: React.FC<{
   defaultValue?: string;
   classname?: string;
   searchable?: boolean;
-  onDropdownSelect: (val: string) => void;
+  onDropdownSelect: (val: columntype) => void;
 }> = ({
   options,
   selectedvalue,
@@ -37,7 +38,7 @@ const CustomSelector: React.FC<{
   useEffect(() => {
     setoptions(options);
   }, [options]);
-  const onSelect = (value: string, label: string, color?: string) => {
+  const onSelect = (value: columntype, label: string, color?: string) => {
     if (selectedValue !== "" && selectedValue === value) {
       setSelectedValue("");
       onDropdownSelect(value);
@@ -70,7 +71,7 @@ const CustomSelector: React.FC<{
         <div
           key={label}
           onClick={() => {
-            value !== selectedValue && onSelect(value, label, color);
+            value !== selectedValue && onSelect(value as columntype, label, color);
           }}
           className=" text-[#cbd5e1] flex items-center my-2 w-full justify-between text_primary "
         >
