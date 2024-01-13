@@ -1,11 +1,16 @@
-'use client'
-import POCDragDrop from '@/components/POCDragDrop'
-import React from 'react'
+"use client";
+import POCDragDrop from "@/components/POCDragDrop";
+import { useAppSelector } from "@/redux/dashboardstore/hook";
+import React from "react";
 
 const TablesContainer = () => {
-    return (
-        <div className='schemamainwrapper h-[100vh] p-11'> <POCDragDrop /></div>
-    )
-}
+  const { tables } = useAppSelector((state) => state.schemareducer);
 
-export default TablesContainer
+  return (
+    <div className="schemamainwrapper h-[100vh] p-11">
+      <POCDragDrop tables={tables} />
+    </div>
+  );
+};
+
+export default TablesContainer;
