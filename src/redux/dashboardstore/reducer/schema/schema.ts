@@ -80,7 +80,27 @@ const schemaSlice = createSlice({
             isEditing: false,
             columns: elem.columns?.map((col) =>
               col.columnIndex === action.payload.column.columnIndex
-                ? action.payload.column
+                ? { ...action.payload.column, isEditing: false }
+                : col
+            ),
+          };
+        } else {
+          return elem;
+        }
+      });
+      state.tables = updatedState;
+    },
+    setcolumnEditing: (
+      state,
+      action: PayloadAction<{ columnIndex: number; tableIndex: string }>
+    ) => {
+      const updatedState = state.tables.map((elem) => {
+        if (elem.tableIndex === action.payload.tableIndex) {
+          return {
+            ...elem,
+            columns: elem.columns?.map((col) =>
+              col.columnIndex === action.payload.columnIndex
+                ? { ...col, isEditing: true }
                 : col
             ),
           };
@@ -98,6 +118,7 @@ export const {
   updateColumnAction,
   deleteTable,
   addTable,
+  setcolumnEditing,
   updateSaveTable,
   addColumnsAction,
   setEditTable,

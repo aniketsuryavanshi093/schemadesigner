@@ -42,7 +42,6 @@ const TableBox: React.FC<{ table: Table }> = ({
       }, 100);
     }
   };
-  console.log(isDragging);
   return (
     <Draggable
       ref={dragRef}

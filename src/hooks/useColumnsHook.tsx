@@ -1,7 +1,7 @@
 import { useAppDispatch } from "@/redux/dashboardstore/hook";
 import {
   addColumnsAction,
-  saveColumn,
+  setcolumnEditing,
   updateColumnAction,
 } from "@/redux/dashboardstore/reducer/schema/schema";
 import { Table, columns } from "@/types";
@@ -15,6 +15,7 @@ const useColumnsHook = () => {
         tableIndex: table.tableIndex!,
         column: {
           columnName: "",
+          isEditing: true,
           columnDataType: "bigint",
           columnIndexType: "none",
           columnIndex: table?.columns?.length! + 1,
@@ -45,10 +46,19 @@ const useColumnsHook = () => {
       })
     );
   };
+  const setcolumnEditingHelper = (tableIndex: string, column: columns) => {
+    dispatch(
+      setcolumnEditing({
+        tableIndex,
+        columnIndex: column.columnIndex!,
+      })
+    );
+  };
   return {
     addColumns,
     handleSaveColumnTitle,
     UpdateColumn,
+    setcolumnEditingHelper,
   };
 };
 

@@ -1,9 +1,11 @@
+import useColumnsHook from "@/hooks/useColumnsHook";
 import useTableHooks from "@/hooks/useTableHooks";
 import { Table } from "@/types";
 import React from "react";
 
 const TableColumns: React.FC<{ table: Table }> = ({ table }) => {
   const { setEditTablehelper } = useTableHooks();
+  const { setcolumnEditingHelper } = useColumnsHook();
   return table.columns?.map((col) => (
     <div
       key={col.columnIndex}
@@ -11,6 +13,7 @@ const TableColumns: React.FC<{ table: Table }> = ({ table }) => {
         e.preventDefault();
         e.stopPropagation();
         setEditTablehelper(table);
+        setcolumnEditingHelper(table.tableIndex!, col);
       }}
       className="flex py-1 bg-[white] px-2 justify-between tablecolwrapper cursor-pointer items-center"
     >

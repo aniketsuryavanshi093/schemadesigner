@@ -116,10 +116,10 @@ const AccordionBodyColumn: React.FC<{
   const { handleSaveColumnTitle } = useColumnsHook();
   useEffect(() => {
     setColumnTitle(column.columnName);
-    if (isFocused > 1 && isFocused === column.columnIndex) {
+    if (column.isEditing) {
       inputref?.current?.focus();
     }
-  }, []);
+  }, [column, isFocused]);
   const handleSavecolumntitle = (e) => {
     e.preventDefault();
     e.stopPropagation();
