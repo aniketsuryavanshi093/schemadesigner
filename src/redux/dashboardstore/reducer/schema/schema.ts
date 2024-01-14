@@ -14,6 +14,11 @@ const schemaSlice = createSlice({
     addTable: (state, action: PayloadAction<Table>) => {
       state.tables.push(action.payload);
     },
+    removeClearEditing: (state) => {
+      state.tables = state.tables.map((elem) =>
+        elem.isEditing ? { ...elem, isEditing: false } : elem
+      );
+    },
     updateSaveTable: (state, action: PayloadAction<Table>) => {
       const updatedState = state.tables.map((elem) =>
         elem.tableIndex === action.payload.tableIndex
@@ -88,7 +93,7 @@ const schemaSlice = createSlice({
   },
 });
 export const {
-  saveColumn,
+  removeClearEditing,
   setIsEditing,
   updateColumnAction,
   deleteTable,
