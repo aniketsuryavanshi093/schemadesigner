@@ -1,36 +1,64 @@
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import Draggable from "react-draggable";
 import ConnectPointsWrapper from "./ConnectPointsWrapper";
+import "./tablebox.scss";
+import { Table } from "@/types";
+import useTableHooks from "@/hooks/useTableHooks";
+import TableColumns from "./TableColumns";
 
-const boxStyle = {
-  border: "1px solid black",
-  position: "relative",
-  padding: "20px 10px",
-};
-
-const TableBox = ({ text, handler, addArrow, setArrows, boxId }) => {
+const TableBox: React.FC<{ table: Table }> = ({
+  handler,
+  addArrow,
+  setArrows,
+  boxId,
+  table,
+}) => {
   const dragRef = useRef();
   const boxRef = useRef();
+  const { setEditTablehelper } = useTableHooks();
   const [position, setPosition] = useState({ x: 100, y: 100 });
   const handleDragStop = (event, data) => {
+    if (event.type === "mouseup" || event.type === "touchend") {
+      setTimeout(() => {
+        setIsDragging(false);
+      }, 100);
+    }
     const newPosition = { x: data.x, y: data.y };
     setPosition(newPosition);
+  };
+  const [isDragging, setIsDragging] = useState(false);
+
+  const handleEdit = useCallback(() => {
+    setEditTablehelper(table);
+  }, [table, setEditTablehelper]);
+  const eventControl = (event) => {
+    if (event.type === "mousemove" || event.type === "touchmove") {
+      setIsDragging(true);
+      setArrows((arrows) => [...arrows]);
+    }
+    if (event.type === "mouseup" || event.type === "touchend") {
+      setTimeout(() => {
+        setIsDragging(false);
+      }, 100);
+    }
   };
   return (
     <Draggable
       ref={dragRef}
-      onDrag={(e) => {
-        setArrows((arrows) => [...arrows]);
-      }}
+      onDrag={eventControl}
       position={position}
       onStop={handleDragStop}
     >
       <div
         id={boxId}
-        className={boxId}
+        className={`${boxId}  tablebox ${
+          table.isEditing && "selectedbox"
+        } shadow-lg hover:shadow-xl  relative border-t-4 `}
         ref={boxRef}
-        style={boxStyle}
+        style={{ borderTopColor: table.tableColor }}
         onDragOver={(e) => e.preventDefault()}
+        onClick={() => !isDragging && handleEdit()}
+        onTouchEnd={() => !isDragging && handleEdit()}
         onDrop={(e) => {
           if (e.dataTransfer.getData("arrow") === boxId) {
             console.log(e.dataTransfer.getData("arrow"), boxId);
@@ -41,7 +69,18 @@ const TableBox = ({ text, handler, addArrow, setArrows, boxId }) => {
           }
         }}
       >
-        <p className={`text-black ${boxId}`}>{text}</p>
+        <div
+          className={`${boxId} flex justify-center items-center hover:bg-[#ebf4ff] transition-all  py-1 w-full hover`}
+        >
+          <p
+            className={` ${
+              table.isEditing && "selectedboxtitle"
+            }  text-center  font-medium text-sm text-gray-700 ${boxId}`}
+          >
+            {table.tableName}
+          </p>
+        </div>
+        <TableColumns table={table} />
         <ConnectPointsWrapper {...{ boxId, handler, dragRef, boxRef }} />
       </div>
     </Draggable>

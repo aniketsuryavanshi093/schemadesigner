@@ -14,6 +14,7 @@ const POCDragDrop: React.FC<{ tables: Table[] }> = ({ tables }) => {
       {tables?.map((table) => (
         <TableBox
           key={table.tableIndex}
+          table={table}
           text={table.tableName}
           {...{ addArrow, setArrows, handler: "right", boxId: table.tableName }}
         />

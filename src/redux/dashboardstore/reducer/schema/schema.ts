@@ -14,6 +14,11 @@ const schemaSlice = createSlice({
     addTable: (state, action: PayloadAction<Table>) => {
       state.tables.push(action.payload);
     },
+    removeClearEditing: (state) => {
+      state.tables = state.tables.map((elem) =>
+        elem.isEditing ? { ...elem, isEditing: false } : elem
+      );
+    },
     updateSaveTable: (state, action: PayloadAction<Table>) => {
       const updatedState = state.tables.map((elem) =>
         elem.tableIndex === action.payload.tableIndex
@@ -75,7 +80,27 @@ const schemaSlice = createSlice({
             isEditing: false,
             columns: elem.columns?.map((col) =>
               col.columnIndex === action.payload.column.columnIndex
-                ? action.payload.column
+                ? { ...action.payload.column, isEditing: false }
+                : col
+            ),
+          };
+        } else {
+          return elem;
+        }
+      });
+      state.tables = updatedState;
+    },
+    setcolumnEditing: (
+      state,
+      action: PayloadAction<{ columnIndex: number; tableIndex: string }>
+    ) => {
+      const updatedState = state.tables.map((elem) => {
+        if (elem.tableIndex === action.payload.tableIndex) {
+          return {
+            ...elem,
+            columns: elem.columns?.map((col) =>
+              col.columnIndex === action.payload.columnIndex
+                ? { ...col, isEditing: true }
                 : col
             ),
           };
@@ -88,11 +113,12 @@ const schemaSlice = createSlice({
   },
 });
 export const {
-  saveColumn,
+  removeClearEditing,
   setIsEditing,
   updateColumnAction,
   deleteTable,
   addTable,
+  setcolumnEditing,
   updateSaveTable,
   addColumnsAction,
   setEditTable,
