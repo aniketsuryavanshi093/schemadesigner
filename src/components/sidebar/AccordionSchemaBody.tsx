@@ -1,19 +1,20 @@
 /* eslint-disable react/jsx-key */
 "use client";
-import { tablecolors } from "@/Constants";
 import { Table, columns } from "@/types";
-import { Button } from "@nextui-org/react";
+import { Button, Tooltip } from "@nextui-org/react";
 import React, { useEffect, useRef, useState } from "react";
 import PopoverComponent from "../Popover/PopoverComponent";
 import ThreeDotBtn from "./ThreeDotBtn";
 import useColumnsHook from "@/hooks/useColumnsHook";
-import { useAppDispatch, useAppSelector } from "@/redux/dashboardstore/hook";
+import { useAppDispatch } from "@/redux/dashboardstore/hook";
 import useTableHooks from "@/hooks/useTableHooks";
 import { setUpdatedColors } from "@/redux/dashboardstore/reducer/colors/colorSlice";
 import ColumnTypeSelector from "../ColumnTypeSelector/ColumnTypeSelector";
+import ColumnIndexTypeSelector from "./ColumnIndexTypeSelector";
+import { tablecolors } from "@/Constants";
 
 const AccordionSchemaBody: React.FC<{ table: Table }> = ({ table }) => {
-  const { addColumns } = useColumnsHook();
+  const { addColumns, UpdateColumn } = useColumnsHook();
   const { updateSaveTablehelper } = useTableHooks();
   const dispatch = useAppDispatch();
   const handleColorChange = (elm: string) => {
@@ -49,13 +50,18 @@ const AccordionSchemaBody: React.FC<{ table: Table }> = ({ table }) => {
   const handleColumnadd = () => {
     addColumns(table, false);
   };
-
+  const handleNullable = (column: columns) => {
+    UpdateColumn(table.tableIndex!, {
+      ...column,
+      isNullable: !column.isNullable,
+    });
+  };
   return (
     <div className="directionlefttoright">
       {table?.columns?.map((elem) => (
         <div
           key={elem.columnIndex}
-          className="flex items-center gap-1 justify-between"
+          className="flex items-center gap-1 justify-between py-[5px]"
         >
           <AccordionBodyColumn
             table={table}
@@ -63,20 +69,29 @@ const AccordionSchemaBody: React.FC<{ table: Table }> = ({ table }) => {
             column={elem}
             isFocused={table?.columns?.length!}
           />
-          <div className="flex-1 flex items-center justify-center gap-[3px]">
-            <Button className="w-4 gap-0 p-0 min-w-6 ">
-              <i className="fa-solid fa-pen"></i>
-            </Button>
-            <Button className="w-4 gap-0 p-0 min-w-6 ">
-              <i className="fa-solid fa-pen"></i>
-            </Button>
-            <Button className="w-4 gap-0 p-0 min-w-6 ">
-              <i className="fa-solid fa-pen"></i>
+          <div className="w-[25%] flex items-center justify-center gap-[3px]">
+            <Tooltip content="Nullable?">
+              <Button
+                onClick={() => handleNullable(elem)}
+                variant="light"
+                className={`py-1 ${
+                  elem.isNullable && "text-[#14b8a6]"
+                } rounded-sm w-full gap-0  min-w-6 h-[30px] `}
+              >
+                N
+              </Button>
+            </Tooltip>
+            <ColumnIndexTypeSelector column={elem} table={table} />
+            <Button
+              variant="light"
+              className="py-1 rounded-sm w-full gap-0 min-w-6 h-[30px] "
+            >
+              <i className="fa-solid fa-ellipsis"></i>
             </Button>
           </div>
         </div>
       ))}
-      <div className="border-t-small columnbottomwrapper w-full flex items-center px-2 pt-[10px]  justify-between">
+      <div className="border-t-small columnbottomwrapper w-full mt-[3px] flex items-center px-2 pt-[10px]  justify-between">
         <div className="flex items-center justify-center gap-2">
           <PopoverComponent
             classname="px-2 py-2"
@@ -126,7 +141,7 @@ const AccordionBodyColumn: React.FC<{
     handleSaveColumnTitle(tableIndex, column, ColumnTitle);
   };
   return (
-    <div className="flex flex-[3] mb-2 items-center justify-center gap-2 ">
+    <div className="flex w-[75%]  items-center justify-center gap-2 ">
       <input
         ref={inputref}
         onBlur={handleSavecolumntitle}

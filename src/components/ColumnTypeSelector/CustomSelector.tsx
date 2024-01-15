@@ -5,13 +5,14 @@ import { columntype } from "@/types";
 export type optionstype = {
   label: string;
   value: string;
-  img?: string;
+  icon?: React.JSX.Element;
   color?: string;
 };
 
 const CustomSelector: React.FC<{
   options: optionstype[];
   selectedvalue?: string;
+  title?: string;
   defaultValue?: string;
   classname?: string;
   searchable?: boolean;
@@ -19,6 +20,8 @@ const CustomSelector: React.FC<{
 }> = ({
   options,
   selectedvalue,
+  classname,
+  title,
   defaultValue,
   onDropdownSelect,
   searchable,
@@ -27,18 +30,16 @@ const CustomSelector: React.FC<{
   const [_options, setoptions] = useState<optionstype[]>(options);
   useEffect(() => {
     if (selectedvalue === "") {
-      setSelectedValue("");
-    }
-  }, [selectedvalue]);
-  useEffect(() => {
-    if (defaultValue) {
       setSelectedValue(defaultValue);
+    } else {
+      setSelectedValue(selectedvalue);
     }
-  }, [defaultValue]);
+  }, [selectedvalue, defaultValue]);
+
   useEffect(() => {
     setoptions(options);
   }, [options]);
-  const onSelect = (value: columntype, label: string, color?: string) => {
+  const onSelect = (value: columntype, label: string) => {
     if (selectedValue !== "" && selectedValue === value) {
       setSelectedValue("");
       onDropdownSelect(value);
@@ -56,7 +57,10 @@ const CustomSelector: React.FC<{
     }
   };
   return (
-    <div className="max-h-[240px] overflow-y-scroll">
+    <div className={` ${classname} max-h-[240px] overflow-y-scroll`}>
+      <p className="my-1 px-2 text-left text-xs cursor-pointer font-bold uppercase text-gray-400">
+        {title}
+      </p>
       {searchable && (
         <Search
           searchiconclass="dropdownsearchicon"
@@ -67,24 +71,28 @@ const CustomSelector: React.FC<{
           waitTime={2}
         ></Search>
       )}
-      {_options.map(({ label, value, color }) => (
+      {_options.map(({ label, value, icon }) => (
         <div
           key={label}
           onClick={() => {
-            value !== selectedValue && onSelect(value as columntype, label, color);
+            value !== selectedValue && onSelect(value as columntype, label);
           }}
-          className=" text-[#cbd5e1] flex items-center my-2 w-full justify-between text_primary "
+          className={` text-[#cbd5e1]  ${
+            value === selectedValue && "bg-[#a47e52] text-[white]"
+          } cursor-pointer  hover:bg-[#14b8a6] hover:text-[white] rounded-md transition-all flex pointer items-center py-2 w-full justify-between text_primary `}
         >
           {value === selectedValue ? (
             <>
-              <div className="fle items-center justify-start">
-                <p className="check-selected mx-4">{label}</p>
+              <div className="flex items-center ms-4 justify-start">
+                {icon || ""}
+                <p className="check-selected">{label}</p>
               </div>
               <i className="fa-solid check-selected fa-check mr-8" />
             </>
           ) : (
-            <div className="fle items-center justify-start">
-              <p className="check-selected mx-4">{label}</p>
+            <div className="flex items-center ms-4 justify-start">
+              {icon || ""}
+              <p className="check-selected">{label}</p>
             </div>
           )}
         </div>

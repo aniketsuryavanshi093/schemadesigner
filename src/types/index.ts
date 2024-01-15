@@ -9,12 +9,13 @@ export type columntype =
   | "date"
   | "datetime"
   | "enum";
-
+export type columnindextype = "primary" | "unique" | "none" | "index";
 export interface columns {
   columnName: string;
   isEditing?: boolean;
   columnIndex?: number;
-  columnIndexType?: "primary" | "unique" | "none" | "index";
+  columnIndexType?: columnindextype;
+  isNullable?: boolean;
   columnDataType?: columntype;
 }
 
