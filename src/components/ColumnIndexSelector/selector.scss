@@ -1,0 +1,19 @@
+.dropdownsearch{
+    padding: 7px 26px;
+    width: 100%;
+    border: none;
+    border-radius: 6px;
+    background: #000000;
+    color: white;
+    &:focus-visible{
+        outline: none;
+    }
+  }
+  .dropdownsearchicon{
+    position: absolute;
+    left: 5px;
+    top: 49%;
+    width: 17px;
+    transform: translateY(-50%);
+    font-size: 6px;
+  }

@@ -88,7 +88,7 @@ const TableBox: React.FC<{ table: Table }> = ({
             {table.tableName}
           </p>
         </div>
-        <TableColumns table={table} />
+        <TableColumns isDragging={isDragging} table={table} />
         <ConnectPointsWrapper {...{ boxId, handler, dragRef, boxRef }} />
       </div>
     </Draggable>

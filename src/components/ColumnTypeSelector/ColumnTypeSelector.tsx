@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
 import CustomSelector from "./CustomSelector";
-import { columnTypeoptions } from "@/Constants";
 import { Table, columns, columntype } from "@/types";
 import "./selector.scss";
 import useColumnsHook from "@/hooks/useColumnsHook";
+import { columnTypeoptions } from "@/Constants";
 
 const ColumnTypeSelector: React.FC<{
   close: () => void;
   table: Table;
   column: columns;
-  
 }> = ({ close, table, column }) => {
   const { UpdateColumn } = useColumnsHook();
   const [ColumnType, setColumnType] = useState<columntype>("bigint");
@@ -20,11 +19,11 @@ const ColumnTypeSelector: React.FC<{
     close();
   };
   useEffect(() => {
-      if(column.columnDataType){
-        setColumnType(column.columnDataType)
-      }
-  }, [column.columnDataType])
-  
+    if (column.columnDataType) {
+      setColumnType(column.columnDataType);
+    }
+  }, [column.columnDataType]);
+
   return (
     <CustomSelector
       searchable
