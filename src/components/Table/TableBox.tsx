@@ -15,8 +15,8 @@ const TableBox: React.FC<{ table: Table }> = ({
 }) => {
   const dragRef = useRef();
   const boxRef = useRef();
-  const { setEditTablehelper } = useTableHooks();
-  const [position, setPosition] = useState({ x: 100, y: 100 });
+  const { setEditTablehelper, updateSaveTablehelper } = useTableHooks();
+  const [position, setPosition] = useState();
   const handleDragStop = (event, data) => {
     if (event.type === "mouseup" || event.type === "touchend") {
       setTimeout(() => {
@@ -25,6 +25,10 @@ const TableBox: React.FC<{ table: Table }> = ({
     }
     const newPosition = { x: data.x, y: data.y };
     setPosition(newPosition);
+    updateSaveTablehelper({
+      ...table,
+      tablePosition: newPosition,
+    });
   };
   const [isDragging, setIsDragging] = useState(false);
 
@@ -45,6 +49,10 @@ const TableBox: React.FC<{ table: Table }> = ({
   return (
     <Draggable
       ref={dragRef}
+      defaultPosition={{
+        x: table?.tablePosition?.x || 0,
+        y: table?.tablePosition?.y || 0,
+      }}
       onDrag={eventControl}
       position={position}
       onStop={handleDragStop}
@@ -53,7 +61,7 @@ const TableBox: React.FC<{ table: Table }> = ({
         id={boxId}
         className={`${boxId}  tablebox ${
           table.isEditing && "selectedbox"
-        } shadow-lg hover:shadow-xl  relative border-t-4 `}
+        } shadow-lg hover:shadow-xl  absolute border-t-4 `}
         ref={boxRef}
         style={{ borderTopColor: table.tableColor }}
         onDragOver={(e) => e.preventDefault()}
@@ -70,7 +78,7 @@ const TableBox: React.FC<{ table: Table }> = ({
         }}
       >
         <div
-          className={`${boxId} flex justify-center items-center hover:bg-[#ebf4ff] transition-all  py-1 w-full hover`}
+          className={`${boxId} flex justify-center items-center hover:bg-[#ebf4ff] boxtitlewrapper transition-all  py-1 w-full hover`}
         >
           <p
             className={` ${
