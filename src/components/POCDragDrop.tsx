@@ -10,7 +10,7 @@ const POCDragDrop: React.FC<{ tables: Table[] }> = ({ tables }) => {
     setArrows([...arrows, { start, end }]);
   };
   return (
-    <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+    <div>
       {tables?.map((table) => (
         <TableBox
           key={table.tableIndex}

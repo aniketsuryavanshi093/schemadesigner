@@ -1,9 +1,9 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-type initialTypes = {
+export type colorInitialState = {
   usedTableColors: string[];
 };
-const initialState: initialTypes = {
+const initialState: colorInitialState = {
   usedTableColors: [],
 };
 const colorSlice = createSlice({

@@ -1,10 +1,10 @@
 import { Table, columns } from "@/types";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-type initialTypes = {
+export type SchemainitialTypes = {
   tables: Table[];
 };
-const initialState: initialTypes = {
+const initialState: SchemainitialTypes = {
   tables: [],
 };
 const schemaSlice = createSlice({
