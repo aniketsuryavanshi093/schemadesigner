@@ -32,3 +32,9 @@ export interface Table {
     y: number;
   };
 }
+
+
+export type relationtype = {
+  head: string
+  tail: string
+}

@@ -15,6 +15,7 @@ import storage from "redux-persist/lib/storage";
 import { colorInitialState } from "./reducer/colors/colorSlice";
 import { SchemainitialTypes } from "./reducer/schema/schema";
 import { PersistPartial } from "redux-persist/es/persistReducer";
+import { relationInitialState, relationReducer } from "./reducer/relations/relationSlice";
 
 const persistConfig = {
   key: "root",
@@ -26,6 +27,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   schemareducer: schemaRootReducer,
   colorreducer: colorRootReducer,
+  relationreducer: relationReducer
 });
 
 const persistedState = persistReducer<RootState, any>(
@@ -47,5 +49,6 @@ export const store = configureStore({
 export type RootState = {
   schemareducer: SchemainitialTypes & PersistPartial;
   colorreducer: colorInitialState & PersistPartial;
+  relationreducer: relationInitialState & PersistPartial;
 };
 export type AppDispatch = typeof store.dispatch;

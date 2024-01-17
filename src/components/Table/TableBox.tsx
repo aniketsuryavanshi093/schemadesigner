@@ -5,13 +5,15 @@ import "./tablebox.scss";
 import { Table } from "@/types";
 import useTableHooks from "@/hooks/useTableHooks";
 import TableColumns from "./TableColumns";
+import { useXarrow } from "react-xarrows";
+import { updateRelation } from "@/redux/dashboardstore/reducer/relations/relationSlice";
 
 const TableBox: React.FC<{ table: Table }> = ({
   handler,
   addArrow,
-  setArrows,
   boxId,
   table,
+  setArrows
 }) => {
   const dragRef = useRef();
   const boxRef = useRef();
@@ -38,7 +40,7 @@ const TableBox: React.FC<{ table: Table }> = ({
   const eventControl = (event) => {
     if (event.type === "mousemove" || event.type === "touchmove") {
       setIsDragging(true);
-      setArrows((arrows) => [...arrows]);
+      setArrows()
     }
     if (event.type === "mouseup" || event.type === "touchend") {
       setTimeout(() => {
@@ -59,9 +61,8 @@ const TableBox: React.FC<{ table: Table }> = ({
     >
       <div
         id={boxId}
-        className={`${boxId}  tablebox ${
-          table.isEditing && "selectedbox"
-        } shadow-lg hover:shadow-xl  absolute border-t-4 `}
+        className={`${boxId}  tablebox ${table.isEditing && "selectedbox"
+          } shadow-lg hover:shadow-xl  absolute border-t-4 `}
         ref={boxRef}
         style={{ borderTopColor: table.tableColor }}
         onDragOver={(e) => e.preventDefault()}
@@ -81,9 +82,8 @@ const TableBox: React.FC<{ table: Table }> = ({
           className={`${boxId} flex justify-center items-center hover:bg-[#ebf4ff] boxtitlewrapper transition-all  py-1 w-full hover`}
         >
           <p
-            className={` ${
-              table.isEditing && "selectedboxtitle"
-            }  text-center  font-medium text-sm text-gray-700 ${boxId}`}
+            className={` ${table.isEditing && "selectedboxtitle"
+              }  text-center  font-medium text-sm text-gray-700 ${boxId}`}
           >
             {table.tableName}
           </p>

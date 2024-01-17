@@ -3,12 +3,18 @@ import { Table } from "@/types";
 import React, { useState } from "react";
 import Xarrow from "react-xarrows";
 import TableBox from "./Table/TableBox";
+import { useAppDispatch } from "@/redux/dashboardstore/hook";
+import { addRelation, updateRelation } from "@/redux/dashboardstore/reducer/relations/relationSlice";
 
 const POCDragDrop: React.FC<{ tables: Table[] }> = ({ tables }) => {
-  const [arrows, setArrows] = useState([]);
+  const dispatch = useAppDispatch()
+
   const addArrow = ({ start, end }) => {
-    setArrows([...arrows, { start, end }]);
+    dispatch(addRelation({ head: start, tail: end }));
   };
+  const setArrows = () => [
+    dispatch(updateRelation())
+  ]
   return (
     <div>
       {tables?.map((table) => (
@@ -19,14 +25,7 @@ const POCDragDrop: React.FC<{ tables: Table[] }> = ({ tables }) => {
           {...{ addArrow, setArrows, handler: "right", boxId: table.tableName }}
         />
       ))}
-      {arrows.map((ar) => (
-        <Xarrow
-          onClick={() => console.log("clicked")}
-          start={ar.start}
-          end={ar.end}
-          key={ar.start + "-." + ar.start}
-        />
-      ))}
+
     </div>
   );
 };

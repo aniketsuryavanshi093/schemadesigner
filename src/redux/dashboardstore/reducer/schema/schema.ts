@@ -46,10 +46,10 @@ const schemaSlice = createSlice({
       const updatedState = state.tables.map((elem) =>
         elem.tableIndex === action.payload.tableIndex
           ? {
-              ...elem,
-              isEditing: action.payload.fromOutside ? true : false,
-              columns: [...elem.columns, action.payload.column],
-            }
+            ...elem,
+            isEditing: action.payload.fromOutside ? true : false,
+            columns: [...elem.columns, action.payload.column],
+          }
           : { ...elem }
       );
       state.tables = updatedState;
