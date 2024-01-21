@@ -1,23 +1,21 @@
 import React, { useRef, useState } from "react";
 import Xarrow from "react-xarrows";
 
-const connectPointStyle = {
-  position: "absolute",
-  width: 15,
-  height: 15,
-  borderRadius: "50%",
-  background: "black",
-};
-const connectPointOffset = {
-  left: { left: 0, top: "50%", transform: "translate(-50%, -50%)" },
-  right: { left: "100%", top: "50%", transform: "translate(-50%, -50%)" },
-  top: { left: "50%", top: 0, transform: "translate(-50%, -50%)" },
-  bottom: { left: "50%", top: "100%", transform: "translate(-50%, -50%)" },
-};
-
 const ConnectPointsWrapper = ({ boxId, handler, dragRef, boxRef }) => {
+  const connectPointStyle = {
+    position: "absolute",
+    width: 10,
+    height: 10,
+    borderRadius: "50%",
+    background: "black",
+  };
+  const connectPointOffset = {
+    left: { left: 0, top: "50%", transform: "translate(-50%, -50%)" },
+    right: { left: "100%", top: "50%", transform: "translate(-50%, -50%)" },
+    top: { left: "50%", top: 0, transform: "translate(-50%, -50%)" },
+    bottom: { left: "50%", top: "100%", transform: "translate(-50%, -50%)" },
+  };
   const ref1 = useRef();
-
   const [position, setPosition] = useState({});
   const [beingDragged, setBeingDragged] = useState(false);
   return (

@@ -33,8 +33,8 @@ export interface Table {
   };
 }
 
-
 export type relationtype = {
-  head: string
-  tail: string
-}
+  head: string;
+  tail: string;
+  tablefrom: string;
+};

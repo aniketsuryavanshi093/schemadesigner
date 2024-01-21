@@ -1,20 +1,14 @@
 "use client";
 import { Table } from "@/types";
-import React, { useState } from "react";
-import Xarrow from "react-xarrows";
+import React from "react";
 import TableBox from "./Table/TableBox";
 import { useAppDispatch } from "@/redux/dashboardstore/hook";
-import { addRelation, updateRelation } from "@/redux/dashboardstore/reducer/relations/relationSlice";
+import { updateRelation } from "@/redux/dashboardstore/reducer/relations/relationSlice";
 
 const POCDragDrop: React.FC<{ tables: Table[] }> = ({ tables }) => {
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
 
-  const addArrow = ({ start, end }) => {
-    dispatch(addRelation({ head: start, tail: end }));
-  };
-  const setArrows = () => [
-    dispatch(updateRelation())
-  ]
+  const setArrows = () => [dispatch(updateRelation())];
   return (
     <div>
       {tables?.map((table) => (
@@ -22,10 +16,9 @@ const POCDragDrop: React.FC<{ tables: Table[] }> = ({ tables }) => {
           key={table.tableIndex}
           table={table}
           text={table.tableName}
-          {...{ addArrow, setArrows, handler: "right", boxId: table.tableName }}
+          {...{ setArrows, boxId: table.tableName }}
         />
       ))}
-
     </div>
   );
 };
