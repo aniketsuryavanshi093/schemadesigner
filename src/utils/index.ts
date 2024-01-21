@@ -13,3 +13,7 @@ export const getRandomColor = (usedcolors: string[]): string | undefined => {
   // Return undefined if no available colors are left
   return undefined;
 };
+
+export const getColumnId = (name1: string, name2: string) => {
+  return `${name1}_${name2}`;
+};
