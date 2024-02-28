@@ -12,6 +12,7 @@ import { setUpdatedColors } from "@/redux/dashboardstore/reducer/colors/colorSli
 import ColumnTypeSelector from "../ColumnTypeSelector/ColumnTypeSelector";
 import ColumnIndexTypeSelector from "./ColumnIndexTypeSelector";
 import { tablecolors } from "@/Constants";
+import ColumnSettingsPopover from "./ColumnSettingsPopover";
 
 const AccordionSchemaBody: React.FC<{ table: Table }> = ({ table }) => {
   const { addColumns, UpdateColumn } = useColumnsHook();
@@ -82,12 +83,7 @@ const AccordionSchemaBody: React.FC<{ table: Table }> = ({ table }) => {
               </Button>
             </Tooltip>
             <ColumnIndexTypeSelector column={elem} table={table} />
-            <Button
-              variant="light"
-              className="py-1 rounded-sm w-full gap-0 min-w-6 h-[30px] "
-            >
-              <i className="fa-solid fa-ellipsis"></i>
-            </Button>
+            <ColumnSettingsPopover table={table} column={elem} />
           </div>
         </div>
       ))}

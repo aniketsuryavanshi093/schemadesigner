@@ -3,6 +3,7 @@ import {
   addColumnsAction,
   setcolumnEditing,
   updateColumnAction,
+  deleteColumnAction,
 } from "@/redux/dashboardstore/reducer/schema/schema";
 import { Table, columns } from "@/types";
 
@@ -54,11 +55,20 @@ const useColumnsHook = () => {
       })
     );
   };
+  const deleteColumn = (tableIndex: string, column: columns) => {
+    dispatch(
+      deleteColumnAction({
+        tableIndex,
+        column,
+      })
+    );
+  };
   return {
     addColumns,
     handleSaveColumnTitle,
     UpdateColumn,
     setcolumnEditingHelper,
+    deleteColumn,
   };
 };
 

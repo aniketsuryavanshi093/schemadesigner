@@ -65,7 +65,7 @@ const CustomSelector: React.FC<{
         <Search
           searchiconclass="dropdownsearchicon"
           inpClassname="dropdownsearch"
-          placeholder="Search user"
+          placeholder="Search datatypes..."
           setValue={handleSearch}
           minSearchChar={0}
           waitTime={2}
