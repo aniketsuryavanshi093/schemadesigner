@@ -46,10 +46,10 @@ const schemaSlice = createSlice({
       const updatedState = state.tables.map((elem) =>
         elem.tableIndex === action.payload.tableIndex
           ? {
-            ...elem,
-            isEditing: action.payload.fromOutside ? true : false,
-            columns: [...elem.columns, action.payload.column],
-          }
+              ...elem,
+              isEditing: action.payload.fromOutside ? true : false,
+              columns: [...elem.columns, action.payload.column],
+            }
           : { ...elem }
       );
       state.tables = updatedState;
@@ -90,6 +90,26 @@ const schemaSlice = createSlice({
       });
       state.tables = updatedState;
     },
+    deleteColumnAction: (
+      state,
+      action: PayloadAction<{ column: columns; tableIndex: string }>
+    ) => {
+      const updatedState = state.tables.map((elem) => {
+        if (elem.tableIndex === action.payload.tableIndex) {
+          return {
+            ...elem,
+            isEditing: false,
+            columns: elem.columns?.filter(
+              (col) =>
+                col.columnIndex !== action.payload.column.columnIndex && col
+            ),
+          };
+        } else {
+          return elem;
+        }
+      });
+      state.tables = updatedState;
+    },
     setcolumnEditing: (
       state,
       action: PayloadAction<{ columnIndex: number; tableIndex: string }>
@@ -116,6 +136,7 @@ export const {
   removeClearEditing,
   setIsEditing,
   updateColumnAction,
+  deleteColumnAction,
   deleteTable,
   addTable,
   setcolumnEditing,

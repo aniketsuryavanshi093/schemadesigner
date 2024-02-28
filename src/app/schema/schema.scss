@@ -3,6 +3,7 @@
 }
 
 .schemawrapper {
+  z-index: 1;
   background-color: #f1f5f9;
 }
 .topsidebtn {
@@ -22,4 +23,20 @@
 .schemamainwrapper {
   width: 100% !important;
   background: beige;
+}
+.columtypewrapper {
+  z-index: 2;
+  background-color: #1e293b !important;
+}
+.deletecolumnbtn {
+  transition: all 0.3s ease-in-out;
+  &:hover {
+    border-color: #c93535 !important;
+    i {
+      color: #c93535;
+    }
+    p {
+      color: #c93535;
+    }
+  }
 }
