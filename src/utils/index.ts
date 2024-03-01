@@ -15,5 +15,5 @@ export const getRandomColor = (usedcolors: string[]): string | undefined => {
 };
 
 export const getColumnId = (name1: string, name2: string) => {
-  return `${name1}_${name2}`;
+  return `${name1}^^${name2}`;
 };

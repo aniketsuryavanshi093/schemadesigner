@@ -29,8 +29,8 @@ const TableColumns: React.FC<{
     }
   };
   const dispatch = useAppDispatch();
-  const addArrow = ({ head, tail }: relationtype) => {
-    dispatch(addRelation({ head, tail }));
+  const addArrow = ({ head, tail, tablefrom }: relationtype) => {
+    dispatch(addRelation({ head, tail, tablefrom }));
   };
   return table.columns?.map((col) => (
     <div
@@ -57,6 +57,7 @@ const TableColumns: React.FC<{
           const refs: relationtype = {
             head: e.dataTransfer.getData("arrow"),
             tail: getColumnId(table.tableName, col.columnName),
+            tablefrom: e.dataTransfer.getData("arrow").split("^^")[0],
           };
           addArrow(refs);
           console.log("droped!", refs);

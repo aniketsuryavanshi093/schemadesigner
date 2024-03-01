@@ -7,24 +7,22 @@ import {
   PopoverHandler,
 } from "@material-tailwind/react";
 import { Button } from "@nextui-org/react";
-import React  from "react";
+import React from "react";
 
 const TableSettingDots: React.FC<{
   table: Table;
 }> = ({ table }) => {
   const { DeleteTablehelper } = useTableHooks();
   const handledeleteTable = () => {
-    DeleteTablehelper(table.tableIndex!);
+    DeleteTablehelper(table);
   };
   const { addColumns } = useColumnsHook();
   return (
-    <Popover 
-      placement="right-end"
-    >
+    <Popover placement="right-end">
       <PopoverHandler>
         <Button
           size="sm"
-          style={{padding:" 15px 11px "}}
+          style={{ padding: " 15px 11px " }}
           variant="flat"
           className="w-5 h-6 gap-0 min-w-8 "
         >
@@ -34,7 +32,7 @@ const TableSettingDots: React.FC<{
       <PopoverContent className="p-0">
         <div className={`w-48 py-2 popoverwrapper `}>
           <p className="text-[#94a3b8] px-1 pt-1 capitalize text-[14px]">
-          TABLE ACTIONS
+            TABLE ACTIONS
           </p>
           <Button className="w-full text-white rounded-md" variant="light">
             <p className="w-full text-left"> Add Comment</p>
