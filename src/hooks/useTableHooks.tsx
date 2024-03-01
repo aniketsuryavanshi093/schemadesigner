@@ -1,4 +1,5 @@
 import { useAppDispatch, useAppSelector } from "@/redux/dashboardstore/hook";
+import { removeRelationofTable } from "@/redux/dashboardstore/reducer/relations/relationSlice";
 import {
   addTable,
   deleteTable,
@@ -12,8 +13,9 @@ const useTableHooks = () => {
   const dispatch = useAppDispatch();
   const { tables } = useAppSelector((state) => state.schemareducer);
 
-  const DeleteTablehelper = (tableindex: string) => {
-    dispatch(deleteTable({ tableIndex: tableindex }));
+  const DeleteTablehelper = (table: Table) => {
+    dispatch(deleteTable({ tableIndex: table.tableIndex! }));
+    dispatch(removeRelationofTable(table.tableName));
   };
   const setEditTablehelper = (table: Table) => {
     if (!tables.every((elem) => elem.isEditing === false)) {

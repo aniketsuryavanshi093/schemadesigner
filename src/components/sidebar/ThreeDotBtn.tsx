@@ -13,7 +13,7 @@ const ThreeDotBtn: React.FC<{ table: Table; isOutsidebtn?: boolean }> = ({
   const { DeleteTablehelper } = useTableHooks();
   const handledeleteTable = () => {
     setIsOpen(false);
-    DeleteTablehelper(table.tableIndex!);
+    DeleteTablehelper(table);
   };
   const { addColumns } = useColumnsHook();
 
