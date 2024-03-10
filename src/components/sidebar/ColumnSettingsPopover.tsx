@@ -8,10 +8,18 @@ const ColumnSettingsPopover: React.FC<{
   table: Table;
   column: columns;
 }> = ({ table, column }) => {
-  const { deleteColumn } = useColumnsHook();
+  const { deleteColumn, UpdateColumn } = useColumnsHook();
+  const [comment, setComment] = React.useState(column.comment);
   const handleDeleteColumn = () => {
     deleteColumn(table.tableIndex!, column);
   };
+  const handleCommentsChange = () => {
+    UpdateColumn(table.tableIndex!, {
+      ...column,
+      comment,
+    });
+  };
+
   return (
     <PopoverComponent
       classname="px-2 py-2 columtypewrapper"
@@ -25,6 +33,9 @@ const ColumnSettingsPopover: React.FC<{
             Comments <i className="fa-regular fa-comment"></i>
           </p>
           <textarea
+            onBlur={handleCommentsChange}
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
             className="commenttextarea canvas-sidebar-comment-text-area w-full px-2 py-1 text-sm text-sm leading-tight text-gray-200 block w-full rounded-md shadow-sm focus-visible:border-teal-500 focus-visible:ring-teal-500 resize-none border-gray-500 bg-gray-700 text-gray-200 placeholder-gray-400"
             placeholder="Optional description for this column"
           />

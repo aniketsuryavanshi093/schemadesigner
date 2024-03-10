@@ -17,6 +17,7 @@ export interface columns {
   columnIndexType?: columnindextype;
   isNullable?: boolean;
   columnDataType?: columntype;
+  comment?: string;
 }
 
 export interface Table {
