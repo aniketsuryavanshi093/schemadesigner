@@ -107,7 +107,7 @@ const TableColumns: React.FC<{
 
 export default TableColumns;
 
-const ColumnComment: React.FC<{ comment: string }> = ({ comment }) => {
+export const ColumnComment: React.FC<{ comment: string }> = ({ comment }) => {
   return (
     <PopoverComponent
       classname="px-3 py-2 columtypewrapper"

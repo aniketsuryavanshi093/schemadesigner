@@ -10,13 +10,17 @@ const ThreeDotBtn: React.FC<{ table: Table; isOutsidebtn?: boolean }> = ({
   isOutsidebtn,
 }) => {
   const [isOpen, setIsOpen] = React.useState(false);
-  const { DeleteTablehelper } = useTableHooks();
+  const { DeleteTablehelper, AddCommentOpenAction } = useTableHooks();
   const handledeleteTable = () => {
     setIsOpen(false);
     DeleteTablehelper(table);
   };
   const { addColumns } = useColumnsHook();
-
+  const handleAddCommenttable = (e: any) => {
+    e.preventDefault();
+    e.stopPropagation();
+    AddCommentOpenAction(table.tableIndex!);
+  };
   return (
     <PopoverComponent
       classname="px-2 py-2 columtypewrapper"
@@ -44,7 +48,11 @@ const ThreeDotBtn: React.FC<{ table: Table; isOutsidebtn?: boolean }> = ({
               </Button>
             </>
           )}
-          <Button className="w-full text-white rounded-md" variant="light">
+          <Button
+            className="w-full text-white rounded-md"
+            onClick={handleAddCommenttable}
+            variant="light"
+          >
             <p className="w-full text-left"> Add Comment</p>
           </Button>
           <div className="mt-2  border-t-1 border-[rgb(51 65 85 / 1)]">

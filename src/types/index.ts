@@ -24,6 +24,7 @@ export interface Table {
   tableColor?: string;
   isEditing: boolean;
   isTableOpen?: boolean;
+  isCommentOpen?: boolean;
   tableName: string;
   columns?: columns[];
   tableComment?: string;

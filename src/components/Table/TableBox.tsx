@@ -3,7 +3,8 @@ import Draggable from "react-draggable";
 import "./tablebox.scss";
 import { Table } from "@/types";
 import useTableHooks from "@/hooks/useTableHooks";
-import TableColumns from "./TableColumns";
+import TableColumns, { ColumnComment } from "./TableColumns";
+import { concatString } from "@/utils";
 
 const TableBox: React.FC<{ table: Table }> = ({ boxId, table, setArrows }) => {
   const dragRef = useRef();
@@ -62,7 +63,7 @@ const TableBox: React.FC<{ table: Table }> = ({ boxId, table, setArrows }) => {
         onTouchEnd={() => !isDragging && handleEdit()}
       >
         <div
-          className={`${boxId} flex justify-center items-center hover:bg-[#ebf4ff] boxtitlewrapper transition-all  py-1 w-full hover`}
+          className={`${boxId} flex justify-center flex-col items-center hover:bg-[#ebf4ff] boxtitlewrapper transition-all  py-1 w-full hover`}
         >
           <p
             className={` ${
@@ -71,6 +72,15 @@ const TableBox: React.FC<{ table: Table }> = ({ boxId, table, setArrows }) => {
           >
             {table.tableName}
           </p>
+
+          {table.tableComment && (
+            <p className="font-medium text-xs w-[75%]  text-gray-800 text-center">
+              {concatString(20, table.tableComment)}
+              {table.tableComment.length > 20 && (
+                <ColumnComment comment={table.tableComment} />
+              )}
+            </p>
+          )}
         </div>
         <TableColumns
           boxId={boxId}

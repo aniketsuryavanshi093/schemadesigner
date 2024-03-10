@@ -16,7 +16,9 @@ const schemaSlice = createSlice({
     },
     removeClearEditing: (state) => {
       state.tables = state.tables.map((elem) =>
-        elem.isEditing ? { ...elem, isEditing: false } : elem
+        elem.isEditing
+          ? { ...elem, isEditing: false, isCommentOpen: false }
+          : elem
       );
     },
     updateSaveTable: (state, action: PayloadAction<Table>) => {
@@ -65,7 +67,11 @@ const schemaSlice = createSlice({
     ) => {
       state.tables = state.tables.map((elem) =>
         elem.tableIndex === action.payload.tableindex
-          ? { ...elem, isEditing: action.payload.isEdit }
+          ? {
+              ...elem,
+              isEditing: action.payload.isEdit,
+              isCommentOpen: action.payload.isEdit,
+            }
           : elem
       );
     },
@@ -110,6 +116,35 @@ const schemaSlice = createSlice({
       });
       state.tables = updatedState;
     },
+    addCommentOpenAction: (
+      state,
+      action: PayloadAction<{ tableIndex: string; isCommentOpen: boolean }>
+    ) => {
+      const updatedState = state.tables.map((elem) =>
+        elem.tableIndex === action.payload.tableIndex
+          ? {
+              ...elem,
+              isEditing: true,
+              isCommentOpen: action.payload.isCommentOpen,
+            }
+          : elem
+      );
+      state.tables = updatedState;
+    },
+    addTablecommentAction: (
+      state,
+      action: PayloadAction<{ tableIndex: string; comment: string }>
+    ) => {
+      const updatedState = state.tables.map((elem) =>
+        elem.tableIndex === action.payload.tableIndex
+          ? {
+              ...elem,
+              tableComment: action.payload.comment,
+            }
+          : elem
+      );
+      state.tables = updatedState;
+    },
     setcolumnEditing: (
       state,
       action: PayloadAction<{ columnIndex: number; tableIndex: string }>
@@ -139,6 +174,8 @@ export const {
   deleteColumnAction,
   deleteTable,
   addTable,
+  addCommentOpenAction,
+  addTablecommentAction,
   setcolumnEditing,
   updateSaveTable,
   addColumnsAction,
