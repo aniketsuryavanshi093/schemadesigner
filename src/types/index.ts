@@ -17,12 +17,14 @@ export interface columns {
   columnIndexType?: columnindextype;
   isNullable?: boolean;
   columnDataType?: columntype;
+  comment?: string;
 }
 
 export interface Table {
   tableColor?: string;
   isEditing: boolean;
   isTableOpen?: boolean;
+  isCommentOpen?: boolean;
   tableName: string;
   columns?: columns[];
   tableComment?: string;

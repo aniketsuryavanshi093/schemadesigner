@@ -5,7 +5,9 @@ import {
   deleteTable,
   setEditTable,
   updateSaveTable,
+  addCommentOpenAction,
   removeClearEditing,
+  addTablecommentAction,
 } from "@/redux/dashboardstore/reducer/schema/schema";
 import { Table } from "@/types";
 
@@ -37,12 +39,30 @@ const useTableHooks = () => {
       })
     );
   };
+  const AddCommentOpenAction = (tableIndex: string) => {
+    dispatch(
+      addCommentOpenAction({
+        tableIndex,
+        isCommentOpen: true,
+      })
+    );
+  };
+  const AddtableComment = (tableIndex: string, comment: string) => {
+    dispatch(
+      addTablecommentAction({
+        tableIndex,
+        comment,
+      })
+    );
+  };
   return {
     DeleteTablehelper,
     AddTablehelper,
     setEditTablehelper,
     updateSaveTablehelper,
     tables,
+    AddCommentOpenAction,
+    AddtableComment,
   };
 };
 

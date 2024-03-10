@@ -63,6 +63,7 @@ const useColumnsHook = () => {
       })
     );
   };
+
   return {
     addColumns,
     handleSaveColumnTitle,

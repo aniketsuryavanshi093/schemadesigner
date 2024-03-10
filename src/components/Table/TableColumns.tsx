@@ -6,6 +6,7 @@ import ConnectPointsWrapper from "./ConnectPointsWrapper";
 import { addRelation } from "@/redux/dashboardstore/reducer/relations/relationSlice";
 import { useAppDispatch } from "@/redux/dashboardstore/hook";
 import { getColumnId } from "@/utils";
+import PopoverComponent from "../Popover/PopoverComponent";
 
 const TableColumns: React.FC<{
   table: Table;
@@ -71,9 +72,10 @@ const TableColumns: React.FC<{
             col.columnIndexType!
           )} text-[10px]`}
         ></i>
-        <p className={`text-sm ml-1  mr-3 ${table.tableName} font-medium`}>
+        <p className={`text-sm ml-1  mr-1 ${table.tableName} font-medium`}>
           {col.columnName}
         </p>
+        {col.comment && <ColumnComment comment={col.comment} />}
       </div>
       <p className={`text-sm font-normal ${table.tableName}  text-[#b2b2b2]`}>
         {col.columnDataType}
@@ -104,3 +106,23 @@ const TableColumns: React.FC<{
 };
 
 export default TableColumns;
+
+export const ColumnComment: React.FC<{ comment: string }> = ({ comment }) => {
+  return (
+    <PopoverComponent
+      classname="px-3 py-2 columtypewrapper"
+      placement="right-start"
+      content={
+        <div className="w-56   ">
+          <p className="mb-1 text-sm font-bold uppercase text-gray-400">
+            <i className="fa-regular fa-comment"></i> Column Comments
+          </p>
+          <p className="mb-1  text-xs font-thin  text-gray-400">{comment}</p>
+        </div>
+      }
+      trigger={
+        <i className="cursor-pointer hover:text-green-600 fa-regular fa-comment text-sm"></i>
+      }
+    />
+  );
+};

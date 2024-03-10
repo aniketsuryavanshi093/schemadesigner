@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-key */
 "use client";
 import { Table, columns } from "@/types";
-import { Button, Tooltip } from "@nextui-org/react";
+import { Button, TableColumn, Tooltip } from "@nextui-org/react";
 import React, { useEffect, useRef, useState } from "react";
 import PopoverComponent from "../Popover/PopoverComponent";
 import ThreeDotBtn from "./ThreeDotBtn";
@@ -13,6 +13,7 @@ import ColumnTypeSelector from "../ColumnTypeSelector/ColumnTypeSelector";
 import ColumnIndexTypeSelector from "./ColumnIndexTypeSelector";
 import { tablecolors } from "@/Constants";
 import ColumnSettingsPopover from "./ColumnSettingsPopover";
+import TableComments from "./SidebarComponents/TableComments";
 
 const AccordionSchemaBody: React.FC<{ table: Table }> = ({ table }) => {
   const { addColumns, UpdateColumn } = useColumnsHook();
@@ -87,6 +88,7 @@ const AccordionSchemaBody: React.FC<{ table: Table }> = ({ table }) => {
           </div>
         </div>
       ))}
+      <TableComments table={table} />
       <div className="border-t-small columnbottomwrapper w-full mt-[3px] flex items-center px-2 pt-[10px]  justify-between">
         <div className="flex items-center justify-center gap-2">
           <PopoverComponent
