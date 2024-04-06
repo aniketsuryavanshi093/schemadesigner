@@ -4,10 +4,11 @@ import Xarrow from "react-xarrows";
 const ConnectPointsWrapper = ({ boxId, handler, dragRef, boxRef }) => {
   const connectPointStyle = {
     position: "absolute",
-    width: 10,
-    height: 10,
-    borderRadius: "50%",
-    background: "black",
+    width: 30,
+    height: 30,
+    cursor: "crosshair",
+    // borderRadius: "50%",
+    // background: "black",
   };
   const connectPointOffset = {
     left: { left: 0, top: "50%", transform: "translate(-50%, -50%)" },
@@ -21,15 +22,19 @@ const ConnectPointsWrapper = ({ boxId, handler, dragRef, boxRef }) => {
   return (
     <React.Fragment>
       <div
-        className="connectPoint"
+        className="flex connectPoint wrapper justify-center items-center"
         style={{
           ...connectPointStyle,
+          zIndex: 1000000,
           ...connectPointOffset[handler],
           ...position,
         }}
         draggable
         onMouseDown={(e) => e.stopPropagation()}
         onDragStart={(e) => {
+          console.log(`dragging ${boxId}`);
+
+          // e.stopPropagation();
           setBeingDragged(true);
           e.dataTransfer.setData("arrow", boxId);
         }}
@@ -49,7 +54,9 @@ const ConnectPointsWrapper = ({ boxId, handler, dragRef, boxRef }) => {
           setPosition({});
           setBeingDragged(false);
         }}
-      />
+      >
+        <div className="w-[10px] h-[10px] bg-black rounded-full"></div>
+      </div>
       {beingDragged ? <Xarrow start={boxId} end={ref1} /> : null}
     </React.Fragment>
   );

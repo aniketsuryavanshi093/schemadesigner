@@ -44,7 +44,6 @@ const ColumnIndexSelector: React.FC<{
       setColumnIndexType(column?.columnIndexType!);
     }
   }, [column.columnIndexType]);
-  console.log(ColumnIndexType);
 
   return (
     <CustomSelector
