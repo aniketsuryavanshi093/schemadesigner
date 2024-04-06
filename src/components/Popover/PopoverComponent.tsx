@@ -4,9 +4,10 @@ import {
   PopoverContent,
   PopoverHandler,
 } from "@material-tailwind/react";
+import { placement } from "@material-tailwind/react/types/components/menu";
 
 const PopoverComponent: React.FC<{
-  placement: string;
+  placement: placement;
   setPopover: any;
   popoverOpen: boolean;
   classname: string;
