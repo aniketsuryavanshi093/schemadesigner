@@ -44,3 +44,12 @@ export type relationtype = {
   tableto: string;
   relation: columnrelationtype;
 };
+
+export type FormSignupvalueType = {
+  profilePic?: string;
+  isGoogleLogin?: boolean;
+  name?: string;
+  cpassword?: string;
+  email?: string;
+  password?: string;
+};
