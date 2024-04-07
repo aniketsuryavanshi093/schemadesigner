@@ -24,9 +24,30 @@ const relationSlice = createSlice({
           !relation.tail.includes(action.payload)
       );
     },
+    updateRelationShip: (state, action: PayloadAction<relationtype>) => {
+      // Find the index of the relationship to be updated
+      const index = state.relations.findIndex(
+        (relation) => relation.id === action.payload.id
+      );
+      // If the relationship exists, update it
+      if (index !== -1) {
+        state.relations[index] = action.payload;
+      }
+    },
+    removeRelationShip: (state, action: PayloadAction<string>) => {
+      // Find the index of the relationship to be updated
+      state.relations = state.relations.filter(
+        (relation) => relation.id !== action.payload
+      );
+    },
   },
 });
-export const { addRelation, updateRelation, removeRelationofTable } =
-  relationSlice.actions;
+export const {
+  addRelation,
+  updateRelation,
+  removeRelationofTable,
+  updateRelationShip,
+  removeRelationShip,
+} = relationSlice.actions;
 
 export const relationReducer = relationSlice.reducer;
