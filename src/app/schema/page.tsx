@@ -1,12 +1,12 @@
 "use client";
-import { useAppDispatch, useAppSelector } from "@/redux/dashboardstore/hook";
+import { useAppSelector } from "@/redux/dashboardstore/hook";
 import React from "react";
 import { Button } from "@nextui-org/react";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import TablesContainer from "./SchemaComponents/TablesContainer";
 import { useXarrow, Xwrapper } from "react-xarrows";
 import Arrow from "@/components/Arrows/Arrows";
-import { updateRelation } from "@/redux/dashboardstore/reducer/relations/relationSlice";
+import useTableRelationHook from "@/hooks/useTableRelationHook";
 
 const Schema = () => {
   const updateXarrow = useXarrow();
@@ -42,7 +42,7 @@ const Schema = () => {
       </TransformWrapper>
       <Xwrapper>
         {relations.map((rel, index) => (
-          <Arrow key={index} head={rel.head} tail={rel.tail} />
+          <Arrow key={index} relation={rel} />
         ))}
       </Xwrapper>
     </>
@@ -56,11 +56,11 @@ const TransformContainer: React.FC<{
   zoomOut: () => void;
   resetTransform: () => void;
 }> = ({ zoomIn, zoomOut, resetTransform }) => {
-  const dispatch = useAppDispatch();
+  const { updateAllRelation } = useTableRelationHook();
   const handleCLick = (callable: any) => {
     callable();
     setTimeout(() => {
-      dispatch(updateRelation());
+      updateAllRelation();
     }, 500);
   };
   return (

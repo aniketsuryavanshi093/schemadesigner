@@ -3,10 +3,10 @@ import useTableHooks from "@/hooks/useTableHooks";
 import { Table, columnindextype, relationtype } from "@/types";
 import React from "react";
 import ConnectPointsWrapper from "./ConnectPointsWrapper";
-import { addRelation } from "@/redux/dashboardstore/reducer/relations/relationSlice";
 import { useAppDispatch } from "@/redux/dashboardstore/hook";
-import { getColumnId } from "@/utils";
+import { generateUID, getColumnId } from "@/utils";
 import PopoverComponent from "../Popover/PopoverComponent";
+import useTableRelationHook from "@/hooks/useTableRelationHook";
 
 const TableColumns: React.FC<{
   table: Table;
@@ -17,6 +17,7 @@ const TableColumns: React.FC<{
 }> = ({ table, isDragging, boxRef, dragRef, boxId }) => {
   const { setEditTablehelper } = useTableHooks();
   const { setcolumnEditingHelper } = useColumnsHook();
+  const { addRelations } = useTableRelationHook();
   const getColumnicon = (type: columnindextype) => {
     switch (type) {
       case "primary":
@@ -30,9 +31,7 @@ const TableColumns: React.FC<{
     }
   };
   const dispatch = useAppDispatch();
-  const addArrow = ({ head, tail, tablefrom }: relationtype) => {
-    dispatch(addRelation({ head, tail, tablefrom }));
-  };
+
   return table.columns?.map((col) => (
     <div
       id={getColumnId(table.tableName, col.columnName)}
@@ -56,11 +55,14 @@ const TableColumns: React.FC<{
           );
         } else {
           const refs: relationtype = {
+            tableto: table.tableName,
+            id: generateUID(4),
+            relation: "onetoone",
             head: e.dataTransfer.getData("arrow"),
             tail: getColumnId(table.tableName, col.columnName),
             tablefrom: e.dataTransfer.getData("arrow").split("^^")[0],
           };
-          addArrow(refs);
+          addRelations(refs);
           console.log("droped!", refs);
         }
       }}

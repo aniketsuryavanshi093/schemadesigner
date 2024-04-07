@@ -10,6 +10,7 @@ export type columntype =
   | "datetime"
   | "enum";
 export type columnindextype = "primary" | "unique" | "none" | "index";
+export type columnrelationtype = "onetoone" | "onetomany" | "manytomamy";
 export interface columns {
   columnName: string;
   isEditing?: boolean;
@@ -38,5 +39,8 @@ export interface Table {
 export type relationtype = {
   head: string;
   tail: string;
+  id: string;
   tablefrom: string;
+  tableto: string;
+  relation: columnrelationtype;
 };

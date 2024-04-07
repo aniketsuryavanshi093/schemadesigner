@@ -1,6 +1,7 @@
 import * as React from "react";
 import Xarrow from "react-xarrows";
 import ArrowRelation from "./ArrowRelation";
+import { relationtype } from "@/types";
 
 export interface IclickPosition {
   open: boolean;
@@ -8,14 +9,14 @@ export interface IclickPosition {
   y: number;
 }
 
-export default function Arrow(props: IArrowProps) {
+const Arrow: React.FC<{ relation: relationtype }> = ({ relation }) => {
   const [hoveredState, setHoveredState] = React.useState(false);
   const [clickPosition, setClickPosition] = React.useState<IclickPosition>({
     open: false,
     x: 0,
     y: 0,
   });
-  const ref = React.useRef(null);
+  const ref = React.useRef<HTMLDivElement>(null);
 
   const handleClickOutside = (event: React.MouseEvent) => {
     if (ref.current && !ref.current?.contains(event.target)) {
@@ -54,7 +55,7 @@ export default function Arrow(props: IArrowProps) {
       onMouseEnter={(e) => {
         e.preventDefault();
         setHoveredState(true);
-        console.log(props, "over");
+        console.log(relation, "over");
       }}
       onMouseLeave={(e) => {
         setHoveredState(false);
@@ -83,16 +84,19 @@ export default function Arrow(props: IArrowProps) {
         path={"smooth"}
         showTail={true}
         color={hoveredState ? "purple" : "#9BA1A6"}
-        start={props.head}
-        end={props.tail}
+        start={relation.head}
+        end={relation.tail}
         strokeWidth={2}
       />
       {clickPosition.open && (
         <ArrowRelation
+          relation={relation}
           setClickPosition={setClickPosition}
           clickPosition={clickPosition}
         />
       )}
     </div>
   );
-}
+};
+
+export default Arrow;

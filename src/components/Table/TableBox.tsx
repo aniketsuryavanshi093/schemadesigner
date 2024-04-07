@@ -1,17 +1,22 @@
 import { useCallback, useRef, useState } from "react";
-import Draggable from "react-draggable";
+import Draggable, { DraggableEvent } from "react-draggable";
 import "./tablebox.scss";
 import { Table } from "@/types";
 import useTableHooks from "@/hooks/useTableHooks";
 import TableColumns, { ColumnComment } from "./TableColumns";
 import { concatString } from "@/utils";
+import useTableRelationHook from "@/hooks/useTableRelationHook";
 
-const TableBox: React.FC<{ table: Table }> = ({ boxId, table, setArrows }) => {
+const TableBox: React.FC<{
+  table: Table;
+  boxId: string;
+}> = ({ boxId, table }) => {
   const dragRef = useRef();
   const boxRef = useRef();
+  const { updateAllRelation } = useTableRelationHook();
   const { setEditTablehelper, updateSaveTablehelper } = useTableHooks();
-  const [position, setPosition] = useState();
-  const handleDragStop = (event, data) => {
+  const [position, setPosition] = useState<{ x: 0; y: 0 }>({ x: 0, y: 0 });
+  const handleDragStop = (event: DraggableEvent, data: any) => {
     if (event.type === "mouseup" || event.type === "touchend") {
       setTimeout(() => {
         setIsDragging(false);
@@ -29,10 +34,10 @@ const TableBox: React.FC<{ table: Table }> = ({ boxId, table, setArrows }) => {
   const handleEdit = useCallback(() => {
     setEditTablehelper(table);
   }, [table, setEditTablehelper]);
-  const eventControl = (event) => {
+  const eventControl = (event: DraggableEvent) => {
     if (event.type === "mousemove" || event.type === "touchmove") {
       setIsDragging(true);
-      setArrows();
+      updateAllRelation();
     }
     if (event.type === "mouseup" || event.type === "touchend") {
       setTimeout(() => {

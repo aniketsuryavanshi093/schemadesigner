@@ -24,3 +24,13 @@ export const concatString = (characters: number, string: string) => {
   }
   return string;
 };
+
+export function generateUID(length: number) {
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let uid = "";
+  for (let i = 0; i < length; i++) {
+    uid += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return uid;
+}

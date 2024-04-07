@@ -1,11 +1,65 @@
 import React from "react";
 import { IclickPosition } from "./Arrows";
+import useTableRelationHook from "@/hooks/useTableRelationHook";
+import { columnrelationtype, relationtype } from "@/types";
 
 const ArrowRelation: React.FC<{
   clickPosition: IclickPosition;
+  relation: relationtype;
   setClickPosition: React.Dispatch<React.SetStateAction<IclickPosition>>;
-}> = ({ clickPosition, setClickPosition }) => {
+}> = ({ clickPosition, setClickPosition, relation }) => {
   const [editingrelatioon, setEditingRelation] = React.useState(false);
+  const { updateRelationShipType, removeRelation } = useTableRelationHook();
+  const relationShipString = (nmae: columnrelationtype) => {
+    let temp = "";
+    switch (nmae) {
+      case "onetoone":
+        temp = "One-To-One";
+        break;
+      case "onetomany":
+        temp = "One-To-Many";
+        break;
+      case "manytomamy":
+        temp = "Many-To-Many";
+        break;
+      default:
+        break;
+    }
+    return temp;
+  };
+  const handleUpdateRelation = (elem: { name: string; value: string }) => {
+    if (elem.value !== relation.relation) {
+      updateRelationShipType(relation, elem.value as columnrelationtype);
+      setClickPosition({
+        open: false,
+        x: 0,
+        y: 0,
+      });
+      setEditingRelation(false);
+    }
+  };
+  const handleRemoveRelation = () => {
+    setClickPosition({
+      open: false,
+      x: 0,
+      y: 0,
+    });
+    removeRelation(relation);
+  };
+  const relationarray: { name: string; value: string }[] = [
+    {
+      name: "One-To-One",
+      value: "onetoone",
+    },
+    {
+      name: "One-To-Many",
+      value: "onetomany",
+    },
+    {
+      name: "Many-To-Many",
+      value: "manytomamy",
+    },
+  ];
   return (
     <div
       style={{
@@ -29,7 +83,7 @@ const ArrowRelation: React.FC<{
         >
           <div className="flex w-full justify-between items-center">
             <p className="font-semibold text-[14px] capitalize text-indigo-500 text-nowrap whitespace-nowrap me-2">
-              One-To-One
+              {relationShipString(relation.relation)}
             </p>
             <div className="svg-div  justify-center items-center  hidden text-gray-500 group-hover:flex">
               <i className="fa-solid fa-pen text-[14px]"></i>
@@ -39,17 +93,22 @@ const ArrowRelation: React.FC<{
       ) : (
         <div className=" w-[140px] z-[1000] absolute text-grey-800 group cursor-pointer rounded border-indigo-700 p-2 focus:outline-none border-0 bg-[#1e293b] ">
           <ul className="relative text-white">
-            <li className="rounded px-2 py-2 capitalize hover:bg-teal-500">
-              one-to-one
-            </li>
-            <li className="rounded px-2 py-2 capitalize hover:bg-teal-500">
-              one-to-many
-            </li>
-            <li className="rounded px-2 py-2 capitalize hover:bg-teal-500">
-              many-to-one
-            </li>
+            {relationarray?.map((elem) => (
+              <li
+                onClick={() => handleUpdateRelation(elem)}
+                key={elem.name}
+                className={`rounded px-2 py-2 capitalize ${
+                  relation.relation === elem.value && "bg-teal-500"
+                } hover:bg-teal-500`}
+              >
+                {elem.name}
+              </li>
+            ))}
             <hr className="border-grey-200 my-1" />
-            <li className="cursor-pointer flex text-[13px] justify-start items-center rounded px-2 py-2 hover:bg-red-200 hover:text-red-600">
+            <li
+              onClick={handleRemoveRelation}
+              className="cursor-pointer flex text-[13px] justify-start items-center rounded px-2 py-2 hover:bg-red-200 hover:text-red-600"
+            >
               <i className="fa-regular text-[13px] fa-trash-can me-3"></i>
               <p>RelationShip</p>
             </li>
