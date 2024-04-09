@@ -40,13 +40,13 @@ export const authOptions: NextAuthOptions = {
             "user/login",
             credentials?.password
               ? {
-                  email: credentials?.username,
-                  password: credentials?.password || "",
-                }
+                email: credentials?.username,
+                password: credentials?.password || "",
+              }
               : {
-                  email: credentials?.username,
-                  isGoogleLogin: true,
-                },
+                email: credentials?.username,
+                isGoogleLogin: true,
+              },
             {
               headers: {
                 "Content-Type": "application/json",
@@ -55,12 +55,10 @@ export const authOptions: NextAuthOptions = {
           );
 
           // If no error and we have user data, return it
-          console.log("💕💕💕💕💕💕💕", res);
           const data = res.data;
           if (data.status === "fail") {
             return;
           }
-          console.log(res.data);
           const user = {
             _id: data?.data?.User?._id,
             name: data?.data?.User?.name,
@@ -70,7 +68,7 @@ export const authOptions: NextAuthOptions = {
             updatedAt: data?.data?.User?.updatedAt,
             folders: data?.data?.User?.folders,
             schemas: data?.data?.User?.schemas,
-            authToken: data?.Token,
+            authToken: data?.data?.Token,
           };
           return user;
         } catch (error: any) {
@@ -90,10 +88,6 @@ export const authOptions: NextAuthOptions = {
         // Note, that `session` can be any arbitrary object, remember to validate it!
         let pic = params.token.profilePic;
         let usname = params.token.userName;
-        console.log(
-          params.session?.profilePic || pic,
-          params.session?.userName || usname
-        );
         params.token.profilePic = params.session?.profilePic || pic;
         params.token.userName = params.session?.userName || usname;
         await Fetch({
@@ -133,6 +127,7 @@ export const authOptions: NextAuthOptions = {
         session.user.updatedAt = token.updatedAt;
         session.user.folders = token.folders;
         session.user.schemas = token.schemas;
+        session.user.authToken = token.authToken;
       }
       return session;
     },

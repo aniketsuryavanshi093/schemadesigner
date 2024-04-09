@@ -1,8 +1,7 @@
 "use client";
 import React from "react";
 
-const DashboardHeader = ({ user }: { user: any }) => {
-  console.log(user);
+const DashboardHeader = () => {
   return (
     <div className="relative overflow-hidden  bg-indigo-700 pb-[19rem]">
       <div

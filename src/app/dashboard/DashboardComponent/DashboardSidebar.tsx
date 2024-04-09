@@ -1,15 +1,54 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { useEffect, useState, } from "react";
+import CreateFolderModal from "./CreateFolderModal";
+import { getUserFoldersAction } from "@/apiservices/userservices";
+import { useSession } from "next-auth/react";
+import { useQuery } from "@tanstack/react-query";
+import { Fetch } from "@/utils/apiservice";
 
 const DashboardSidebar = () => {
   const router = usePathname();
   const [selected, setSelected] = React.useState<string>("");
+  const [createFolderModal, setCreateFolderModal] = useState(false)
+  const { data } = useSession()
+  console.log(data);
+
+  // const { data: userfolder, isLoading } = useQuery({
+  //   queryFn: () => getUserFoldersAction({ authToken: data?.user?.authToken }),
+  //   queryKey: ['userfolder'],
+  //   enabled: !!data?.user?.authToken
+  // })
+
+  const getFontOverridead = async () => {
+    try {
+      const res = await Fetch({
+        token: data?.user?.authToken,
+        method: "GET",
+        url: "user/folder"
+      })
+      console.log(res);
+
+    } catch (error) {
+      console.log(error);
+
+    }
+
+  }
+  useEffect(() => {
+    getFontOverridead()
+  }, [data])
+
+  // console.log(userfolder, isLoading);
+
   useEffect(() => {
     setSelected(router as string);
   }, [router]);
-  console.log(selected);
+
+  const handleCreateFolder = async () => {
+    setCreateFolderModal(true)
+  }
   return (
     <aside className="pb-8 pt-6 lg:col-span-3">
       {/* user profile with name */}
@@ -17,9 +56,8 @@ const DashboardSidebar = () => {
         <Link
           href="/dashboard"
           prefetch={false}
-          className={`listitem ${
-            selected === "/dashboard" && "listitemselected"
-          } `}
+          className={`listitem ${selected === "/dashboard" && "listitemselected"
+            } `}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -39,11 +77,9 @@ const DashboardSidebar = () => {
         <Link
           prefetch={false}
           href="/dashboard/favourites"
-          className={`listitem ${
-            selected === "/dashboard/favourites" && "listitemselected"
-          } `}
+          className={`listitem ${selected === "/dashboard/favourites" && "listitemselected"
+            } `}
         >
-          {/* onClick={() => setSelected("favourites")} */}
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -59,7 +95,7 @@ const DashboardSidebar = () => {
           </svg>
           My Favorites
         </Link>
-        <button className={`listitem  `}>
+        <button className={`listitem`} onClick={handleCreateFolder}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -76,6 +112,11 @@ const DashboardSidebar = () => {
           Create Folders
         </button>
       </div>
+      {
+        createFolderModal && (
+          <CreateFolderModal isOpen={createFolderModal} onClose={() => setCreateFolderModal(false)} />
+        )
+      }
     </aside>
   );
 };

@@ -11,8 +11,9 @@ export const Fetch = async ({
 }) => {
   let res = await fetch(`${process.env.NEXT_SERVERURL}${url}`, {
     method,
+    mode: 'cors', // Specify that you're making cross-origin requests
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `${token}`,
       "Content-Type": "application/json", // this needs to be defined
     },
     body: JSON.stringify(data),
@@ -20,10 +21,11 @@ export const Fetch = async ({
   return res.json();
 };
 
+
 export const createHeader = (token: string) => {
   return {
     headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-};
+      Authorization: `{token}`
+    }
+  }
+}

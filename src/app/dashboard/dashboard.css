@@ -18,6 +18,16 @@ z-index: 3;
     height: 37px;
     background-color: #6366f1 !important;
   }
+  .createinput{
+    appearance: none;
+    background-color: #fff;
+    border-color: #64748b;
+    border-width: 1px;
+    border-radius: 0;
+    padding: .5rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
   .listitem {
     font-size: 15px;
     margin-top: 5px;
