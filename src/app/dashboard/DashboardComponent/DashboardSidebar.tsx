@@ -6,41 +6,24 @@ import CreateFolderModal from "./CreateFolderModal";
 import { getUserFoldersAction } from "@/apiservices/userservices";
 import { useSession } from "next-auth/react";
 import { useQuery } from "@tanstack/react-query";
-import { Fetch } from "@/utils/apiservice";
+import { FolderType } from "@/types";
+import Image from "next/image";
 
 const DashboardSidebar = () => {
   const router = usePathname();
   const [selected, setSelected] = React.useState<string>("");
   const [createFolderModal, setCreateFolderModal] = useState(false)
   const { data } = useSession()
-  console.log(data);
+  const { data: userfolder, isLoading } = useQuery({
+    queryFn: () => getUserFoldersAction({ authToken: data?.user?.authToken }),
+    queryKey: ['userfolder'],
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    retry: false,
+    enabled: !!data?.user?.authToken
+  })
 
-  // const { data: userfolder, isLoading } = useQuery({
-  //   queryFn: () => getUserFoldersAction({ authToken: data?.user?.authToken }),
-  //   queryKey: ['userfolder'],
-  //   enabled: !!data?.user?.authToken
-  // })
-
-  const getFontOverridead = async () => {
-    try {
-      const res = await Fetch({
-        token: data?.user?.authToken,
-        method: "GET",
-        url: "user/folder"
-      })
-      console.log(res);
-
-    } catch (error) {
-      console.log(error);
-
-    }
-
-  }
-  useEffect(() => {
-    getFontOverridead()
-  }, [data])
-
-  // console.log(userfolder, isLoading);
+  console.log(userfolder, isLoading);
 
   useEffect(() => {
     setSelected(router as string);
@@ -95,20 +78,21 @@ const DashboardSidebar = () => {
           </svg>
           My Favorites
         </Link>
+        {
+          userfolder?.data?.data?.map((elem: FolderType) => (
+            <Link href={`/folder/${elem._id}`} key={elem._id} className={`listitem flex items-center justify-start`} >
+              <i className="fa-regular fa-folder-open"></i>
+              {elem.name}
+            </Link>
+          ))
+        }
         <button className={`listitem`} onClick={handleCreateFolder}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M12 10.5v6m3-3H9m4.06-7.19l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z"
-            ></path>
-          </svg>
+          <Image
+            height={22}
+            width={22}
+            src="/images/folder.svg"
+            alt="seacrh"
+          />
           Create Folders
         </button>
       </div>

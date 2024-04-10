@@ -1,14 +1,11 @@
-import { Fetch, } from "@/utils/apiservice";
+import axiosInterceptorInstance from "@/http";
+import { Fetch, createHeader, } from "@/utils/apiservice";
 
 export const getUserFoldersAction = async (val: { authToken: string }) => {
     console.log(val.authToken);
-    return Fetch({
-        token: val?.authToken,
-        method: "GET",
-        url: "user/folder"
-    })
-    // return axiosInterceptorInstance.get(
-    //     `/user/folder`,
-    //     createHeader(val.authToken)
-    // );
+
+    return axiosInterceptorInstance.get(
+        `/user/folders`,
+        createHeader(val.authToken)
+    );
 }

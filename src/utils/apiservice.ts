@@ -25,7 +25,7 @@ export const Fetch = async ({
 export const createHeader = (token: string) => {
   return {
     headers: {
-      Authorization: `{token}`
+      Authorization: `${token}`
     }
   }
 }

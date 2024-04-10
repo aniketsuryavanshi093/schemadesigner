@@ -3,18 +3,21 @@ import CustomModal from '@/components/Modals/CustomModal'
 import enqueSnackBar from '@/utils/enqueSnackBar';
 import { newfoldervalidation } from '@/utils/validations/validation';
 import { Button } from '@nextui-org/react';
+import { useQueryClient } from '@tanstack/react-query';
 import { Form, Formik } from 'formik'
 import React, { useTransition } from 'react'
 import { Spinner } from 'reactstrap';
 
 const CreateFolderModal: React.FC<{ onClose: () => void, isOpen: boolean }> = ({ isOpen, onClose }) => {
     const [isPending, startTransition] = useTransition();
+    const queryCLient = useQueryClient();
     const handleServerAction = async (value: any) => {
         try {
             const rsposne = await createFolderAction(value)
             console.log(rsposne);
             onClose()
             enqueSnackBar({ type: "success", message: "Folder created!" })
+            queryCLient.invalidateQueries({ queryKey: ['userfolder'] })
         } catch (error) {
             console.log(error);
         }
