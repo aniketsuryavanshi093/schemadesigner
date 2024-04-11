@@ -22,3 +22,12 @@ export const signupvalidations = Yup.object({
     )
     .required("this field is required"),
 });
+
+export const newdaigramvalidation = Yup.object({
+  title: Yup.string().required("Schema title is required!")
+})
+
+
+export const newfoldervalidation = Yup.object({
+  name: Yup.string().required("Folder name is required!")
+})

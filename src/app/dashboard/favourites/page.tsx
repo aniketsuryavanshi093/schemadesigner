@@ -1,9 +1,14 @@
+"use client";
 import React from "react";
+import Commonheader from "../DashboardComponent/Commonheader";
 
 const Favorites = () => {
   return (
     <div>
-      <h1>Favorites</h1>
+      <Commonheader
+        title="My favorites
+"
+      />
     </div>
   );
 };

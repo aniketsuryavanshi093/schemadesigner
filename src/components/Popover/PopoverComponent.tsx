@@ -19,7 +19,6 @@ const PopoverComponent: React.FC<{
       open={popoverOpen}
       handler={() => setPopover(!popoverOpen)}
       placement={placement}
-      showArrow={true}
     >
       <PopoverHandler>{trigger}</PopoverHandler>
       <PopoverContent className={`bg-[#18181bdd] ${classname}  `}>
@@ -27,7 +26,7 @@ const PopoverComponent: React.FC<{
       </PopoverContent>
     </Popover>
   ) : (
-    <Popover placement={placement} showArrow={true}>
+    <Popover placement={placement} >
       <PopoverHandler>{trigger}</PopoverHandler>
       <PopoverContent className={`bg-[#18181bdd] ${classname}  `}>
         {content}

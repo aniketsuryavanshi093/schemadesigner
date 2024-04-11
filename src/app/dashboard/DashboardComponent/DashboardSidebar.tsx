@@ -1,15 +1,37 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import CreateFolderModal from "./CreateFolderModal";
+import { getUserFoldersAction } from "@/apiservices/userservices";
+import { useSession } from "next-auth/react";
+import { useQuery } from "@tanstack/react-query";
+import { FolderType } from "@/types";
+import Image from "next/image";
 
 const DashboardSidebar = () => {
   const router = usePathname();
+
   const [selected, setSelected] = React.useState<string>("");
+  const [createFolderModal, setCreateFolderModal] = useState(false);
+  const { data } = useSession();
+  const { data: userfolder, isLoading } = useQuery({
+    queryFn: () => getUserFoldersAction({ authToken: data?.user?.authToken }),
+    queryKey: ["userfolder"],
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    retry: false,
+    enabled: !!data?.user?.authToken,
+  });
+
   useEffect(() => {
     setSelected(router as string);
   }, [router]);
-  console.log(selected);
+
+  const handleCreateFolder = async () => {
+    setCreateFolderModal(true);
+  };
+
   return (
     <aside className="pb-8 pt-6 lg:col-span-3">
       {/* user profile with name */}
@@ -43,7 +65,6 @@ const DashboardSidebar = () => {
             selected === "/dashboard/favourites" && "listitemselected"
           } `}
         >
-          {/* onClick={() => setSelected("favourites")} */}
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -59,23 +80,30 @@ const DashboardSidebar = () => {
           </svg>
           My Favorites
         </Link>
-        <button className={`listitem  `}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
+        {userfolder?.data?.data?.map((elem: FolderType) => (
+          <Link
+            href={`/dashboard/folder/${elem._id}`}
+            key={elem._id}
+            className={`listitem flex ${
+              window.location.pathname.split("/")[3] === elem._id &&
+              "listitemselected"
+            } items-center justify-start`}
           >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M12 10.5v6m3-3H9m4.06-7.19l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z"
-            ></path>
-          </svg>
+            <i className="fa-regular fa-folder-open"></i>
+            {elem.name}
+          </Link>
+        ))}
+        <button className={`listitem`} onClick={handleCreateFolder}>
+          <Image height={22} width={22} src="/images/folder.svg" alt="seacrh" />
           Create Folders
         </button>
       </div>
+      {createFolderModal && (
+        <CreateFolderModal
+          isOpen={createFolderModal}
+          onClose={() => setCreateFolderModal(false)}
+        />
+      )}
     </aside>
   );
 };

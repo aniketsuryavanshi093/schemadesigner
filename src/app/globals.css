@@ -79,6 +79,33 @@ body {
 ::-webkit-scrollbar-track {
   background-color:#fff;
 }
+.wrapper{
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+a:hover{
+  color: black;
+}
+a{
+ 
+  color: black;
+  text-decoration: none !important;
+}
+:root{
+  --table-striped-bg: #f5f5f5;
+  --border-color: #DBDBDB;
+  --table-card-bg: #2b2e3b;
+  --text-secondry: #787486;
+  --table-bodycolor: #9295a4;
+  --maincontent-background: #fff;
+  --scrollbar-bg: #bdbdbd;
+  --table-head-bg: #c3cbe4;
+  --text-muted: #5e6d55;
+  --text-primary: #000;
+  --table-text-color: #000;
+  --border-radius: 12px;
+}
 ::-webkit-scrollbar {
   width: 5px;
   background-color: #f5f5f5;
