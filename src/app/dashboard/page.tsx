@@ -5,29 +5,10 @@ import Link from "next/link";
 import "./dashboard.css";
 import PopoverComponent from "@/components/Popover/PopoverComponent";
 import { SnackbarProvider } from "notistack";
+import OptionsContent from "@/components/OptionsContainer/OptionsContainer";
 
 const MyDaigram = () => {
-  const content = (
-    <div className="overflow-hidden border-none rounded-md  shadow-lg outline-none min-w-[170px] ">
-      <div className="mt-1 mb-2 flex items-center justify-start px-1  pb-1 text-xs font-bold uppercase text-gray-400"> More Actions </div>
-      <div className="group flex cursor-pointer items-center px-1 py-1.5 text-sm text-gray-200 hover:bg-gray-600 hover:text-gray-200">
-        <i className="fa-solid fa-pen-to-square me-2 text-gray-400"></i> Edit Details
-      </div>
-      <div className="group flex cursor-pointer items-center px-1 py-1.5 text-sm text-gray-200 hover:bg-gray-600 hover:text-gray-200">
-        <i className="fa-regular fa-copy me-2 text-gray-400"></i> Make Copy
-      </div>
-      <div className="group flex cursor-pointer items-center px-1 py-1.5 text-sm text-gray-200 hover:bg-gray-600 hover:text-gray-200">
-        <i className="fa-solid fa-folder-open me-2 text-gray-400"></i> Move to Folder
-      </div>
-      <div className="group flex cursor-pointer items-center px-1 py-1.5 text-sm text-gray-200 hover:bg-gray-600 hover:text-gray-200">
-        <i className="fa-solid fa-star me-2 text-gray-400"></i> Add to Favorites
-      </div>
-      <hr className="my-1 border-gray-600" />
-      <div className="group flex cursor-pointer items-center px-1 py-1.5 text-sm text-gray-200 hover:bg-gray-600 hover:text-gray-200">
-        <i className="fa-solid fa-trash me-2 text-gray-400"></i> Delete
-      </div>
-    </div>
-  );
+
   return (
 
     <SnackbarProvider
@@ -57,7 +38,7 @@ const MyDaigram = () => {
                 <PopoverComponent
                   classname="px-2 py-2"
                   placement="right-start"
-                  content={content}
+                  content={<OptionsContent />}
                   trigger={
                     <button className="opacity-0 absolute wrapper schemaoption p-2 bg-gray-700 rounded-sm top-2 right-2">
                       <i className="fa-solid fa-ellipsis text-white"></i>

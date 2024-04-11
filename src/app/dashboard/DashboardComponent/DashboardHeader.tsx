@@ -1,7 +1,8 @@
 "use client";
+import { UserType } from "@/types";
 import React from "react";
 
-const DashboardHeader = () => {
+const DashboardHeader: React.FC<{ user: UserType, isLoading: boolean }> = () => {
   return (
     <div className="relative overflow-hidden  bg-indigo-700 pb-[19rem]">
       <div

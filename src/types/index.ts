@@ -54,6 +54,9 @@ export type FormSignupvalueType = {
   password?: string;
 };
 
+export type errorType = 'success' | 'error'
+
+
 export type SchemaType = {
   title: string;
   user: string;
@@ -69,4 +72,15 @@ export type FolderType = {
   _id: string;
   schemaIds: SchemaType[],
   createdAt: string
+}
+
+export type UserType = {
+  _id: string;
+  schemaIds: SchemaType[]
+  createdAt: string
+  name: string
+  folder: FolderType[]
+  profilePic: string,
+  email: string,
+  updatedAt: string
 }

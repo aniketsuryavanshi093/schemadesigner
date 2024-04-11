@@ -22,9 +22,7 @@ const DashboardSidebar = () => {
     retry: false,
     enabled: !!data?.user?.authToken
   })
-
   console.log(userfolder, isLoading);
-
   useEffect(() => {
     setSelected(router as string);
   }, [router]);
