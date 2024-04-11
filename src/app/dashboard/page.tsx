@@ -2,25 +2,37 @@
 import React from "react";
 import Commonheader from "./DashboardComponent/Commonheader";
 import Link from "next/link";
-import "./dashboard.css";
 import PopoverComponent from "@/components/Popover/PopoverComponent";
 import { SnackbarProvider } from "notistack";
 import OptionsContent from "@/components/OptionsContainer/OptionsContainer";
+import { useQuery } from "@tanstack/react-query";
+import { getUserSchemaAction } from "@/apiservices/userservices";
+import { useSession } from "next-auth/react";
+import "./dashboard.css";
 
 const MyDaigram = () => {
-
+  const { data } = useSession();
+  const { data: userSchema, isLoading } = useQuery({
+    queryFn: () => getUserSchemaAction(data?.user?.authToken),
+    queryKey: ["userDetails"],
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    retry: false,
+    enabled: !!data?.user?.authToken,
+    staleTime: 10 * 60 * 5,
+  });
+  console.log(userSchema, "userSchema", isLoading);
   return (
-
     <SnackbarProvider
       anchorOrigin={{
-        vertical: 'bottom',
-        horizontal: 'right',
+        vertical: "bottom",
+        horizontal: "right",
       }}
       iconVariant={{
-        success: '✅',
-        error: '✖️',
-        warning: '⚠️',
-        info: 'ℹ️',
+        success: "✅",
+        error: "✖️",
+        warning: "⚠️",
+        info: "ℹ️",
       }}
     >
       <div>
@@ -31,10 +43,13 @@ const MyDaigram = () => {
               className="flex flex-col schemadivwrapper relative overflow-hidden rounded-lg border-2 border-t-0 border-gray-200 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
               href="/dashboard/favourites"
             >
-              <button className="" onClick={(e) => {
-                e.stopPropagation()
-                e.preventDefault()
-              }}>
+              <button
+                className=""
+                onClick={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                }}
+              >
                 <PopoverComponent
                   classname="px-2 py-2"
                   placement="right-start"
@@ -73,7 +88,6 @@ const MyDaigram = () => {
         </div>
       </div>
     </SnackbarProvider>
-
   );
 };
 

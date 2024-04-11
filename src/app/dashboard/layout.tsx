@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import React from "react";
 import DashboardSidebar from "./DashboardComponent/DashboardSidebar";
 import DashboardHeader from "./DashboardComponent/DashboardHeader";
@@ -13,19 +13,16 @@ type PageProps = {
 };
 const Dashboardlayout: React.FC<PageProps> = ({ children }) => {
   return (
-    <SessionProvider refetchOnWindowFocus={false} >
+    <SessionProvider refetchOnWindowFocus={false}>
       <QueryProvider>
-        <LayoutContent >
-          {children}
-        </LayoutContent>
+        <LayoutContent>{children}</LayoutContent>
       </QueryProvider>
     </SessionProvider>
-
   );
 };
 
 const LayoutContent: React.FC<PageProps> = ({ children }) => {
-  const { data, status } = useSession()
+  const { data, status } = useSession();
   console.log(data?.user?.authToken);
 
   const { data: userData, isLoading } = useQuery({
@@ -36,8 +33,7 @@ const LayoutContent: React.FC<PageProps> = ({ children }) => {
     retry: false,
     enabled: !!data?.user?.authToken,
     staleTime: 10 * 60 * 5,
-  })
-  console.log(userData);
+  });
 
   return (
     <div className="w-full  min-h-screen bg-gray-100">
@@ -53,7 +49,7 @@ const LayoutContent: React.FC<PageProps> = ({ children }) => {
         </div>
       </section>
     </div>
-  )
-}
+  );
+};
 
 export default Dashboardlayout;

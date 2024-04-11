@@ -24,7 +24,6 @@ const DashboardSidebar = () => {
     enabled: !!data?.user?.authToken,
   });
 
-  console.log(userfolder, isLoading);
   useEffect(() => {
     setSelected(router as string);
   }, [router]);
@@ -40,8 +39,9 @@ const DashboardSidebar = () => {
         <Link
           href="/dashboard"
           prefetch={false}
-          className={`listitem ${selected === "/dashboard" && "listitemselected"
-            } `}
+          className={`listitem ${
+            selected === "/dashboard" && "listitemselected"
+          } `}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -61,8 +61,9 @@ const DashboardSidebar = () => {
         <Link
           prefetch={false}
           href="/dashboard/favourites"
-          className={`listitem ${selected === "/dashboard/favourites" && "listitemselected"
-            } `}
+          className={`listitem ${
+            selected === "/dashboard/favourites" && "listitemselected"
+          } `}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -83,9 +84,10 @@ const DashboardSidebar = () => {
           <Link
             href={`/dashboard/folder/${elem._id}`}
             key={elem._id}
-            className={`listitem flex ${window.location.pathname.split("/")[3] === elem._id &&
+            className={`listitem flex ${
+              window.location.pathname.split("/")[3] === elem._id &&
               "listitemselected"
-              } items-center justify-start`}
+            } items-center justify-start`}
           >
             <i className="fa-regular fa-folder-open"></i>
             {elem.name}
