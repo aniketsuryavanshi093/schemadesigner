@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { useEffect, useState, } from "react";
+import React, { useEffect, useState } from "react";
 import CreateFolderModal from "./CreateFolderModal";
 import { getUserFoldersAction } from "@/apiservices/userservices";
 import { useSession } from "next-auth/react";
@@ -11,25 +11,28 @@ import Image from "next/image";
 
 const DashboardSidebar = () => {
   const router = usePathname();
+
   const [selected, setSelected] = React.useState<string>("");
-  const [createFolderModal, setCreateFolderModal] = useState(false)
-  const { data } = useSession()
+  const [createFolderModal, setCreateFolderModal] = useState(false);
+  const { data } = useSession();
   const { data: userfolder, isLoading } = useQuery({
     queryFn: () => getUserFoldersAction({ authToken: data?.user?.authToken }),
-    queryKey: ['userfolder'],
+    queryKey: ["userfolder"],
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     retry: false,
-    enabled: !!data?.user?.authToken
-  })
+    enabled: !!data?.user?.authToken,
+  });
+
   console.log(userfolder, isLoading);
   useEffect(() => {
     setSelected(router as string);
   }, [router]);
 
   const handleCreateFolder = async () => {
-    setCreateFolderModal(true)
-  }
+    setCreateFolderModal(true);
+  };
+
   return (
     <aside className="pb-8 pt-6 lg:col-span-3">
       {/* user profile with name */}
@@ -76,29 +79,29 @@ const DashboardSidebar = () => {
           </svg>
           My Favorites
         </Link>
-        {
-          userfolder?.data?.data?.map((elem: FolderType) => (
-            <Link href={`/folder/${elem._id}`} key={elem._id} className={`listitem flex items-center justify-start`} >
-              <i className="fa-regular fa-folder-open"></i>
-              {elem.name}
-            </Link>
-          ))
-        }
+        {userfolder?.data?.data?.map((elem: FolderType) => (
+          <Link
+            href={`/dashboard/folder/${elem._id}`}
+            key={elem._id}
+            className={`listitem flex ${window.location.pathname.split("/")[3] === elem._id &&
+              "listitemselected"
+              } items-center justify-start`}
+          >
+            <i className="fa-regular fa-folder-open"></i>
+            {elem.name}
+          </Link>
+        ))}
         <button className={`listitem`} onClick={handleCreateFolder}>
-          <Image
-            height={22}
-            width={22}
-            src="/images/folder.svg"
-            alt="seacrh"
-          />
+          <Image height={22} width={22} src="/images/folder.svg" alt="seacrh" />
           Create Folders
         </button>
       </div>
-      {
-        createFolderModal && (
-          <CreateFolderModal isOpen={createFolderModal} onClose={() => setCreateFolderModal(false)} />
-        )
-      }
+      {createFolderModal && (
+        <CreateFolderModal
+          isOpen={createFolderModal}
+          onClose={() => setCreateFolderModal(false)}
+        />
+      )}
     </aside>
   );
 };
