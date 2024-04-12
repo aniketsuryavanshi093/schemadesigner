@@ -34,3 +34,36 @@ export function generateUID(length: number) {
   }
   return uid;
 }
+
+export function getTimeAgo(timestamp: string) {
+  const now = new Date();
+  const past = new Date(timestamp);
+  const elapsed = now - past;
+
+  // Convert elapsed time to seconds
+  const seconds = Math.floor(elapsed / 1000);
+
+  // Define time intervals
+  const intervals = {
+    year: 31536000,
+    month: 2592000,
+    day: 86400,
+    hour: 3600,
+    minute: 60,
+  };
+
+  // Calculate time differences
+  if (seconds > intervals.year) {
+    return "" + Math.floor(seconds / intervals.year) + " year ago";
+  } else if (seconds > intervals.month) {
+    return "" + Math.floor(seconds / intervals.month) + " month ago";
+  } else if (seconds > intervals.day) {
+    return "" + Math.floor(seconds / intervals.day) + " day ago";
+  } else if (seconds > intervals.hour) {
+    return "" + Math.floor(seconds / intervals.hour) + " hour ago";
+  } else if (seconds > intervals.minute) {
+    return "" + Math.floor(seconds / intervals.minute) + " minute ago";
+  } else {
+    return "just now";
+  }
+}

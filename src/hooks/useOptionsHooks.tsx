@@ -1,4 +1,7 @@
-import { MoveToFolderAction } from "@/actions/SchemaActions";
+import {
+  MoveToFolderAction,
+  DeleteSchemaAction,
+} from "@/actions/SchemaActions";
 import { errorType } from "@/types";
 import React, { useTransition } from "react";
 
@@ -19,7 +22,24 @@ const useOptionsHooks = () => {
       } else {
         callback("success", data);
       }
-      console.log(data);
+    } catch (error) {
+      callback("error", error);
+      console.log("error", error);
+    }
+  };
+  const handleDeleteSchema = async (
+    schemaId: string,
+    callback: (type: errorType, data: any) => void
+  ) => {
+    try {
+      const data = (await DeleteSchemaAction({
+        schemaId,
+      })) as { isError: boolean };
+      if (data?.isError) {
+        callback("error", data);
+      } else {
+        callback("success", data);
+      }
     } catch (error) {
       callback("error", error);
       console.log("error", error);
@@ -32,9 +52,16 @@ const useOptionsHooks = () => {
   ) => {
     StartTransition(() => handleMoveFolder(folderId, schemaId, callback));
   };
+  const deleteSchema = (
+    schemaId: string,
+    callback: (type: errorType, data: any) => void
+  ) => {
+    StartTransition(() => handleDeleteSchema(schemaId, callback));
+  };
   return {
     moveTofolders,
     isPending,
+    deleteSchema,
   };
 };
 

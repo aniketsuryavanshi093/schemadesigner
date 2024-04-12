@@ -11,11 +11,24 @@ const OptionsContent: React.FC<{ schemaId: string }> = ({ schemaId }) => {
   >("options");
   const queryClient = useQueryClient();
   const folders = queryClient.getQueryData(["userfolder"]);
-  const { moveTofolders, isPending } = useOptionsHooks();
+  const { moveTofolders, isPending, deleteSchema } = useOptionsHooks();
   const handleFolderclick = (id: string) => {
-    moveTofolders(id, "66153345f319f2f153801849", (errorType, data) => {
+    moveTofolders(id, schemaId, (errorType, data) => {
       if (errorType === "success") {
+        console.log("data", data, ["folder", id]);
+        queryClient.resetQueries({ queryKey: ["folder", id], stale: false });
         enqueSnackBar({ message: data?.message!, type: "success" });
+      } else {
+        enqueSnackBar({ message: data?.message!, type: "error" });
+      }
+    });
+  };
+  const handleDelete = () => {
+    deleteSchema(schemaId, (errorType, data) => {
+      if (errorType === "success") {
+        queryClient.invalidateQueries({ queryKey: ["userSchemas"] });
+        enqueSnackBar({ message: data?.message!, type: "success" });
+        queryClient.resetQueries({ queryKey: ["folder"], stale: false });
       } else {
         enqueSnackBar({ message: data?.message!, type: "error" });
       }
@@ -48,7 +61,10 @@ const OptionsContent: React.FC<{ schemaId: string }> = ({ schemaId }) => {
             Favorites
           </div>
           <hr className="my-1 border-gray-600" />
-          <div className="group flex cursor-pointer items-center px-1 py-1.5 text-sm text-gray-200 hover:bg-gray-600 hover:text-gray-200">
+          <div
+            onClick={handleDelete}
+            className="group flex cursor-pointer items-center px-1 py-1.5 text-sm text-gray-200 hover:bg-gray-600 hover:text-gray-200"
+          >
             <i className="fa-solid fa-trash me-2 text-gray-400"></i> Delete
           </div>
         </>
@@ -62,8 +78,7 @@ const OptionsContent: React.FC<{ schemaId: string }> = ({ schemaId }) => {
           </div>
           {isPending ? (
             <div className="wrapper my-3">
-              {" "}
-              <Spinner size={"sm"} />{" "}
+              <Spinner size={"sm"} />
             </div>
           ) : (
             folders?.data.data?.map((elem: FolderType) => (
