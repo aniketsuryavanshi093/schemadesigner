@@ -1,5 +1,5 @@
 import axiosInterceptorInstance from "@/http";
-import { Fetch, createHeader } from "@/utils/apiservice";
+import { createHeader } from "@/utils/apiservice";
 
 export const getUserFoldersAction = async (val: { authToken: string }) => {
   return axiosInterceptorInstance.get(
