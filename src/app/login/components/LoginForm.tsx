@@ -10,10 +10,12 @@ import {
   loginvalidations,
   signupvalidations,
 } from "@/utils/validations/validation";
-import { log } from "console";
+import { Spinner } from "reactstrap";
+import { create } from "domain";
 
 const LoginForm = () => {
   const [isPending, startTransition] = useTransition();
+  const [Loading, setLoading] = useState(false);
   const [Error, setError] = useState<{ type: string; msg: string }>({
     type: "",
     msg: "",
@@ -41,35 +43,51 @@ const LoginForm = () => {
         if (type === "google" || type === "github") {
           const provider = new GoogleAuthProvider();
           const googleresponse = (await signInWithPopup(auth, provider)) as any;
-          await handleAuthSubmit(
+          const createres = await handleAuthSubmit(
             {
               name: `${googleresponse?._tokenResponse?.firstName} ${googleresponse?._tokenResponse?.lastName}`,
-              email: googleresponse?._tokenResponse?.email,
+              email:
+                googleresponse?.user?.email ||
+                googleresponse?._tokenResponse?.email,
               profilePic: googleresponse?._tokenResponse?.photoUrl,
               isGoogleLogin: true,
             },
             "credentials",
             formType
           );
+
+          if (createres.isError) {
+            setLoading(false);
+            setError({ msg: createres.message, type: "cred" });
+            return;
+          }
           signIn("credentials", {
             redirect: true,
-            username: googleresponse?._tokenResponse?.email,
+            username:
+              googleresponse?.user?.email ||
+              googleresponse?._tokenResponse?.email,
             password: "",
           })
             .then((data: any) => {
               if (data?.error) {
                 setError({ msg: data.error, type: "cred" });
+                setLoading(false);
               } else {
                 console.log(
                   "🚀 ~ file: index.tsx ~ line 106 ~ LoginForm ~ data",
                   data
                 );
-                // window.location.replace("/dashboard");
+                window.location.replace("/dashboard");
               }
             })
             .catch((er) => console.log(er));
         } else {
-          await handleAuthSubmit(values, type, formType);
+          const createres = await handleAuthSubmit(values, type, formType);
+          if (createres.isError) {
+            setLoading(false);
+            setError({ msg: createres.message, type: "cred" });
+            return;
+          }
           signIn(type, {
             redirect: true,
             username: values?.email,
@@ -78,7 +96,9 @@ const LoginForm = () => {
             .then((data: any) => {
               if (data?.error) {
                 setError({ msg: data.error, type: "cred" });
+                setLoading(false);
               } else {
+                console.log(data);
                 window.location.replace("/dashboard");
               }
             })
@@ -94,9 +114,9 @@ const LoginForm = () => {
             password: "",
           })
             .then((data: any) => {
-              console.log(data);
               if (data?.error !== null || data?.error) {
-                setError({ msg: data.error, type: "google" });
+                setError({ msg: data.error, type: "cred" });
+                setLoading(false);
               } else {
                 window.location.replace("/dashboard");
               }
@@ -109,10 +129,12 @@ const LoginForm = () => {
             password: values?.password?.trim(),
           })
             .then((data: any) => {
-              console.log(data);
               if (data?.error) {
+                setLoading(false);
                 setError({ msg: data.error, type: "cred" });
               } else {
+                console.log(data);
+
                 window.location.replace("/dashboard");
               }
             })
@@ -121,17 +143,22 @@ const LoginForm = () => {
       }
     } catch (error: any) {
       console.log("💕💕", "server Error", error);
+      setLoading(false);
     }
   };
   const validation =
     formType === "login" ? loginvalidations : signupvalidations;
   const handleOtherClick = (type: string) => {
     setError({ type: "", msg: "" });
+    setLoading(true);
     startTransition(() => handleServerAction(null, type));
   };
   return (
     <div className="form-container">
       <p className="title">{formType === "login" ? "Login" : "SignUp"}</p>
+      {Error.type === "cred" && (
+        <p className="error-msg text-red-800 text-sm mb-0">{Error.msg}</p>
+      )}
       <Formik
         initialValues={initialValue}
         validationSchema={validation}
@@ -140,12 +167,15 @@ const LoginForm = () => {
         }}
       >
         {({ values, handleChange, errors }) => (
-          <Form className=" form">
+          <Form className="mt-2 form">
             <div className="input-group">
               <label htmlFor="email">Email</label>
               <input
                 type="email"
-                onChange={handleChange}
+                onChange={(e) => {
+                  setError({ msg: "", type: "" });
+                  handleChange(e);
+                }}
                 value={values.email}
                 name="email"
                 id="email"
@@ -156,8 +186,12 @@ const LoginForm = () => {
               <label htmlFor="password">Password</label>
               <input
                 type="password"
-                onChange={handleChange}
+                onChange={(e) => {
+                  setError({ msg: "", type: "" });
+                  handleChange(e);
+                }}
                 name="password"
+                disabled={isPending || Loading}
                 value={values.password}
                 id="password"
                 placeholder=""
@@ -176,6 +210,7 @@ const LoginForm = () => {
                 <input
                   type="password"
                   value={values.cpassword}
+                  disabled={isPending || Loading}
                   name="cpassword"
                   onChange={handleChange}
                   id="cpassword"
@@ -184,7 +219,13 @@ const LoginForm = () => {
               </div>
             )}
             <button type="submit" className="sign">
-              {formType === "login" ? "Sign in" : "SignUp"}
+              {isPending || Loading ? (
+                <Spinner size="sm" />
+              ) : formType === "login" ? (
+                "Sign in"
+              ) : (
+                "SignUp"
+              )}
             </button>
           </Form>
         )}
@@ -226,12 +267,13 @@ const LoginForm = () => {
         </button>
       </div>
       <p className="signup">
-        {formType === "login" ? "Dont have an account?" : "Already a member?"}{" "}
+        {formType === "login" ? "Dont have an account?" : "Already a member?"}
         <a
           className="cursor-pointer"
-          onClick={() =>
-            setFormType((prev) => (prev === "login" ? "signup" : "login"))
-          }
+          onClick={() => {
+            setError({ msg: "", type: "" });
+            setFormType((prev) => (prev === "login" ? "signup" : "login"));
+          }}
         >
           {formType === "login" ? "Sign up" : "Login"}
         </a>
