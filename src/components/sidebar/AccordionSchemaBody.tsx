@@ -17,6 +17,7 @@ import TableComments from "./SidebarComponents/TableComments";
 
 const AccordionSchemaBody: React.FC<{ table: Table }> = ({ table }) => {
   const { addColumns, UpdateColumn } = useColumnsHook();
+  const [open, setopen] = useState(false);
   const { updateSaveTablehelper } = useTableHooks();
   const dispatch = useAppDispatch();
   const handleColorChange = (elm: string) => {
@@ -92,7 +93,9 @@ const AccordionSchemaBody: React.FC<{ table: Table }> = ({ table }) => {
       <div className="border-t-small columnbottomwrapper w-full mt-[3px] flex items-center px-2 pt-[10px]  justify-between">
         <div className="flex items-center justify-center gap-2">
           <PopoverComponent
-            classname="px-2 py-2"
+            classname="px-2 py-2 columtypewrapper"
+            popoverOpen={open}
+            setPopover={setopen}
             placement="bottom-start"
             content={content}
             trigger={

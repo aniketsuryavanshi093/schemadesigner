@@ -46,7 +46,7 @@ const Commonheader: React.FC<{
           Imptitle="Sort :"
           options={[...options]}
         />
-        <Button onClick={handleNewDaigram} className="newdaigrambtn">
+        <Button onClick={handleNewDaigram} className=" ms-3 newdaigrambtn">
           {" "}
           New Daigram{" "}
         </Button>

@@ -22,8 +22,7 @@ const Dashboardlayout: React.FC<PageProps> = ({ children }) => {
 };
 
 const LayoutContent: React.FC<PageProps> = ({ children }) => {
-  const { data, status } = useSession();
-  console.log(data?.user?.authToken);
+  const { data } = useSession();
 
   const { data: userData, isLoading } = useQuery({
     queryKey: ["userDetails"],
