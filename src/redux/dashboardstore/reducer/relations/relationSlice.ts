@@ -14,6 +14,9 @@ const relationSlice = createSlice({
     addRelation: (state, action: PayloadAction<relationtype>) => {
       state.relations.push(action.payload);
     },
+    InsertRelation: (state, action: PayloadAction<relationtype[]>) => {
+      state.relations = action.payload;
+    },
     updateRelation: (state) => {
       state.relations = [...state.relations];
     },
@@ -47,6 +50,7 @@ export const {
   updateRelation,
   removeRelationofTable,
   updateRelationShip,
+  InsertRelation,
   removeRelationShip,
 } = relationSlice.actions;
 

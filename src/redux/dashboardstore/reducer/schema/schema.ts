@@ -14,6 +14,9 @@ const schemaSlice = createSlice({
     addTable: (state, action: PayloadAction<Table>) => {
       state.tables.push(action.payload);
     },
+    InsertTable: (state, action: PayloadAction<Table[]>) => {
+      state.tables = action.payload;
+    },
     removeClearEditing: (state) => {
       state.tables = state.tables.map((elem) =>
         elem.isEditing
@@ -176,6 +179,7 @@ export const {
   addTable,
   addCommentOpenAction,
   addTablecommentAction,
+  InsertTable,
   setcolumnEditing,
   updateSaveTable,
   addColumnsAction,
