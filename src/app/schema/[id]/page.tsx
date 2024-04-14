@@ -17,7 +17,7 @@ const Schema = () => {
       <TransformWrapper
         panning={{ excluded: tables.map((table) => table.tableName) }}
         wheel={{ excluded: tables.map((table) => table.tableName) }}
-        initialScale={1}
+        initialScale={0.3}
         initialPositionX={0}
         smooth={false}
         minScale={0.5}
