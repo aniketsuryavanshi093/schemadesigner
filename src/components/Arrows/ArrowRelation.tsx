@@ -97,7 +97,7 @@ const ArrowRelation: React.FC<{
               <li
                 onClick={() => handleUpdateRelation(elem)}
                 key={elem.name}
-                className={`rounded px-2 py-2 capitalize ${
+                className={` whitespace-nowrap rounded px-2 py-2 capitalize ${
                   relation.relation === elem.value && "bg-teal-500"
                 } hover:bg-teal-500`}
               >

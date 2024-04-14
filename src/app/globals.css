@@ -87,6 +87,9 @@ body {
 a:hover{
   color: black;
 }
+p{
+  margin-bottom: 0px !important;
+}
 a{
  
   color: black;

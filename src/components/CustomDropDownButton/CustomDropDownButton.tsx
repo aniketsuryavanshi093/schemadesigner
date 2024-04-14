@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
-import {
-  Dropdown,
-  DropdownMenu,
-  DropdownToggle,
-  DropdownItem,
-} from "reactstrap";
+
 import "./CustomDropDownButton.css";
 import Image from "next/image";
 import Search from "../Search/Search";
+import {
+  Button,
+  Dropdown,
+  DropdownMenu,
+  DropdownTrigger,
+  DropdownItem,
+} from "@nextui-org/react";
 
 export type optionstype = {
   label: string;
@@ -104,26 +106,127 @@ const CustomDropDownButton: React.FC<Pageprops> = ({
     }
   }, [StatusCOlor]);
   return (
-    <Dropdown
-      disabled={disabled}
-      isOpen={Menu}
-      toggle={() => {
-        setoptions(options);
-        setMenu(!Menu);
-      }}
-      style={{ transform: "none" }}
-      className={
-        title === "Filter"
-          ? "filterbox"
-          : "align-self-center dropdownwrapper px-0"
-      }
-    >
-      <DropdownToggle
-        className={`btn custom-dropdown   ${
-          disabled && "statusselectdisable"
-        } ${classname || ""} `}
-        id={`dropdown-basic${defaultValue || selectedValue}`}
-      >
+    // <Dropdown
+    //   disabled={disabled}
+    //   isOpen={Menu}
+    //   toggle={() => {
+    //     setoptions(options);
+    //     setMenu(!Menu);
+    //   }}
+    //   style={{ transform: "none" }}
+    //   className={
+    //     title === "Filter"
+    //       ? "filterbox"
+    //       : "align-self-center dropdownwrapper px-0"
+    //   }
+    // >
+    //   <DropdownToggle
+    //     className={`btn custom-dropdown   ${
+    //       disabled && "statusselectdisable"
+    //     } ${classname || ""} `}
+    //     id={`dropdown-basic${defaultValue || selectedValue}`}
+    //   >
+    //     <div className="wrapper justify-between p-2 rounded-md hover:bg-gray-100 w-100">
+    //       <div className="wrapper ">
+    //         {icon && (
+    //           <Image
+    //             className={"me-2 darkmode_icon"}
+    //             src={icon}
+    //             alt="Wallet"
+    //             height={14}
+    //             width={14}
+    //           />
+    //         )}
+    //         {Imptitle && (
+    //           <span className="text-sm font-semibold text-gray-400 me-2">
+    //             {Imptitle}
+    //           </span>
+    //         )}
+    //         {reset_value ? (
+    //           <span className="filter_label text-grey-600 font-semibold  align-middle">
+    //             {title}
+    //           </span>
+    //         ) : (
+    //           <div className="wrapper justify-start">
+    //             {onselectIcon &&
+    //               options.find((el) => el.value === selectedValue)?.img && (
+    //                 <Image
+    //                   src={
+    //                     options.find((el) => el.value === selectedValue)
+    //                       ?.img as string
+    //                   }
+    //                   alt="xyz"
+    //                   className="me-2 rounded-pill"
+    //                   height={20}
+    //                   width={20}
+    //                 />
+    //               )}
+    //             <span className="filter_laebl text-[12px] align-middle text-grey-600 font-semibold  textcapitilize">
+    //               {ShowImpLable || title}
+    //             </span>
+    //           </div>
+    //         )}
+    //       </div>
+    //       <i className=" ms-1 text-sm fa-solid fa-chevron-down" />
+    //     </div>
+    //   </DropdownToggle>
+    //   <DropdownMenu className="custonmenu">
+    //     {searchable && (
+    //       <Search
+    //         searchiconclass="dropdownsearchicon"
+    //         inpClassname="dropdownsearch"
+    //         placeholder="Search user"
+    //         setValue={handleSearch}
+    //         minSearchChar={0}
+    //         waitTime={2}
+    //       ></Search>
+    //     )}
+    //     {_options.map(({ label, value, img, color }: optionstype) => (
+    //       <DropdownItem
+    //         active={value === selectedValue}
+    //         key={value}
+    //         onClick={() => {
+    //           value !== selectedValue && onSelect(value, label, color);
+    //         }}
+    //       >
+    //         <div className="wrapper text_primary justify-content-between">
+    //           {value === selectedValue && !reset_value ? (
+    //             <>
+    //               <div className="wrapper justify-start">
+    //                 {img && (
+    //                   <Image
+    //                     src={img || "/images/icons/userdummy.avif"}
+    //                     className="rounded-pill"
+    //                     alt={label}
+    //                     height={25}
+    //                     width={25}
+    //                   />
+    //                 )}
+    //                 <p className="check-selected mx-2">{label}</p>
+    //               </div>
+    //               <i className="fa-solid check-selected fa-check ms-2" />
+    //             </>
+    //           ) : (
+    //             <div className="wrapper justify-start">
+    //               {img && (
+    //                 <Image
+    //                   src={img || "/images/icons/userdummy.avif"}
+    //                   className="rounded-pill"
+    //                   alt={label}
+    //                   height={25}
+    //                   width={25}
+    //                 />
+    //               )}
+    //               <p className="check-selected mx-2">{label}</p>
+    //             </div>
+    //           )}
+    //         </div>
+    //       </DropdownItem>
+    //     ))}
+    //   </DropdownMenu>
+    // </Dropdown>
+    <Dropdown>
+      <DropdownTrigger>
         <div className="wrapper justify-between p-2 rounded-md hover:bg-gray-100 w-100">
           <div className="wrapper ">
             {icon && (
@@ -167,59 +270,17 @@ const CustomDropDownButton: React.FC<Pageprops> = ({
           </div>
           <i className=" ms-1 text-sm fa-solid fa-chevron-down" />
         </div>
-      </DropdownToggle>
-      <DropdownMenu className="custonmenu">
-        {searchable && (
-          <Search
-            searchiconclass="dropdownsearchicon"
-            inpClassname="dropdownsearch"
-            placeholder="Search user"
-            setValue={handleSearch}
-            minSearchChar={0}
-            waitTime={2}
-          ></Search>
-        )}
+      </DropdownTrigger>
+      <DropdownMenu
+        aria-label="Single selection example"
+        variant="flat"
+        disallowEmptySelection
+        selectionMode="single"
+        selectedKeys={selectedValue}
+        onSelectionChange={(e) => onDropdownSelect(e as string)}
+      >
         {_options.map(({ label, value, img, color }: optionstype) => (
-          <DropdownItem
-            active={value === selectedValue}
-            key={value}
-            onClick={() => {
-              value !== selectedValue && onSelect(value, label, color);
-            }}
-          >
-            <div className="wrapper text_primary justify-content-between">
-              {value === selectedValue && !reset_value ? (
-                <>
-                  <div className="wrapper justify-start">
-                    {img && (
-                      <Image
-                        src={img || "/images/icons/userdummy.avif"}
-                        className="rounded-pill"
-                        alt={label}
-                        height={25}
-                        width={25}
-                      />
-                    )}
-                    <p className="check-selected mx-2">{label}</p>
-                  </div>
-                  <i className="fa-solid check-selected fa-check ms-2" />
-                </>
-              ) : (
-                <div className="wrapper justify-start">
-                  {img && (
-                    <Image
-                      src={img || "/images/icons/userdummy.avif"}
-                      className="rounded-pill"
-                      alt={label}
-                      height={25}
-                      width={25}
-                    />
-                  )}
-                  <p className="check-selected mx-2">{label}</p>
-                </div>
-              )}
-            </div>
-          </DropdownItem>
+          <DropdownItem key={value}>{label}</DropdownItem>
         ))}
       </DropdownMenu>
     </Dropdown>

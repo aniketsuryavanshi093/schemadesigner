@@ -13,7 +13,8 @@ const SchemaCard: React.FC<{ schema: SchemaType; key: string }> = ({
     <div key={key} className="relative block">
       <Link
         className="flex flex-col schemadivwrapper relative overflow-hidden rounded-lg border-2 border-t-0 border-gray-200 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-        href="/dashboard/favourites"
+        href={`/schema/${schema._id}`}
+        prefetch={false}
       >
         <button
           className=""

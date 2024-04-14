@@ -15,7 +15,10 @@ const TableBox: React.FC<{
   const boxRef = useRef();
   const { updateAllRelation } = useTableRelationHook();
   const { setEditTablehelper, updateSaveTablehelper } = useTableHooks();
-  const [position, setPosition] = useState<{ x: 0; y: 0 }>({ x: 0, y: 0 });
+  const [position, setPosition] = useState<{ x: number; y: number }>({
+    x: table?.tablePosition?.x || 0,
+    y: table?.tablePosition?.y || 0,
+  });
   const handleDragStop = (event: DraggableEvent, data: any) => {
     if (event.type === "mouseup" || event.type === "touchend") {
       setTimeout(() => {
@@ -45,13 +48,10 @@ const TableBox: React.FC<{
       }, 100);
     }
   };
+
   return (
     <Draggable
       ref={dragRef}
-      defaultPosition={{
-        x: table?.tablePosition?.x || 0,
-        y: table?.tablePosition?.y || 0,
-      }}
       onDrag={eventControl}
       position={position}
       onStop={handleDragStop}
