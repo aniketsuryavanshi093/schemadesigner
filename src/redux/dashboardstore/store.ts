@@ -15,7 +15,12 @@ import storage from "redux-persist/lib/storage";
 import { colorInitialState } from "./reducer/colors/colorSlice";
 import { SchemainitialTypes } from "./reducer/schema/schema";
 import { PersistPartial } from "redux-persist/es/persistReducer";
-import { relationInitialState, relationReducer } from "./reducer/relations/relationSlice";
+import {
+  relationInitialState,
+  relationReducer,
+} from "./reducer/relations/relationSlice";
+import { trackerInitialState } from "./reducer/trackarrows/trackarrow";
+import TrackArrowRootReducer from "./reducer/trackarrows";
 
 const persistConfig = {
   key: "root",
@@ -27,7 +32,8 @@ const persistConfig = {
 const rootReducer = combineReducers({
   schemareducer: schemaRootReducer,
   colorreducer: colorRootReducer,
-  relationreducer: relationReducer
+  relationreducer: relationReducer,
+  trackArrowreducer: TrackArrowRootReducer,
 });
 
 const persistedState = persistReducer<RootState, any>(
@@ -50,5 +56,6 @@ export type RootState = {
   schemareducer: SchemainitialTypes & PersistPartial;
   colorreducer: colorInitialState & PersistPartial;
   relationreducer: relationInitialState & PersistPartial;
+  trackArrowreducer: trackerInitialState & PersistPartial;
 };
 export type AppDispatch = typeof store.dispatch;

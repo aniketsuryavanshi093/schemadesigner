@@ -15,7 +15,7 @@ export const getRandomColor = (usedcolors: string[]): string | undefined => {
 };
 
 export const getColumnId = (name1: string, name2: string) => {
-  return `${name1}^^${name2}`;
+  return `${name1?.replaceAll(" ", "")}^^${name2?.replaceAll(" ", "")}`;
 };
 
 export const concatString = (characters: number, string: string) => {

@@ -2,11 +2,16 @@
 import { useAppSelector } from "@/redux/dashboardstore/hook";
 import React from "react";
 import { Button } from "@nextui-org/react";
-import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import {
+  TransformWrapper,
+  TransformComponent,
+  KeepScale,
+} from "react-zoom-pan-pinch";
 import TablesContainer from "./SchemaComponents/TablesContainer";
 import { useXarrow, Xwrapper } from "react-xarrows";
 import Arrow from "@/components/Arrows/Arrows";
 import useTableRelationHook from "@/hooks/useTableRelationHook";
+import TrackerArrow from "@/components/Arrows/TrackerArrow";
 
 const Schema = () => {
   const updateXarrow = useXarrow();
@@ -48,6 +53,7 @@ const Schema = () => {
         {relations.map((rel, index) => (
           <Arrow key={index} relation={rel} />
         ))}
+        <TrackerArrow />
       </Xwrapper>
     </>
   );
