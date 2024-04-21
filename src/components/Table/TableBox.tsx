@@ -40,7 +40,7 @@ const TableBox: React.FC<{
   const eventControl = (event: DraggableEvent) => {
     if (event.type === "mousemove" || event.type === "touchmove") {
       setIsDragging(true);
-      updateAllRelation();
+      handleChanges();
     }
     if (event.type === "mouseup" || event.type === "touchend") {
       setTimeout(() => {
@@ -48,7 +48,13 @@ const TableBox: React.FC<{
       }, 100);
     }
   };
-
+  let tempInterval: any;
+  const handleChanges = useCallback(() => {
+    clearTimeout(tempInterval);
+    tempInterval = setTimeout(() => {
+      updateAllRelation();
+    }, 100);
+  }, [tempInterval]);
   return (
     <Draggable
       ref={dragRef}

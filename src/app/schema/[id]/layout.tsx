@@ -39,7 +39,10 @@ const LayoutContent: React.FC<{ children: ReactNode }> = ({ children }) => {
   });
   const dispatch = useAppDispatch();
   useEffect(() => {
-    if (schemaDetails?.data?.data?.Schema) {
+    if (
+      schemaDetails?.data?.data?.Schema &&
+      schemaDetails.data.data.Schema.tablesdata
+    ) {
       dispatch(
         InsertTable(JSON.parse(schemaDetails.data.data.Schema.tablesdata))
       );
@@ -74,12 +77,14 @@ const LayoutContent: React.FC<{ children: ReactNode }> = ({ children }) => {
     };
 
     document.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("unload", handleVisibilityChange);
 
     return () => {
       // Cleanup: Remove the event listener when the component unmounts
+      window.removeEventListener("unload", handleVisibilityChange);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, [isLogging, id, data?.user?.authToken]); // Dependency array includes isLogging
+  }, [isLogging, id, data?.user?.authToken, tablesdata, tablesrelations]); // Dependency array includes isLogging
 
   return (
     <div className="flex w-full h-[100vh]">

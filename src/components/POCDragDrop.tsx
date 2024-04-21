@@ -10,7 +10,7 @@ const POCDragDrop: React.FC<{ tables: Table[] }> = ({ tables }) => {
         <TableBox
           key={table.tableIndex}
           table={table}
-          {...{ boxId: table.tableName }}
+          {...{ boxId: table.tableName?.replaceAll(" ", "") }}
         />
       ))}
     </div>
