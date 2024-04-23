@@ -2,26 +2,17 @@
 import React from "react";
 import Commonheader from "./DashboardComponent/Commonheader";
 import { SnackbarProvider } from "notistack";
-import { useQuery } from "@tanstack/react-query";
-import { getUserSchemaAction } from "@/apiservices/userservices";
 import { useSession } from "next-auth/react";
+import useGetUserDaigrams from "@/hooks/useGetUserDaigrams";
 import { SchemaType } from "@/types";
 import SchemaDisplayContainer from "@/components/SchemasDisplayContainer/SchemaDisplayContainer";
 import "./dashboard.css";
 
 const MyDaigram = () => {
-  const { data, status } = useSession();
-  const { data: userSchema, isLoading } = useQuery({
-    queryFn: () => getUserSchemaAction(data?.user?.authToken),
-    queryKey: ["userSchemas"],
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    retry: false,
-    enabled: !!data?.user?.authToken,
-    staleTime: 10 * 60 * 5,
-  });
+  const { status } = useSession();
+  const [filtervalue, setfiltervalue] = React.useState("LastCreatedAt");
+  const { userSchema, isLoading } = useGetUserDaigrams(filtervalue)
   const schemas = userSchema?.data?.data[0]?.schemas as SchemaType[];
-
   return (
     <SnackbarProvider
       anchorOrigin={{
@@ -36,7 +27,7 @@ const MyDaigram = () => {
       }}
     >
       <div>
-        <Commonheader title="My Daigrams" />
+        <Commonheader filterChanged={(e) => setfiltervalue(e)} title="My Daigrams" />
         <SchemaDisplayContainer
           Schemas={schemas}
           isloading={isLoading || status === "loading"}
