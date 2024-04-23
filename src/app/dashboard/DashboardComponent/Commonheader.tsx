@@ -5,26 +5,25 @@ import CreateNewDaigramModal from "./CreateNewDaigramModal";
 
 const Commonheader: React.FC<{
   title?: string;
+  filterChanged: (value: string) => void
   HeaderComponent?: () => JSX.Element; // Make HeaderComponent optional
-}> = ({ title, HeaderComponent }) => {
+}> = ({ title, HeaderComponent, filterChanged }) => {
   const [isOpen, setIsopen] = useState(false);
+  const [selectedKeys, setSelectedKeys] = React.useState(new Set(["LastCreatedAt"]));
   const options = [
     {
       label: "Date Created",
-      value: "dateCreated",
+      value: "LastCreatedAt",
     },
     {
       label: "Date Updated",
-      value: "dateUpdated",
+      value: "LastUpdatedAt",
     },
     {
       label: "Alphabetical",
-      value: "alphabetical",
+      value: "Alphabetical",
     },
   ];
-  const handleFilter = (value: string) => {
-    console.log(value);
-  };
   const handleNewDaigram = () => {
     setIsopen(true);
   };
@@ -40,9 +39,12 @@ const Commonheader: React.FC<{
 
       <div className="flex justify-between items-center ">
         <CustomDropDownButton
-          defaultValue={"dateCreated"}
-          selectedvalue={"dateCreated"}
-          onDropdownSelect={handleFilter}
+          defaultValue={"LastCreatedAt"}
+          selectedvalue={selectedKeys}
+          onDropdownSelect={(e) => {
+            setSelectedKeys(e)
+            filterChanged(e.anchorKey)
+          }}
           Imptitle="Sort :"
           options={[...options]}
         />

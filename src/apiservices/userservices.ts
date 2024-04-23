@@ -12,8 +12,8 @@ export const getUserDetailsAction = async (val: string) => {
   return axiosInterceptorInstance.get(`/user/get`, createHeader(val));
 };
 
-export const getUserSchemaAction = async (val: string) => {
-  return axiosInterceptorInstance.get(`/user/getdaigrams`, createHeader(val));
+export const getUserSchemaAction = async (val: string, filter?: string) => {
+  return axiosInterceptorInstance.get(`/user/getdaigrams?sortby=${filter || 'LastCreatedAt'}`, createHeader(val));
 };
 
 export const getUserFolderDetailsAction = async (val: {
