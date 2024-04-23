@@ -67,6 +67,7 @@ const TransformContainer: React.FC<{
       updateAllRelation();
     }, 500);
   };
+  const { sidebarOpen } = useAppSelector((state) => state.schemareducer);
   return (
     <>
       <div className="tools absolute z-[9999999999] bottom-[10%] right-[6%]">
@@ -90,7 +91,9 @@ const TransformContainer: React.FC<{
         </Button>
       </div>
       <TransformComponent
-        wrapperClass="schemawrapperpanpinch"
+        wrapperClass={` ${
+          sidebarOpen ? "schemawrapperpanpinch" : "schemawrapperpanpinchfull"
+        } `}
         contentClass="schematransformcomp"
       >
         <TablesContainer />
