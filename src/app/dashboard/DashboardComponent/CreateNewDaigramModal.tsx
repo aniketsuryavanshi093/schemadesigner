@@ -46,7 +46,7 @@ const CreateNewDaigramModal: React.FC<{
         }}
       >
         {({ values, errors, handleChange }) => (
-          <Form className="wrapper m-3 flex-column">
+          <Form className="wrapper m-3 flex-col">
             <div className="w-full">
               <label
                 className="block font-semibold text-sm text-gray-700"

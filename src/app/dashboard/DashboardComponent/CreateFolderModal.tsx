@@ -14,7 +14,6 @@ const CreateFolderModal: React.FC<{ onClose: () => void, isOpen: boolean }> = ({
     const handleServerAction = async (value: any) => {
         try {
             const rsposne = await createFolderAction(value)
-            console.log(rsposne);
             onClose()
             enqueSnackBar({ type: "success", message: "Folder created!" })
             queryCLient.invalidateQueries({ queryKey: ['userfolder'] })

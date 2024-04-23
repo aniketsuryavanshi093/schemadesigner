@@ -15,7 +15,7 @@ import { Spinner } from "reactstrap";
 const LoginForm = () => {
   const [isPending, startTransition] = useTransition();
   const [Loading, setLoading] = useState(false);
-  const [Error, setError] = useState<{ type: string; msg: string }>({
+  const [ErrorInfo, setError] = useState<{ type: string; msg: string }>({
     type: "",
     msg: "",
   });
@@ -24,15 +24,15 @@ const LoginForm = () => {
   const initialValue: FormSignupvalueType =
     formType === "login"
       ? {
-          email: "",
-          password: "",
-        }
+        email: "",
+        password: "",
+      }
       : {
-          email: "",
-          password: "",
-          name: "",
-          cpassword: "",
-        };
+        email: "",
+        password: "",
+        name: "",
+        cpassword: "",
+      };
   const handleServerAction = async (
     values: FormSignupvalueType | null,
     type: string
@@ -155,8 +155,8 @@ const LoginForm = () => {
   return (
     <div className="form-container">
       <p className="title">{formType === "login" ? "Login" : "SignUp"}</p>
-      {Error.type === "cred" && (
-        <p className="error-msg text-red-800 text-sm mb-0">{Error.msg}</p>
+      {ErrorInfo.type === "cred" && (
+        <p className="error-msg text-red-800 text-sm mb-0">{ErrorInfo.msg}</p>
       )}
       <Formik
         initialValues={initialValue}
@@ -235,7 +235,7 @@ const LoginForm = () => {
         <p className="message">
           {formType === "login" ? "Login" : "SignUp"} with social accounts
         </p>
-        <div className="line"></div>
+        <div className="line" />
       </div>
       <div className="social-icons">
         <button
@@ -267,15 +267,15 @@ const LoginForm = () => {
       </div>
       <p className="signup">
         {formType === "login" ? "Dont have an account?" : "Already a member?"}
-        <a
-          className="cursor-pointer"
+        <button
+          className="cursor-pointer border-none bg-transparent text-white ms-2"
           onClick={() => {
             setError({ msg: "", type: "" });
             setFormType((prev) => (prev === "login" ? "signup" : "login"));
           }}
         >
           {formType === "login" ? "Sign up" : "Login"}
-        </a>
+        </button>
       </p>
     </div>
   );

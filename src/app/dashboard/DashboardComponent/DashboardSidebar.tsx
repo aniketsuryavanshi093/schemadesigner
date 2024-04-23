@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { Skeleton } from "@nextui-org/react";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import CreateFolderModal from "./CreateFolderModal";
@@ -34,24 +35,22 @@ const DashboardSidebar = () => {
 
   return (
     <aside className="pb-8 pt-6 lg:col-span-3">
-      {/* user profile with name */}
       <div className="listwrapper">
         <Link
           href="/dashboard"
           prefetch={false}
-          className={`listitem ${
-            selected === "/dashboard" && "listitemselected"
-          } `}
+          className={`listitem ${selected === "/dashboard" && "listitemselected"
+            } `}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
-            stroke-width="1.5"
+            strokeWidth="1.5"
             stroke="currentColor"
           >
             <path
-              stroke-linecap="round"
+              strokeLinecap="round"
               stroke-linejoin="round"
               d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125"
             ></path>
@@ -61,9 +60,8 @@ const DashboardSidebar = () => {
         <Link
           prefetch={false}
           href="/dashboard/favourites"
-          className={`listitem ${
-            selected === "/dashboard/favourites" && "listitemselected"
-          } `}
+          className={`listitem ${selected === "/dashboard/favourites" && "listitemselected"
+            } `}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -80,19 +78,23 @@ const DashboardSidebar = () => {
           </svg>
           My Favorites
         </Link>
-        {userfolder?.data?.data?.map((elem: FolderType) => (
+        {!data?.user?.authToken || isLoading ? (
+          Array(2).fill(0).map((_, ind) => (
+            <Skeleton key={ind} className="w-[95%] mt-2 mx-auto h-[40px] rounded-md" />
+          ))
+        ) : userfolder?.data?.data?.map((elem: FolderType) => (
           <Link
             href={`/dashboard/folder/${elem._id}`}
             key={elem._id}
-            className={`listitem flex ${
-              window.location.pathname.split("/")[3] === elem._id &&
+            className={`listitem flex ${window.location.pathname.split("/")[3] === elem._id &&
               "listitemselected"
-            } items-center justify-start`}
+              } items-center justify-start`}
           >
             <i className="fa-regular fa-folder-open"></i>
             {elem.name}
           </Link>
         ))}
+
         <button className={`listitem`} onClick={handleCreateFolder}>
           <Image height={22} width={22} src="/images/folder.svg" alt="seacrh" />
           Create Folders

@@ -50,7 +50,7 @@ const SchemaCard: React.FC<{ schema: SchemaType; key: string }> = ({
             <div className="flex items-center justify-between">
               <div className="my-0.5 flex items-center space-x-2">
                 <p className="mb-0 text-xs text-gray-500">
-                  Edited {getTimeAgo(schema.createdAt)}
+                  Edited {getTimeAgo(schema.updatedAt)}
                 </p>
               </div>
             </div>
