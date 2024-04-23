@@ -3,9 +3,11 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 export type SchemainitialTypes = {
   tables: Table[];
+  sidebarOpen: boolean;
 };
 const initialState: SchemainitialTypes = {
   tables: [],
+  sidebarOpen: true,
 };
 const schemaSlice = createSlice({
   name: "tableSchema",
@@ -148,6 +150,9 @@ const schemaSlice = createSlice({
       );
       state.tables = updatedState;
     },
+    sidebarOpen: (state, action: PayloadAction<boolean>) => {
+      state.sidebarOpen = action.payload;
+    },
     setcolumnEditing: (
       state,
       action: PayloadAction<{ columnIndex: number; tableIndex: string }>
@@ -178,6 +183,7 @@ export const {
   deleteTable,
   addTable,
   addCommentOpenAction,
+  sidebarOpen,
   addTablecommentAction,
   InsertTable,
   setcolumnEditing,

@@ -8,8 +8,12 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { getSchemaDetailsAction } from "@/apiservices/Schemaservices";
 import { useAppDispatch, useAppSelector } from "@/redux/dashboardstore/hook";
-import { InsertTable } from "@/redux/dashboardstore/reducer/schema/schema";
+import {
+  InsertTable,
+  sidebarOpen,
+} from "@/redux/dashboardstore/reducer/schema/schema";
 import { InsertRelation } from "@/redux/dashboardstore/reducer/relations/relationSlice";
+import { Button } from "@nextui-org/react";
 
 const layout: React.FC<{ children: ReactNode }> = ({ children }) => {
   return (
@@ -22,6 +26,9 @@ const layout: React.FC<{ children: ReactNode }> = ({ children }) => {
 const LayoutContent: React.FC<{ children: ReactNode }> = ({ children }) => {
   const { data } = useSession();
   const tablesdata = useAppSelector((state) => state.schemareducer.tables);
+  const { sidebarOpen: sidebaropen } = useAppSelector(
+    (state) => state.schemareducer
+  );
   const tablesrelations = useAppSelector(
     (state) => state.relationreducer.relations
   );
@@ -85,10 +92,21 @@ const LayoutContent: React.FC<{ children: ReactNode }> = ({ children }) => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
   }, [isLogging, id, data?.user?.authToken, tablesdata, tablesrelations]); // Dependency array includes isLogging
-
+  const handleSidebar = () => {
+    dispatch(sidebarOpen(true));
+  };
   return (
     <div className="flex w-full h-[100vh]">
-      <SchemaSidebar />
+      {!sidebaropen && (
+        <Button
+          onClick={handleSidebar}
+          className="absolute left-[2%] top-[3%] rounded-[4px] w-6 gap-0 p-0 min-w-10 z-[99999999999]"
+        >
+          <i className="fa-solid fa-chevron-left"></i>
+        </Button>
+      )}
+
+      {sidebaropen && <SchemaSidebar />}
       {children}
     </div>
   );

@@ -15,7 +15,10 @@ import storage from "redux-persist/lib/storage";
 import { colorInitialState } from "./reducer/colors/colorSlice";
 import { SchemainitialTypes } from "./reducer/schema/schema";
 import { PersistPartial } from "redux-persist/es/persistReducer";
-import { relationInitialState, relationReducer } from "./reducer/relations/relationSlice";
+import {
+  relationInitialState,
+  relationReducer,
+} from "./reducer/relations/relationSlice";
 
 const persistConfig = {
   key: "root",
@@ -27,23 +30,23 @@ const persistConfig = {
 const rootReducer = combineReducers({
   schemareducer: schemaRootReducer,
   colorreducer: colorRootReducer,
-  relationreducer: relationReducer
+  relationreducer: relationReducer,
 });
 
-const persistedState = persistReducer<RootState, any>(
-  persistConfig,
-  rootReducer
-);
+// const persistedState = persistReducer<RootState, any>(
+//   persistConfig,
+//   rootReducer
+// );
 
 export const store = configureStore({
-  reducer: persistedState,
+  reducer: rootReducer,
   devTools: process.env.NODE_ENV !== "production",
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-      },
-    }),
+  // middleware: (getDefaultMiddleware) =>
+  //   getDefaultMiddleware({
+  //     serializableCheck: {
+  //       ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+  //     },
+  //   }),
 });
 
 export type RootState = {
