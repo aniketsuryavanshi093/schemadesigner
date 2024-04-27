@@ -30,10 +30,6 @@ export interface Table {
   columns?: columns[];
   tableComment?: string;
   tableIndex?: string;
-  tablePosition: {
-    x: number;
-    y: number;
-  };
 }
 
 export type relationtype = {
@@ -54,8 +50,7 @@ export type FormSignupvalueType = {
   password?: string;
 };
 
-export type errorType = 'success' | 'error'
-
+export type errorType = "success" | "error";
 
 export type SchemaType = {
   title: string;
@@ -65,22 +60,22 @@ export type SchemaType = {
   updatedAt: string;
   tablesdata: string | Table;
   tablesrelations: string | relationtype;
-}
+};
 
 export type FolderType = {
   name: string;
   _id: string;
-  schemaIds: SchemaType[],
-  createdAt: string
-}
+  schemaIds: SchemaType[];
+  createdAt: string;
+};
 
 export type UserType = {
   _id: string;
-  schemaIds: SchemaType[]
-  createdAt: string
-  name: string
-  folder: FolderType[]
-  profilePic: string,
-  email: string,
-  updatedAt: string
-}
+  schemaIds: SchemaType[];
+  createdAt: string;
+  name: string;
+  folder: FolderType[];
+  profilePic: string;
+  email: string;
+  updatedAt: string;
+};

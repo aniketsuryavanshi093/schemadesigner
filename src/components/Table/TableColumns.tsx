@@ -1,23 +1,18 @@
 import useColumnsHook from "@/hooks/useColumnsHook";
 import useTableHooks from "@/hooks/useTableHooks";
-import { Table, columnindextype, relationtype } from "@/types";
+import { Table, columnindextype } from "@/types";
 import React from "react";
-import ConnectPointsWrapper from "./ConnectPointsWrapper";
-import { useAppDispatch } from "@/redux/dashboardstore/hook";
-import { generateUID, getColumnId } from "@/utils";
+import { Handle, Position } from "reactflow";
+import { getColumnId } from "@/utils";
 import PopoverComponent from "../Popover/PopoverComponent";
 import useTableRelationHook from "@/hooks/useTableRelationHook";
 
 const TableColumns: React.FC<{
   table: Table;
-  isDragging: boolean;
-  boxRef: any;
-  dragRef: any;
-  boxId: string;
-}> = ({ table, isDragging, boxRef, dragRef, boxId }) => {
+  // boxId: string;
+}> = ({ table }) => {
   const { setEditTablehelper } = useTableHooks();
   const { setcolumnEditingHelper } = useColumnsHook();
-  const { addRelations } = useTableRelationHook();
   const getColumnicon = (type: columnindextype) => {
     switch (type) {
       case "primary":
@@ -30,41 +25,16 @@ const TableColumns: React.FC<{
         return "text-[#14b8a6] fa-snowflake";
     }
   };
-  const dispatch = useAppDispatch();
 
   return table.columns?.map((col) => (
     <div
       id={getColumnId(table.tableName, col.columnName)}
       key={col.columnIndex}
       onClick={(e) => {
-        if (!isDragging) {
-          e.preventDefault();
-          e.stopPropagation();
-          setEditTablehelper(table);
-          setcolumnEditingHelper(table.tableIndex!, col);
-        }
-      }}
-      onDrop={(e) => {
-        if (
-          e.dataTransfer.getData("arrow") ===
-          getColumnId(table.tableName, col.columnName)
-        ) {
-          console.log(
-            e.dataTransfer.getData("arrow"),
-            getColumnId(table.tableName, col.columnName)
-          );
-        } else {
-          const refs: relationtype = {
-            tableto: table.tableName,
-            id: generateUID(4),
-            relation: "onetoone",
-            head: e.dataTransfer.getData("arrow"),
-            tail: getColumnId(table.tableName, col.columnName),
-            tablefrom: e.dataTransfer.getData("arrow").split("^^")[0],
-          };
-          addRelations(refs);
-          console.log("droped!", refs);
-        }
+        e.preventDefault();
+        e.stopPropagation();
+        setEditTablehelper(table);
+        setcolumnEditingHelper(table.tableIndex!, col);
       }}
       className={` ${table.tableName} flex py-1 bg-[white] px-2 relative justify-between tablecolwrapper cursor-pointer items-center`}
     >
@@ -83,26 +53,28 @@ const TableColumns: React.FC<{
         {col.columnDataType}
         {col.isNullable ? "?" : ""}
       </p>
-      {table.isEditing && (
-        <>
-          <ConnectPointsWrapper
-            {...{
-              boxId: getColumnId(table.tableName, col.columnName),
-              handler: "right",
-              dragRef,
-              boxRef,
-            }}
-          />
-          <ConnectPointsWrapper
-            {...{
-              boxId: getColumnId(table.tableName, col.columnName),
-              handler: "left",
-              dragRef,
-              boxRef,
-            }}
-          />
-        </>
-      )}
+      {/* {table.isEditing && ( */}
+      <Handle
+        type="source"
+        position={Position.Left}
+        id={getColumnId(table.tableName, `${col.columnName}left`)}
+      />
+      <Handle
+        type="target"
+        position={Position.Left}
+        id={`${table.tableName?.replaceAll(" ", "")}left`}
+      />
+      <Handle
+        type="target"
+        position={Position.Right}
+        id={`${table.tableName?.replaceAll(" ", "")}right`}
+      />
+      <Handle
+        type="source"
+        position={Position.Right}
+        id={getColumnId(table.tableName, `${col.columnName}right`)}
+      />
+      {/* )} */}
     </div>
   ));
 };

@@ -1,103 +1,146 @@
 "use client";
-import { useAppSelector } from "@/redux/dashboardstore/hook";
-import React from "react";
-import { Button } from "@nextui-org/react";
-import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-import TablesContainer from "./SchemaComponents/TablesContainer";
-import { useXarrow, Xwrapper } from "react-xarrows";
-import Arrow from "@/components/Arrows/Arrows";
-import useTableRelationHook from "@/hooks/useTableRelationHook";
+import { getSchemaDetailsAction } from "@/apiservices/Schemaservices";
+import TableBox from "@/components/Table/TableBox";
+import { useAppDispatch, useAppSelector } from "@/redux/dashboardstore/hook";
+import { InsertTable } from "@/redux/dashboardstore/reducer/schema/schema";
+import { Table } from "@/types";
+import { useQuery } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
+import { useParams } from "next/navigation";
+import React, { useCallback, useEffect, useState } from "react";
+import ReactFlow, {
+  addEdge,
+  Background,
+  Connection,
+  Controls,
+  MiniMap,
+  useEdgesState,
+  useNodesState,
+} from "reactflow";
+import "reactflow/dist/style.css";
 
+const nodeTypes = { tableBox: TableBox };
+const rfStyle = {
+  backgroundColor: "#f1f6f8",
+};
+// const _nodes = [
+//   {
+//     id: "node-1",
+//     type: "tableBox",
+//     position: { x: 0, y: 0 },
+//     data: { value: 123 },
+//   },
+// ];
 const Schema = () => {
-  const updateXarrow = useXarrow();
+  const [isLogging, setIsLogging] = useState(false);
+  const { data } = useSession();
   const { tables } = useAppSelector((state) => state.schemareducer);
-  const { relations } = useAppSelector((state) => state.relationreducer);
+  const { id } = useParams();
+  const { data: schemaDetails } = useQuery({
+    queryKey: ["schema", id],
+    queryFn: () =>
+      getSchemaDetailsAction({ id: id, authToken: data?.user?.authToken }),
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    retry: false,
+    enabled: !!data?.user?.authToken && !!id,
+    staleTime: 10 * 60 * 5,
+  });
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    if (
+      schemaDetails?.data?.data?.Schema &&
+      schemaDetails.data.data.Schema.tablesdata
+    ) {
+      console.log(
+        JSON.parse(schemaDetails?.data?.data?.Schema?.tablesdata || [])
+      );
+      const data = JSON.parse(
+        schemaDetails?.data?.data?.Schema?.tablesdata || []
+      ) as Table[];
+      const temp: Table[] = data.map((elem) => {
+        return elem.data.value;
+      });
+
+      dispatch(InsertTable(temp));
+      setNodes(data);
+      // dispatch(
+      //   InsertRelation(
+      //     JSON.parse(schemaDetails.data.data.Schema.tablesrelations)
+      //   )
+      // );
+    }
+  }, [schemaDetails]);
+  const [nodes, setNodes, onNodesChange] = useNodesState<{ value: Table }>([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const onConnect = useCallback(
+    (connection: Connection) => setEdges((eds) => addEdge(connection, eds)),
+    [setEdges]
+  );
+  useEffect(() => {
+    if (tables.length > 0) {
+      const tempNodes: Node[] = [];
+      tables.forEach((element) => {
+        let tableid = element.tableIndex;
+        tempNodes.push({
+          id: tableid,
+          type: "tableBox",
+          position: nodes.find((node) => node.id === tableid)?.position || {
+            x: 0,
+            y: 0,
+          },
+          data: { value: element },
+        });
+      });
+      setNodes(tempNodes);
+    }
+  }, [tables]);
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "hidden" && !isLogging) {
+        setIsLogging(true);
+        console.log("Logging data...");
+        // Replace the following line with your actual API request
+        // fetch(`${REACT_APP_SCREEN_SORT_URL}/generateScreenSort/122`, { method: 'POST' })
+        navigator.sendBeacon(
+          `${process.env.NEXT_SERVERURL}schema/update/${id}`,
+          JSON.stringify({
+            token: data?.user?.authToken,
+            schema: {
+              tablesdata: JSON.stringify(nodes),
+              tablesrelations: "",
+            },
+          })
+        );
+      } else if (document.visibilityState === "visible") {
+        setIsLogging(false);
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("unload", handleVisibilityChange);
+
+    return () => {
+      // Cleanup: Remove the event listener when the component unmounts
+      window.removeEventListener("unload", handleVisibilityChange);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [isLogging, id, data?.user?.authToken, nodes]);
   return (
-    <>
-      <TransformWrapper
-        panning={{
-          excluded: tables.map((table) => table.tableName?.replaceAll(" ", "")),
-        }}
-        wheel={{
-          excluded: tables.map((table) => table.tableName?.replaceAll(" ", "")),
-        }}
-        initialScale={1}
-        initialPositionX={0}
-        smooth={false}
-        minScale={0.5}
-        maxScale={3}
-        limitToBounds={false}
-        onPinching={updateXarrow}
-        onZoomStop={updateXarrow}
-        onWheel={updateXarrow}
-        onPanning={updateXarrow}
-        onPinchingStop={updateXarrow}
-        onTransformed={updateXarrow}
-        onPanningStart={updateXarrow}
-        onPanningStop={updateXarrow}
-        onZoom={updateXarrow}
-        initialPositionY={0}
-      >
-        {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
-          <TransformContainer
-            {...{ zoomIn, zoomOut, resetTransform, ...rest }}
-          />
-        )}
-      </TransformWrapper>
-      <Xwrapper>
-        {relations.map((rel, index) => (
-          <Arrow key={index} relation={rel} />
-        ))}
-      </Xwrapper>
-    </>
+    <ReactFlow
+      nodes={nodes}
+      edges={edges}
+      onNodesChange={onNodesChange}
+      onEdgesChange={onEdgesChange}
+      onConnect={onConnect}
+      nodeTypes={nodeTypes}
+      fitView
+      style={rfStyle}
+    >
+      <Controls />
+      <MiniMap />
+    </ReactFlow>
   );
 };
 
 export default Schema;
-
-const TransformContainer: React.FC<{
-  zoomIn: () => void;
-  zoomOut: () => void;
-  resetTransform: () => void;
-}> = ({ zoomIn, zoomOut, resetTransform }) => {
-  const { updateAllRelation } = useTableRelationHook();
-  const handleCLick = (callable: any) => {
-    callable();
-    setTimeout(() => {
-      updateAllRelation();
-    }, 500);
-  };
-  const { sidebarOpen } = useAppSelector((state) => state.schemareducer);
-  return (
-    <>
-      <div className="tools absolute z-[9999999999] bottom-[10%] right-[6%]">
-        <Button
-          className="w-6 gap-0 p-0 min-w-10  rounded-[8px]"
-          onClick={() => handleCLick(zoomIn)}
-        >
-          <i className="fa-solid fa-plus"></i>
-        </Button>
-        <Button
-          className="w-6 gap-0 p-0 min-w-10 mx-2 rounded-[8px]"
-          onClick={() => handleCLick(zoomOut)}
-        >
-          <i className="fa-solid fa-minus"></i>
-        </Button>
-        <Button
-          onClick={() => handleCLick(resetTransform)}
-          className="w-6 gap-0 p-0 min-w-10  rounded-[8px]"
-        >
-          <i className="fa-solid fa-arrows-to-circle"></i>
-        </Button>
-      </div>
-      <TransformComponent
-        wrapperClass={` ${
-          sidebarOpen ? "schemawrapperpanpinch" : "schemawrapperpanpinchfull"
-        } `}
-        contentClass="schematransformcomp"
-      >
-        <TablesContainer />
-      </TransformComponent>
-    </>
-  );
-};
