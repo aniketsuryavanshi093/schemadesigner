@@ -62,12 +62,12 @@ const TableColumns: React.FC<{
       <Handle
         type="target"
         position={Position.Left}
-        id={`${table.tableName?.replaceAll(" ", "")}left`}
+        id={getColumnId(table.tableName, `${col.columnName}left`)}
       />
       <Handle
         type="target"
         position={Position.Right}
-        id={`${table.tableName?.replaceAll(" ", "")}right`}
+        id={getColumnId(table.tableName, `${col.columnName}right`)}
       />
       <Handle
         type="source"

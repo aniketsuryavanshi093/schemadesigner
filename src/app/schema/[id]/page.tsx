@@ -1,5 +1,6 @@
 "use client";
 import { getSchemaDetailsAction } from "@/apiservices/Schemaservices";
+import Arrow, { IclickPosition } from "@/components/Arrows/Arrows";
 import TableBox from "@/components/Table/TableBox";
 import { useAppDispatch, useAppSelector } from "@/redux/dashboardstore/hook";
 import { InsertTable } from "@/redux/dashboardstore/reducer/schema/schema";
@@ -13,7 +14,10 @@ import ReactFlow, {
   Background,
   Connection,
   Controls,
+  Edge,
+  MarkerType,
   MiniMap,
+  ReactFlowProvider,
   useEdgesState,
   useNodesState,
 } from "reactflow";
@@ -23,14 +27,7 @@ const nodeTypes = { tableBox: TableBox };
 const rfStyle = {
   backgroundColor: "#f1f6f8",
 };
-// const _nodes = [
-//   {
-//     id: "node-1",
-//     type: "tableBox",
-//     position: { x: 0, y: 0 },
-//     data: { value: 123 },
-//   },
-// ];
+
 const Schema = () => {
   const [isLogging, setIsLogging] = useState(false);
   const { data } = useSession();
@@ -64,6 +61,11 @@ const Schema = () => {
 
       dispatch(InsertTable(temp));
       setNodes(data);
+      setEdges(
+        JSON.parse(
+          schemaDetails?.data?.data?.Schema?.tablesrelations || []
+        ) as Edge[]
+      );
       // dispatch(
       //   InsertRelation(
       //     JSON.parse(schemaDetails.data.data.Schema.tablesrelations)
@@ -71,12 +73,43 @@ const Schema = () => {
       // );
     }
   }, [schemaDetails]);
+
   const [nodes, setNodes, onNodesChange] = useNodesState<{ value: Table }>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const [clickPosition, setClickPosition] = React.useState<IclickPosition>({
+    open: false,
+    x: 0,
+    y: 0,
+    edge: null,
+  });
   const onConnect = useCallback(
-    (connection: Connection) => setEdges((eds) => addEdge(connection, eds)),
+    (connection: Connection) => {
+      setEdges((eds) => {
+        console.log("connection", connection, eds);
+        return addEdge(
+          {
+            ...connection,
+            data: {
+              relation: "onetoone",
+            },
+            markerEnd: {
+              type: MarkerType.ArrowClosed,
+              width: 10,
+              height: 10,
+              color: "black",
+            },
+            style: {
+              strokeWidth: 1.8,
+              stroke: "#a0aec0",
+            },
+          },
+          eds
+        );
+      });
+    },
     [setEdges]
   );
+
   useEffect(() => {
     if (tables.length > 0) {
       const tempNodes: Node[] = [];
@@ -108,7 +141,7 @@ const Schema = () => {
             token: data?.user?.authToken,
             schema: {
               tablesdata: JSON.stringify(nodes),
-              tablesrelations: "",
+              tablesrelations: JSON.stringify(edges),
             },
           })
         );
@@ -125,21 +158,37 @@ const Schema = () => {
       window.removeEventListener("unload", handleVisibilityChange);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, [isLogging, id, data?.user?.authToken, nodes]);
+  }, [isLogging, id, data?.user?.authToken, nodes, edges]);
+  const handleEdgeClick = (event: React.MouseEvent, edge: Edge) => {
+    console.log(event, edge);
+    setClickPosition({
+      open: !clickPosition.open,
+      x: event.clientX,
+      y: event.clientY,
+      edge,
+    });
+  };
   return (
-    <ReactFlow
-      nodes={nodes}
-      edges={edges}
-      onNodesChange={onNodesChange}
-      onEdgesChange={onEdgesChange}
-      onConnect={onConnect}
-      nodeTypes={nodeTypes}
-      fitView
-      style={rfStyle}
-    >
-      <Controls />
-      <MiniMap />
-    </ReactFlow>
+    <ReactFlowProvider>
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        onConnect={onConnect}
+        onEdgeClick={handleEdgeClick}
+        nodeTypes={nodeTypes}
+        fitView
+        style={rfStyle}
+      >
+        <Controls />
+        <MiniMap />
+      </ReactFlow>
+      <Arrow
+        clickPosition={clickPosition}
+        setClickPosition={setClickPosition}
+      />
+    </ReactFlowProvider>
   );
 };
 
