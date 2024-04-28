@@ -133,8 +133,7 @@ const LoginForm = () => {
                 setError({ msg: data.error, type: "cred" });
               } else {
                 console.log(data);
-
-                window.location.replace("/dashboard");
+                // window.location.replace("/dashboard");
               }
             })
             .catch((er) => console.log(er));
