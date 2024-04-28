@@ -31,7 +31,7 @@ const LayoutContent: React.FC<{ children: ReactNode }> = ({ children }) => {
           onClick={handleSidebar}
           className="absolute left-[2%] top-[3%] rounded-[4px] w-6 gap-0 p-0 min-w-10 z-[99999999999]"
         >
-          <i className="fa-solid fa-chevron-left"></i>
+          <i className="fa-solid fa-chevron-right"></i>
         </Button>
       )}
       {sidebaropen && <SchemaSidebar />}

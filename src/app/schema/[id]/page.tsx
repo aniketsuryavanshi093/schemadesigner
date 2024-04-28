@@ -25,7 +25,7 @@ import "reactflow/dist/style.css";
 
 const nodeTypes = { tableBox: TableBox };
 const rfStyle = {
-  backgroundColor: "#f1f6f8",
+  backgroundColor: "#ffff",
 };
 
 const Schema = () => {
@@ -56,9 +56,8 @@ const Schema = () => {
         schemaDetails?.data?.data?.Schema?.tablesdata || []
       ) as Table[];
       const temp: Table[] = data.map((elem) => {
-        return elem.data.value;
+        return elem?.data?.value;
       });
-
       dispatch(InsertTable(temp));
       setNodes(data);
       setEdges(
@@ -73,8 +72,8 @@ const Schema = () => {
       // );
     }
   }, [schemaDetails]);
-
   const [nodes, setNodes, onNodesChange] = useNodesState<{ value: Table }>([]);
+  console.log(nodes, tables);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [clickPosition, setClickPosition] = React.useState<IclickPosition>({
     open: false,
