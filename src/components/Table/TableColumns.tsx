@@ -5,7 +5,12 @@ import React from "react";
 import { Handle, Position } from "reactflow";
 import { getColumnId } from "@/utils";
 import PopoverComponent from "../Popover/PopoverComponent";
-import useTableRelationHook from "@/hooks/useTableRelationHook";
+
+const style = {
+  width: 10,
+  height: 10,
+  color: "blue",
+};
 
 const TableColumns: React.FC<{
   table: Table;
@@ -55,22 +60,30 @@ const TableColumns: React.FC<{
       </p>
       {/* {table.isEditing && ( */}
       <Handle
+        style={style}
+        color="blue"
         type="source"
         position={Position.Left}
         id={getColumnId(table.tableName, `${col.columnName}left`)}
       />
       <Handle
+        style={style}
+        color="blue"
         type="target"
         position={Position.Left}
         id={getColumnId(table.tableName, `${col.columnName}left`)}
       />
       <Handle
+        style={style}
+        color="blue"
         type="target"
         position={Position.Right}
         id={getColumnId(table.tableName, `${col.columnName}right`)}
       />
       <Handle
         type="source"
+        color="blue"
+        style={style}
         position={Position.Right}
         id={getColumnId(table.tableName, `${col.columnName}right`)}
       />

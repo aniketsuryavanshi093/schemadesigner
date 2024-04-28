@@ -29,7 +29,7 @@ const rfStyle = {
 };
 
 const Schema = () => {
-  const [isLogging, setIsLogging] = useState(false);
+  const [isExecuted, setIsExecuted] = useState(false);
   const { data } = useSession();
   const { tables } = useAppSelector((state) => state.schemareducer);
   const { id } = useParams();
@@ -65,11 +65,6 @@ const Schema = () => {
           schemaDetails?.data?.data?.Schema?.tablesrelations || []
         ) as Edge[]
       );
-      // dispatch(
-      //   InsertRelation(
-      //     JSON.parse(schemaDetails.data.data.Schema.tablesrelations)
-      //   )
-      // );
     }
   }, [schemaDetails]);
   const [nodes, setNodes, onNodesChange] = useNodesState<{ value: Table }>([]);
@@ -127,37 +122,72 @@ const Schema = () => {
       setNodes(tempNodes);
     }
   }, [tables]);
+
   useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === "hidden" && !isLogging) {
-        setIsLogging(true);
-        console.log("Logging data...");
-        // Replace the following line with your actual API request
-        // fetch(`${REACT_APP_SCREEN_SORT_URL}/generateScreenSort/122`, { method: 'POST' })
-        navigator.sendBeacon(
-          `${process.env.NEXT_SERVERURL}schema/update/${id}`,
-          JSON.stringify({
-            token: data?.user?.authToken,
-            schema: {
-              tablesdata: JSON.stringify(nodes),
-              tablesrelations: JSON.stringify(edges),
-            },
-          })
-        );
-      } else if (document.visibilityState === "visible") {
-        setIsLogging(false);
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      if (!isExecuted) {
+        sendDataToServer();
+        setIsExecuted(isExecuted);
+        event.preventDefault();
+        event.returnValue = "";
       }
     };
 
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "hidden" && !isExecuted) {
+        sendDataToServer();
+        setIsExecuted(isExecuted);
+      }
+    };
+
+    const handlePageHide = () => {
+      if (!isExecuted) {
+        sendDataToServer();
+        setIsExecuted(isExecuted);
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
     document.addEventListener("visibilitychange", handleVisibilityChange);
-    window.addEventListener("unload", handleVisibilityChange);
+    window.addEventListener("pagehide", handlePageHide);
 
     return () => {
-      // Cleanup: Remove the event listener when the component unmounts
-      window.removeEventListener("unload", handleVisibilityChange);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("pagehide", handlePageHide);
     };
-  }, [isLogging, id, data?.user?.authToken, nodes, edges]);
+  }, [id, data?.user?.authToken, nodes, edges]);
+
+  const sendDataToServer = () => {
+    console.log("Logging data...");
+
+    const _data = {
+      token: data?.user?.authToken,
+      schema: {
+        tablesdata: JSON.stringify(nodes),
+        tablesrelations: JSON.stringify(edges),
+      },
+    };
+
+    // Try using navigator.sendBeacon() first
+    const url = `${process.env.NEXT_SERVERURL}schema/update/${id}`;
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(_data),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+      })
+      .catch((error) => {
+        console.error("Error sending data:", error);
+      });
+  };
+
   const handleEdgeClick = (event: React.MouseEvent, edge: Edge) => {
     console.log(event, edge);
     setClickPosition({
@@ -167,6 +197,7 @@ const Schema = () => {
       edge,
     });
   };
+
   return (
     <ReactFlowProvider>
       <ReactFlow
