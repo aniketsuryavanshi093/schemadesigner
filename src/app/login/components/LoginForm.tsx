@@ -10,7 +10,7 @@ import {
   loginvalidations,
   signupvalidations,
 } from "@/utils/validations/validation";
-import { Spinner } from "reactstrap";
+import { Spinner } from "@nextui-org/react";
 
 const LoginForm = () => {
   const [isPending, startTransition] = useTransition();
@@ -24,15 +24,15 @@ const LoginForm = () => {
   const initialValue: FormSignupvalueType =
     formType === "login"
       ? {
-        email: "",
-        password: "",
-      }
+          email: "",
+          password: "",
+        }
       : {
-        email: "",
-        password: "",
-        name: "",
-        cpassword: "",
-      };
+          email: "",
+          password: "",
+          name: "",
+          cpassword: "",
+        };
   const handleServerAction = async (
     values: FormSignupvalueType | null,
     type: string

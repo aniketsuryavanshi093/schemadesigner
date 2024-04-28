@@ -1,9 +1,9 @@
-import { Spinner } from "reactstrap";
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import useOptionsHooks from "@/hooks/useOptionsHooks";
 import { FolderType } from "@/types";
 import enqueSnackBar from "@/utils/enqueSnackBar";
+import { Spinner } from "@nextui-org/react";
 
 const OptionsContent: React.FC<{ schemaId: string }> = ({ schemaId }) => {
   const [SelectedScreenType, setSelectedScreenType] = useState<
