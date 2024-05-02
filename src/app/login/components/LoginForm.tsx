@@ -97,7 +97,6 @@ const LoginForm = () => {
                 setError({ msg: data.error, type: "cred" });
                 setLoading(false);
               } else {
-                console.log(data);
                 window.location.replace("/dashboard");
               }
             })
@@ -132,8 +131,7 @@ const LoginForm = () => {
                 setLoading(false);
                 setError({ msg: data.error, type: "cred" });
               } else {
-                console.log(data);
-                // window.location.replace("/dashboard");
+                window.location.replace("/dashboard");
               }
             })
             .catch((er) => console.log(er));
@@ -161,6 +159,7 @@ const LoginForm = () => {
         initialValues={initialValue}
         validationSchema={validation}
         onSubmit={(value: FormSignupvalueType) => {
+          setLoading(true);
           startTransition(() => handleServerAction(value, "credentials"));
         }}
       >
@@ -217,7 +216,7 @@ const LoginForm = () => {
               </div>
             )}
             <button type="submit" className="sign">
-              {isPending || Loading ? (
+              {Loading ? (
                 <Spinner size="sm" />
               ) : formType === "login" ? (
                 "Sign in"
