@@ -189,7 +189,6 @@ const Schema = () => {
   };
 
   const handleEdgeClick = (event: React.MouseEvent, edge: Edge) => {
-    console.log(event, edge);
     setClickPosition({
       open: !clickPosition.open,
       x: event.clientX,

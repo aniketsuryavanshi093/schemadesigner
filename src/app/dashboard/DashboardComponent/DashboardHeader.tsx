@@ -1,10 +1,69 @@
 "use client";
 import { UserType } from "@/types";
+import {
+  Avatar,
+  AvatarIcon,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+  Skeleton,
+} from "@nextui-org/react";
+import { signOut } from "next-auth/react";
+import Image from "next/image";
 import React from "react";
 
-const DashboardHeader: React.FC<{ user: UserType, isLoading: boolean }> = () => {
+const DashboardHeader: React.FC<{
+  user: UserType;
+  isLoading: boolean;
+}> = ({ user, isLoading }) => {
+  console.log(user);
+  const handleLogout = () => {
+    signOut();
+  };
   return (
     <div className="relative overflow-hidden  bg-indigo-700 pb-[19rem]">
+      <div className="mx-auto flex justify-between max-w-7xl px-4 pb-6 mt-4  sm:px-6 lg:px-8 lg:pb-16">
+        <Image
+          alt="logo"
+          src="/logoschema.svg"
+          className="z-[50]"
+          width={40}
+          height={40}
+        />
+        <Dropdown>
+          <DropdownTrigger>
+            <div className="flex justify-between cursor-pointer items-center">
+              {!isLoading ? (
+                <Skeleton
+                  as="p"
+                  className=" w-[150px] h-[15px] bg-[#8f9193] rounded-md mx-3"
+                />
+              ) : (
+                <p className="text-[#ebf4ff]  font-medium text-medium mx-3">
+                  {user?.name || user?.email}
+                </p>
+              )}
+
+              <Avatar
+                icon={<AvatarIcon />}
+                classNames={{
+                  base: "bg-gradient-to-br from-[#FFB457] to-[#FF705B]",
+                  icon: "text-black/80",
+                }}
+              />
+            </div>
+          </DropdownTrigger>
+          <DropdownMenu aria-label="Dropdown Variants" variant={"flat"}>
+            <DropdownItem
+              onClick={handleLogout}
+              startContent={<i className="fa-solid  fa-right-from-bracket"></i>}
+            >
+              Sign Out
+            </DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
+      </div>
       <div
         aria-hidden="true"
         className="absolute inset-y-0 inset-x-0 left-1/2 w-full -translate-x-1/2 transform overflow-hidden lg:inset-y-0"
