@@ -3,10 +3,12 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 export type SchemainitialTypes = {
   tables: Table[];
+  isShare: boolean;
   sidebarOpen: boolean;
 };
 const initialState: SchemainitialTypes = {
   tables: [],
+  isShare: false,
   sidebarOpen: true,
 };
 const schemaSlice = createSlice({
@@ -153,6 +155,9 @@ const schemaSlice = createSlice({
     sidebarOpen: (state, action: PayloadAction<boolean>) => {
       state.sidebarOpen = action.payload;
     },
+    setIsSharestate: (state, action: PayloadAction<boolean>) => {
+      state.isShare = action.payload;
+    },
     setcolumnEditing: (
       state,
       action: PayloadAction<{ columnIndex: number; tableIndex: string }>
@@ -188,6 +193,7 @@ export const {
   InsertTable,
   setcolumnEditing,
   updateSaveTable,
+  setIsSharestate,
   addColumnsAction,
   setEditTable,
 } = schemaSlice.actions;

@@ -106,6 +106,11 @@ p {
   margin-bottom: 0px !important;
 }
 
+.react-flow__panel.bottom {
+
+  bottom: 55px !important;
+}
+
 .react-flow__attribution {
   display: none;
 }
