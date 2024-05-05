@@ -5,9 +5,9 @@ import Link from "next/link";
 export default function Home() {
   return (
     <main className="min-h-auto w-full font-sans text-gray-800 antialiased  bg-gray-100">
-      <div className="w-full h-2  z-10  headergradient"></div>
+      <div className="w-full h-2 z-10 headergradient"></div>
       {/* header section */}
-      <div className="relative flex items-center justify-center md:justify-between px-8 py-4 md:mt-6 border-b-2 md:border-0 border-gray-300 mx-2">
+      <div className="relative flex items-center justify-between md:justify-between px-3 lg:px-8 py-4 md:mt-6 border-b-2 md:border-0 border-gray-300 mx-2">
         <div className="flex items-center">
           <Image
             src="/images/schemalogo.svg"
@@ -52,13 +52,13 @@ export default function Home() {
               </h2>
             </div>
           </div>
-          <div className="flex flex-col sm:flex-row justify-center sm:mt-12 md:mb-4">
+          <div className="flex flex-row  justify-center sm:mt-12 md:mb-4">
             <Button
               variant="solid"
               radius="sm"
               className="bg-white 
-              leading-none text-indigo text-xt-base font-medium hover:text-indigo-500 h-12 px-8 rounded-lg 
-              shadow-md text-black  w-[200px]  "
+              leading-none text-indigo lg:w-[200px] w-[120px] text-xt-base font-medium hover:text-indigo-500 h-12 px-8 rounded-lg 
+              shadow-md text-black   "
             >
               Learn more
             </Button>
@@ -66,7 +66,7 @@ export default function Home() {
               <Button
                 variant="solid"
                 radius="sm"
-                className=" w-[200px] h-[48px] ms-4 text-white bg-[#6366f1] shadow-md"
+                className=" lg:w-[200px] w-[120px] h-[48px] ms-4 text-white bg-[#6366f1] shadow-md"
                 endContent={<i className="fa-solid fa-arrow-right-long"></i>}
               >
                 Get Started
@@ -85,7 +85,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section className="mt-8 bg-skew skew-gradient skew-shadow">
+      <section className="mt-8 pt-10 lg:pt-72 skew-gradient skew-shadow">
         <div className="w-5/6 max-w-4xl mx-auto mt-8 mb-4 content">
           <div className="flex flex-col justify-center text-center -mx-6 -my-6">
             <p className="text-4xl sm:text-5xl font-medium leading-none !mb-4 mt-8 text-grey-800">
@@ -262,11 +262,10 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <hr className="border max-w-6xl mx-auto border-gray-100 my-10"></hr>
+      <hr className="border max-w-6xl mx-auto border-gray-400 my-5 md:my-10"></hr>
       <section className="w-5/6 max-w-6xl pt-8 mt-2 mb-8 text-center mx-auto">
-        <h3 className="text-3xl text-gray-700 opacity-75 font-light leading-10 mb-8">
-          Trusted and loved by developer teams, <br />
-          from startups to enterprises
+        <h3 className="text-2xl md:text-3xl text-gray-700 opacity-75 font-light leading-10 mb-8">
+          Trusted and loved by developer teams, from startups to enterprises
         </h3>
       </section>
       <section className="my-8 bg-gray-100">
