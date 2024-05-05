@@ -14,12 +14,11 @@ import ReactFlow, {
   MarkerType,
   MiniMap,
   ReactFlowProvider,
-  useEdgesState,
-  useNodesState,
 } from "reactflow";
 import "reactflow/dist/style.css";
 import Arrow, { IclickPosition } from "../Arrows/Arrows";
 import TableBox from "../Table/TableBox";
+import useSchemaHook from "./useSchemaHook";
 
 const nodeTypes = { tableBox: TableBox };
 const rfStyle = {
@@ -27,6 +26,15 @@ const rfStyle = {
 };
 const SchemaComponent: React.FC<{ isShare?: boolean }> = ({ isShare }) => {
   const [isExecuted, setIsExecuted] = useState(false);
+  const {
+    sendDataToServer,
+    nodes,
+    setNodes,
+    onNodesChange,
+    edges,
+    setEdges,
+    onEdgesChange,
+  } = useSchemaHook(isShare!);
   const { data } = useSession();
   const { tables } = useAppSelector((state) => state.schemareducer);
   const { id } = useParams();
@@ -61,9 +69,7 @@ const SchemaComponent: React.FC<{ isShare?: boolean }> = ({ isShare }) => {
       );
     }
   }, [schemaDetails]);
-  const [nodes, setNodes, onNodesChange] = useNodesState<{ value: Table }>([]);
-  console.log(nodes, tables);
-  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+
   const [clickPosition, setClickPosition] = React.useState<IclickPosition>({
     open: false,
     x: 0,
@@ -106,8 +112,8 @@ const SchemaComponent: React.FC<{ isShare?: boolean }> = ({ isShare }) => {
           id: tableid,
           type: "tableBox",
           position: nodes.find((node) => node.id === tableid)?.position || {
-            x: 0,
-            y: 0,
+            x: -1094.4950200227331,
+            y: -1179.5467872801296,
           },
           data: { value: element },
         });
@@ -149,37 +155,6 @@ const SchemaComponent: React.FC<{ isShare?: boolean }> = ({ isShare }) => {
       window.removeEventListener("pagehide", handlePageHide);
     };
   }, [id, data?.user?.authToken, nodes, edges]);
-
-  const sendDataToServer = () => {
-    if (isShare) {
-      return;
-    }
-    const _data = {
-      token: data?.user?.authToken,
-      schema: {
-        tablesdata: JSON.stringify(nodes),
-        tablesrelations: JSON.stringify(edges),
-      },
-    };
-
-    // Try using navigator.sendBeacon() first
-    const url = `${process.env.NEXT_SERVERURL}schema/update/${id}`;
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(_data),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-      })
-      .catch((error) => {
-        console.error("Error sending data:", error);
-      });
-  };
 
   const handleEdgeClick = (event: React.MouseEvent, edge: Edge) => {
     if (isShare) {

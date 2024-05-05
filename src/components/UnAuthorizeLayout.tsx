@@ -1,7 +1,11 @@
 import React from "react";
 
 const UnAuthorizeLayout = ({ children }: { children: React.JSX.Element }) => {
-  return <div className="loginwrapper w-full h-[100vh] ">{children}</div>;
+  return (
+    <main className="flex flex-row items-center justify-center bg-white ">
+      {children}
+    </main>
+  );
 };
 
 export default UnAuthorizeLayout;

@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from "@/redux/dashboardstore/hook";
 import { sidebarOpen } from "@/redux/dashboardstore/reducer/schema/schema";
 import { Button } from "@nextui-org/react";
 import SchemaHeader from "@/components/Schema/SchemaHeader";
+import { SnackbarProvider } from "notistack";
 
 const layout: React.FC<{ children: ReactNode }> = ({ children }) => {
   return (
@@ -24,7 +25,18 @@ const LayoutContent: React.FC<{ children: ReactNode }> = ({ children }) => {
     dispatch(sidebarOpen(true));
   };
   return (
-    <>
+    <SnackbarProvider
+      anchorOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      iconVariant={{
+        success: "✅",
+        error: "✖️",
+        warning: "⚠️",
+        info: "ℹ️",
+      }}
+    >
       <SchemaHeader></SchemaHeader>
       <div className="flex w-full h-[100vh]">
         {!sidebaropen && (
@@ -38,7 +50,7 @@ const LayoutContent: React.FC<{ children: ReactNode }> = ({ children }) => {
         {sidebaropen && <SchemaSidebar />}
         {children}
       </div>
-    </>
+    </SnackbarProvider>
   );
 };
 

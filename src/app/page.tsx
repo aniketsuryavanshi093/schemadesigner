@@ -1,5 +1,6 @@
 import { Button } from "@nextui-org/react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -17,16 +18,21 @@ export default function Home() {
           <p className="text-lg text-black ps-3">Schema Designer</p>
         </div>
         <div className="flex items-center">
-          <a className="hidden lg:block font-medium text-gray-500 hover:text-gray-900 ml-6 cursor-pointer">
-            Log in
-          </a>
-          <Button
-            variant="solid"
-            className="ms-4 text-white bg-[#6366f1] w-[120px] shadow-md hover:shadow-lg"
-            radius="sm"
+          <Link
+            href="/login"
+            className="hidden lg:block font-medium text-gray-500 hover:text-gray-900 ml-6 cursor-pointer"
           >
-            Try Schema
-          </Button>
+            Log in
+          </Link>
+          <Link href="/login">
+            <Button
+              variant="solid"
+              className="ms-4 text-white bg-[#6366f1] w-[120px] shadow-md hover:shadow-lg"
+              radius="sm"
+            >
+              Try Schema
+            </Button>
+          </Link>
         </div>
       </div>
       {/* Info header section  */}
@@ -56,14 +62,16 @@ export default function Home() {
             >
               Learn more
             </Button>
-            <Button
-              variant="solid"
-              radius="sm"
-              className=" w-[200px] h-[48px] ms-4 text-white bg-[#6366f1] shadow-md"
-              endContent={<i className="fa-solid fa-arrow-right-long"></i>}
-            >
-              Get Started
-            </Button>
+            <Link href="/login">
+              <Button
+                variant="solid"
+                radius="sm"
+                className=" w-[200px] h-[48px] ms-4 text-white bg-[#6366f1] shadow-md"
+                endContent={<i className="fa-solid fa-arrow-right-long"></i>}
+              >
+                Get Started
+              </Button>
+            </Link>
           </div>
           <div className="absolute w-5/6 max-w-3xl mt-4 inset-x-0 mx-auto bg-indigo-500 text-white rounded-lg shadow-lg overflow-hidden z-50">
             <Image
@@ -272,14 +280,14 @@ export default function Home() {
                 Create a 🔥 diagram for your app database in less than 15
                 minutes.
               </h3>
-              <a className="text-center my-2 sm:my-0" href="/register">
+              <Link className="text-center my-2 sm:my-0" href="/login">
                 <button
                   className="focus:outline-none self-center tracking-wider bg-indigo-500 hover:bg-indigo-600 text-base leading-none text-white font-medium h-12 px-8 rounded-lg shadow-md hover:shadow-lg whitespace-nowrap mb-2 sm:mb-0 sm:mr-2"
                   style={{ textShadow: "0 1px 2px rgba(0,0,0,0.20)" }}
                 >
                   Start diagramming
                 </button>
-              </a>
+              </Link>
             </div>
           </div>
         </div>
