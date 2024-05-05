@@ -102,6 +102,24 @@ a:hover {
   color: black;
 }
 
+.headergradient {
+  background: radial-gradient(circle, rgba(0, 229, 183, 1) 39%, rgba(130, 239, 227, 1) 62%);
+
+}
+
+.skew-gradient {
+  background: linear-gradient(180deg, #fff, #F1F5F9);
+}
+
+.textgradient {
+  background-clip: text;
+  background-image: linear-gradient(to right, #4e2ce7, #007aff, #009cee, #00b197, #14bf42);
+}
+
+.bg-skew {
+  padding: 18rem 0 5rem 0;
+}
+
 p {
   margin-bottom: 0px !important;
 }
