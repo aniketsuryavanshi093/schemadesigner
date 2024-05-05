@@ -11,9 +11,12 @@ export default async function Login() {
   // const user = await getCurrentUser();
   return (
     <UnAuthorizeLayout>
-      <div className="w-100 wrapper loginform flex-column">
-        <LoginForm />
-      </div>
+      <>
+        <aside className="bg-primary asideimage hidden h-screen flex-1 sm:block "></aside>
+        <div className="flex-1 flex min-h-screen flex-col items-center justify-center">
+          <LoginForm />
+        </div>
+      </>
     </UnAuthorizeLayout>
   );
 }

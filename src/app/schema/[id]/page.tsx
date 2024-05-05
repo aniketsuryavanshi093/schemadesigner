@@ -2,7 +2,7 @@
 import SchemaComponent from "@/components/Schema/SchemaComponent";
 
 const Schema = () => {
-  return <SchemaComponent isShare />;
+  return <SchemaComponent />;
 };
 
 export default Schema;

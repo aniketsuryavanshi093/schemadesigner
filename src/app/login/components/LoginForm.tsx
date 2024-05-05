@@ -10,7 +10,9 @@ import {
   loginvalidations,
   signupvalidations,
 } from "@/utils/validations/validation";
-import { Spinner } from "@nextui-org/react";
+import { Button, Spinner } from "@nextui-org/react";
+import Link from "next/link";
+import Image from "next/image";
 
 const LoginForm = () => {
   const [isPending, startTransition] = useTransition();
@@ -150,10 +152,24 @@ const LoginForm = () => {
     startTransition(() => handleServerAction(null, type));
   };
   return (
-    <div className="form-container">
-      <p className="title">{formType === "login" ? "Login" : "SignUp"}</p>
+    <div className="mx-auto w-full max-w-sm lg:w-[24rem]">
+      <Link prefetch={false} href="/">
+        <div className="flex shrink-0 items-center h-16 w-auto">
+          <Image
+            src="images/schemalogo.svg"
+            alt="logo"
+            width="64"
+            height="64"
+          />
+        </div>
+      </Link>
+      <h2 className="mt-8 text-3xl font-extrabold text-gray-800">
+        {formType === "login" ? "Sign in to your account" : "Welcome!"}
+      </h2>
       {ErrorInfo.type === "cred" && (
-        <p className="error-msg text-red-800 text-sm mb-0">{ErrorInfo.msg}</p>
+        <p className="error-msg text-red-800 text-start text-sm mb-0">
+          {ErrorInfo.msg}
+        </p>
       )}
       <Formik
         initialValues={initialValue}
@@ -215,7 +231,7 @@ const LoginForm = () => {
                 />
               </div>
             )}
-            <button type="submit" className="sign">
+            <Button variant="solid" type="submit" className="sign">
               {Loading ? (
                 <Spinner size="sm" />
               ) : formType === "login" ? (
@@ -223,7 +239,7 @@ const LoginForm = () => {
               ) : (
                 "SignUp"
               )}
-            </button>
+            </Button>
           </Form>
         )}
       </Formik>
@@ -263,10 +279,10 @@ const LoginForm = () => {
           </svg>
         </button>
       </div>
-      <p className="signup">
+      <p className="signup text-sm text-gray-900">
         {formType === "login" ? "Dont have an account?" : "Already a member?"}
         <button
-          className="cursor-pointer border-none bg-transparent text-white ms-2"
+          className="cursor-pointer border-none bg-transparent text-indigo-500 ms-2"
           onClick={() => {
             setError({ msg: "", type: "" });
             setFormType((prev) => (prev === "login" ? "signup" : "login"));
