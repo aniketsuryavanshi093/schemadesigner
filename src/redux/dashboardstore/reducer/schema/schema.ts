@@ -5,10 +5,20 @@ export type SchemainitialTypes = {
   tables: Table[];
   isShare: boolean;
   sidebarOpen: boolean;
+  IsGuestUser: boolean;
+  guestUserState: {
+    nodes: any[];
+    edges: any[];
+  };
 };
 const initialState: SchemainitialTypes = {
   tables: [],
   isShare: false,
+  IsGuestUser: false,
+  guestUserState: {
+    nodes: [],
+    edges: [],
+  },
   sidebarOpen: true,
 };
 const schemaSlice = createSlice({
@@ -158,6 +168,9 @@ const schemaSlice = createSlice({
     setIsSharestate: (state, action: PayloadAction<boolean>) => {
       state.isShare = action.payload;
     },
+    setIsGuestUser: (state, action: PayloadAction<boolean>) => {
+      state.IsGuestUser = action.payload;
+    },
     setcolumnEditing: (
       state,
       action: PayloadAction<{ columnIndex: number; tableIndex: string }>
@@ -178,6 +191,12 @@ const schemaSlice = createSlice({
       });
       state.tables = updatedState;
     },
+    setGuestUserState: (
+      state,
+      action: PayloadAction<{ nodes: any; edges: any }>
+    ) => {
+      state.guestUserState = action.payload;
+    },
   },
 });
 export const {
@@ -190,12 +209,14 @@ export const {
   addCommentOpenAction,
   sidebarOpen,
   addTablecommentAction,
+  setIsGuestUser,
   InsertTable,
   setcolumnEditing,
   updateSaveTable,
   setIsSharestate,
   addColumnsAction,
   setEditTable,
+  setGuestUserState,
 } = schemaSlice.actions;
 
 export const scheamReducer = schemaSlice.reducer;

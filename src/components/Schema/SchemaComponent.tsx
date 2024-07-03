@@ -1,6 +1,9 @@
 import { getSchemaDetailsAction } from "@/apiservices/Schemaservices";
 import { useAppDispatch, useAppSelector } from "@/redux/dashboardstore/hook";
-import { InsertTable } from "@/redux/dashboardstore/reducer/schema/schema";
+import {
+  InsertTable,
+  setGuestUserState,
+} from "@/redux/dashboardstore/reducer/schema/schema";
 import { Table } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
@@ -26,6 +29,11 @@ const rfStyle = {
 };
 const SchemaComponent: React.FC<{ isShare?: boolean }> = ({ isShare }) => {
   const [isExecuted, setIsExecuted] = useState(false);
+  const [isGuestUserStateInitiated, setisGuestUserStateInitiated] =
+    useState(false);
+  const { tables, IsGuestUser, guestUserState } = useAppSelector(
+    (state) => state.schemareducer
+  );
   const {
     sendDataToServer,
     nodes,
@@ -34,9 +42,8 @@ const SchemaComponent: React.FC<{ isShare?: boolean }> = ({ isShare }) => {
     edges,
     setEdges,
     onEdgesChange,
-  } = useSchemaHook(isShare!);
+  } = useSchemaHook(isShare! || IsGuestUser);
   const { data } = useSession();
-  const { tables } = useAppSelector((state) => state.schemareducer);
   const { id } = useParams();
   const { data: schemaDetails } = useQuery({
     queryKey: ["schema", id],
@@ -48,6 +55,21 @@ const SchemaComponent: React.FC<{ isShare?: boolean }> = ({ isShare }) => {
     enabled: isShare ? true : !!data?.user?.authToken && !!id,
     staleTime: 10 * 60 * 5,
   });
+  useEffect(() => {
+    if (IsGuestUser) {
+      if (nodes?.length) {
+        dispatch(setGuestUserState({ nodes, edges }));
+      }
+    }
+  }, [nodes, edges]);
+  useEffect(() => {
+    if (IsGuestUser && !isGuestUserStateInitiated) {
+      setNodes(guestUserState?.nodes);
+      setEdges(guestUserState?.edges);
+      setisGuestUserStateInitiated(true);
+    }
+  }, [IsGuestUser, guestUserState, isGuestUserStateInitiated]);
+
   const dispatch = useAppDispatch();
   useEffect(() => {
     if (
@@ -118,9 +140,14 @@ const SchemaComponent: React.FC<{ isShare?: boolean }> = ({ isShare }) => {
           data: { value: element },
         });
       });
-      setNodes(tempNodes);
+      if (IsGuestUser && isGuestUserStateInitiated) {
+        setNodes(tempNodes);
+      }
+      if (!IsGuestUser) {
+        setNodes(tempNodes);
+      }
     }
-  }, [tables]);
+  }, [tables, isGuestUserStateInitiated, IsGuestUser]);
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
       if (!isExecuted) {
@@ -173,7 +200,10 @@ const SchemaComponent: React.FC<{ isShare?: boolean }> = ({ isShare }) => {
       <ReactFlow
         nodes={nodes}
         edges={edges}
-        onNodesChange={onNodesChange}
+        onNodesChange={(e) => {
+          console.log(e);
+          onNodesChange(e);
+        }}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         onEdgeClick={handleEdgeClick}

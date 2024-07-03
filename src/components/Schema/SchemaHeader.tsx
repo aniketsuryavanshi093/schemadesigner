@@ -18,7 +18,9 @@ import enqueSnackBar from "@/utils/enqueSnackBar";
 const SchemaHeader = () => {
   const [shareModal, setShareModal] = useState(false);
   const [Isloading, setIsloading] = useState(false);
-  const { isShare } = useAppSelector((state) => state.schemareducer);
+  const { isShare, IsGuestUser } = useAppSelector(
+    (state) => state.schemareducer
+  );
   const { sendDataToServer } = useSchemaHook(false);
   const handlePresentationLayer = () => {
     var fullscreenContainer = document.getElementsByClassName("react-flow")[0]!;
@@ -92,61 +94,69 @@ const SchemaHeader = () => {
         </div>
       </div>
       <div className="flex justify-start items-center mr-[100px]">
-        <div className="flex hidden shrink-0 items-center text-lg text-white md:block">
-          <a
-            href="https://drawsql.app/diagrams"
-            className="text-[#b2b7ff] hover:text-white hover:underline"
-          >
-            Diagrams
-          </a>
-          <span className="mx-1 text-indigo-lighter">&gt;</span> scaler schema
-        </div>
-      </div>
-      <div className="flex justify-start items-center">
-        {isShare && (
-          <span data-v-1ff9a3f3="" className="text-yellow-400 mx-3">
-            Saves disallowed
-          </span>
-        )}
-        {isShare ? (
-          <ViewOnlybutton />
-        ) : (
-          <div className="inline-flex">
-            <button
-              onClick={handelSave}
-              data-testid="canvas-navbar-save-btn"
-              className="nav-button mt-0 flex w-[92px] items-center rounded rounded-r-none border px-4 py-2 text-lg leading-none text-white no-underline hover:bg-white hover:text-indigo-500 border-white"
+        {!IsGuestUser ? (
+          <div className="flex hidden shrink-0 items-center text-lg text-white md:block">
+            <a
+              href="https://drawsql.app/diagrams"
+              className="text-[#b2b7ff] hover:text-white hover:underline"
             >
-              <svg
-                data-v-1ff9a3f3=""
-                className="mr-2 inline-block h-3 w-2 stroke-current"
-                viewBox="0 0 22 22"
-              >
-                <circle
-                  data-v-1ff9a3f3=""
-                  cx="11"
-                  cy="11"
-                  r="9"
-                  fill="none"
-                  stroke-width="3"
-                ></circle>
-              </svg>
-              {Isloading ? <Spinner size="sm" /> : <span>Save</span>}
-            </button>
-            <div>
-              <button
-                className="nav-button h-full mt-0 flex items-center rounded rounded-l-none border border-l-0 border-white px-1 py-1 leading-none text-white no-underline hover:bg-white hover:text-indigo-500 focus:outline-none"
-                id="headlessui-menu-button-5"
-                type="button"
-              >
-                <div className="svg-div grid place-content-center   align-middle">
-                  <i className="fa-solid fa-chevron-down m-0"></i>
-                </div>
-              </button>
-            </div>
+              Diagrams
+            </a>
+            <span className="mx-1 text-indigo-lighter">&gt;</span> scaler schema
+          </div>
+        ) : (
+          <div className="w-full flex justify-center items-center">
+            <p className="text-xl text-white "> Guest mode </p>
           </div>
         )}
       </div>
+      {!IsGuestUser && (
+        <div className="flex justify-start items-center">
+          {isShare && (
+            <span data-v-1ff9a3f3="" className="text-yellow-400 mx-3">
+              Saves disallowed
+            </span>
+          )}
+          {isShare ? (
+            <ViewOnlybutton />
+          ) : (
+            <div className="inline-flex">
+              <button
+                onClick={handelSave}
+                data-testid="canvas-navbar-save-btn"
+                className="nav-button mt-0 flex w-[92px] items-center rounded rounded-r-none border px-4 py-2 text-lg leading-none text-white no-underline hover:bg-white hover:text-indigo-500 border-white"
+              >
+                <svg
+                  data-v-1ff9a3f3=""
+                  className="mr-2 inline-block h-3 w-2 stroke-current"
+                  viewBox="0 0 22 22"
+                >
+                  <circle
+                    data-v-1ff9a3f3=""
+                    cx="11"
+                    cy="11"
+                    r="9"
+                    fill="none"
+                    stroke-width="3"
+                  ></circle>
+                </svg>
+                {Isloading ? <Spinner size="sm" /> : <span>Save</span>}
+              </button>
+              <div>
+                <button
+                  className="nav-button h-full mt-0 flex items-center rounded rounded-l-none border border-l-0 border-white px-1 py-1 leading-none text-white no-underline hover:bg-white hover:text-indigo-500 focus:outline-none"
+                  id="headlessui-menu-button-5"
+                  type="button"
+                >
+                  <div className="svg-div grid place-content-center   align-middle">
+                    <i className="fa-solid fa-chevron-down m-0"></i>
+                  </div>
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
       {shareModal && (
         <ShareSchemaModal
           isOpen={shareModal}

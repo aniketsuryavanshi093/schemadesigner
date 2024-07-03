@@ -1,6 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
 
-const guestroutes = ["/login", "/schema/share"];
+const guestroutes = ["/login", "/schema/share", "/schema/guesteditor"];
 
 export function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
