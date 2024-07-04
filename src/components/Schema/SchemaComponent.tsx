@@ -2,6 +2,7 @@ import { getSchemaDetailsAction } from "@/apiservices/Schemaservices";
 import { useAppDispatch, useAppSelector } from "@/redux/dashboardstore/hook";
 import {
   InsertTable,
+  setClearAll,
   setGuestUserState,
 } from "@/redux/dashboardstore/reducer/schema/schema";
 import { Table } from "@/types";
@@ -29,46 +30,66 @@ const rfStyle = {
 };
 const SchemaComponent: React.FC<{ isShare?: boolean }> = ({ isShare }) => {
   const [isExecuted, setIsExecuted] = useState(false);
-  const [isGuestUserStateInitiated, setisGuestUserStateInitiated] =
+  const [isNodesChecked, setisNodesChecked] =
     useState(false);
-  const { tables, IsGuestUser, guestUserState } = useAppSelector(
+  const { tables, IsGuestUser, guestUserState, clearAll } = useAppSelector(
     (state) => state.schemareducer
   );
+  useEffect(() => {
+    return () => {
+      executeDestroyTask()
+    }
+  }, [])
+
   const {
     sendDataToServer,
     nodes,
     setNodes,
     onNodesChange,
+    getNodes,
+    getEdges,
     edges,
     setEdges,
+    updateGuestUserData,
     onEdgesChange,
   } = useSchemaHook(isShare! || IsGuestUser);
   const { data } = useSession();
+  useEffect(() => {
+    if (clearAll) {
+      setEdges([])
+      setNodes([])
+      dispatch(setClearAll(false))
+    }
+  }, [clearAll])
+
   const { id } = useParams();
-  const { data: schemaDetails } = useQuery({
+  const { data: schemaDetails, isLoading } = useQuery({
     queryKey: ["schema", id],
     queryFn: () =>
       getSchemaDetailsAction({ id: id, authToken: data?.user?.authToken }),
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    retry: false,
     enabled: isShare ? true : !!data?.user?.authToken && !!id,
-    staleTime: 10 * 60 * 5,
   });
   useEffect(() => {
     if (IsGuestUser) {
       if (nodes?.length) {
-        dispatch(setGuestUserState({ nodes, edges }));
+        setNodes(nodes)
       }
     }
   }, [nodes, edges]);
   useEffect(() => {
-    if (IsGuestUser && !isGuestUserStateInitiated) {
+    if (IsGuestUser) {
       setNodes(guestUserState?.nodes);
       setEdges(guestUserState?.edges);
-      setisGuestUserStateInitiated(true);
+
+      if (guestUserState?.nodes?.length) {
+        const temp: any[] = guestUserState?.nodes?.map((elem: any) => {
+          return elem?.data?.value;
+        });
+        dispatch(InsertTable(temp));
+      }
+      setisNodesChecked(true)
     }
-  }, [IsGuestUser, guestUserState, isGuestUserStateInitiated]);
+  }, [IsGuestUser]);
 
   const dispatch = useAppDispatch();
   useEffect(() => {
@@ -79,7 +100,7 @@ const SchemaComponent: React.FC<{ isShare?: boolean }> = ({ isShare }) => {
       const data = JSON.parse(
         schemaDetails?.data?.data?.Schema?.tablesdata || []
       ) as Table[];
-      const temp: Table[] = data.map((elem) => {
+      const temp: Table[] = data.map((elem: any) => {
         return elem?.data?.value;
       });
       dispatch(InsertTable(temp));
@@ -89,8 +110,9 @@ const SchemaComponent: React.FC<{ isShare?: boolean }> = ({ isShare }) => {
           schemaDetails?.data?.data?.Schema?.tablesrelations || []
         ) as Edge[]
       );
+      setisNodesChecked(true)
     }
-  }, [schemaDetails]);
+  }, [schemaDetails?.data?.data?.Schema]);
 
   const [clickPosition, setClickPosition] = React.useState<IclickPosition>({
     open: false,
@@ -124,9 +146,14 @@ const SchemaComponent: React.FC<{ isShare?: boolean }> = ({ isShare }) => {
     },
     [setEdges]
   );
-
+  const executeDestroyTask = () => {
+    setNodes([])
+    setEdges([])
+    dispatch(InsertTable([]))
+    updateGuestUserData()
+  }
   useEffect(() => {
-    if (tables.length > 0) {
+    if (tables.length > 0 && isNodesChecked) {
       const tempNodes: Node[] = [];
       tables.forEach((element) => {
         let tableid = element.tableIndex;
@@ -140,48 +167,50 @@ const SchemaComponent: React.FC<{ isShare?: boolean }> = ({ isShare }) => {
           data: { value: element },
         });
       });
-      if (IsGuestUser && isGuestUserStateInitiated) {
-        setNodes(tempNodes);
-      }
-      if (!IsGuestUser) {
-        setNodes(tempNodes);
-      }
+      setNodes(tempNodes);
+      updateGuestUserData(tempNodes)
     }
-  }, [tables, isGuestUserStateInitiated, IsGuestUser]);
+  }, [tables, isNodesChecked]);
   useEffect(() => {
-    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      if (!isExecuted) {
-        sendDataToServer();
-        setIsExecuted(isExecuted);
-        event.preventDefault();
-        event.returnValue = "";
-      }
-    };
+    if (!IsGuestUser) {
+      const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+        console.log(event);
 
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === "hidden" && !isExecuted) {
-        sendDataToServer();
-        setIsExecuted(isExecuted);
-      }
-    };
+        if (!isExecuted) {
+          executeDestroyTask()
+          sendDataToServer();
+          setIsExecuted(isExecuted);
+          event.preventDefault();
+          event.returnValue = "";
+        }
+      };
 
-    const handlePageHide = () => {
-      if (!isExecuted) {
-        sendDataToServer();
-        setIsExecuted(isExecuted);
-      }
-    };
+      const handleVisibilityChange = () => {
+        if (document.visibilityState === "hidden" && !isExecuted) {
+          sendDataToServer();
+          setIsExecuted(isExecuted);
+        }
+      };
 
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    document.addEventListener("visibilitychange", handleVisibilityChange);
-    window.addEventListener("pagehide", handlePageHide);
+      const handlePageHide = () => {
+        if (!isExecuted) {
+          sendDataToServer();
+          setIsExecuted(isExecuted);
+        }
+      };
 
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
-      window.removeEventListener("pagehide", handlePageHide);
-    };
-  }, [id, data?.user?.authToken, nodes, edges]);
+      window.addEventListener("beforeunload", handleBeforeUnload);
+      document.addEventListener("visibilitychange", handleVisibilityChange);
+      window.addEventListener("pagehide", handlePageHide);
+
+      return () => {
+        window.removeEventListener("beforeunload", handleBeforeUnload);
+        document.removeEventListener("visibilitychange", handleVisibilityChange);
+        window.removeEventListener("pagehide", handlePageHide);
+      };
+    }
+
+  }, [id, data?.user?.authToken, nodes, edges, IsGuestUser]);
 
   const handleEdgeClick = (event: React.MouseEvent, edge: Edge) => {
     if (isShare) {
@@ -194,17 +223,28 @@ const SchemaComponent: React.FC<{ isShare?: boolean }> = ({ isShare }) => {
       edge,
     });
   };
+  const handleEdgesChanges = (e: any) => {
+    onEdgesChange(e)
+    updateGuestUserData()
+  }
+  console.log(nodes, getNodes(), edges);
 
   return (
-    <ReactFlowProvider>
+    <>
       <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        onNodesChange={(e) => {
-          console.log(e);
-          onNodesChange(e);
+        nodes={isLoading ? [] : nodes}
+        onNodeDragStop={(e) => {
+          // onNodesChange(getNodes());
+          setNodes(getNodes())
+          if (IsGuestUser) {
+            updateGuestUserData()
+          }
         }}
-        onEdgesChange={onEdgesChange}
+        edges={isLoading ? [] : edges}
+        onNodesChange={(e) => {
+          onNodesChange(e)
+        }}
+        onEdgesChange={handleEdgesChanges}
         onConnect={onConnect}
         onEdgeClick={handleEdgeClick}
         nodeTypes={nodeTypes}
@@ -218,7 +258,7 @@ const SchemaComponent: React.FC<{ isShare?: boolean }> = ({ isShare }) => {
         clickPosition={clickPosition}
         setClickPosition={setClickPosition}
       />
-    </ReactFlowProvider>
+    </>
   );
 };
 
