@@ -12,7 +12,22 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <Provider store={store}>
       <SessionProvider refetchOnWindowFocus={false}>
-        <QueryProvider>{children}</QueryProvider>
+        <QueryProvider>
+          {sessionStorage.getItem("guestuser") ? (
+            <PersistGate
+              loading={
+                <div className="h-[100vh] w-full flex items-center justify-center">
+                  <div className={`loader mt-[94px]`} />
+                </div>
+              }
+              persistor={peristor}
+            >
+              {children}
+            </PersistGate>
+          ) : (
+            children
+          )}
+        </QueryProvider>
       </SessionProvider>
     </Provider>
   );

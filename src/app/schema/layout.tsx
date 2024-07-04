@@ -7,11 +7,14 @@ import { sidebarOpen } from "@/redux/dashboardstore/reducer/schema/schema";
 import { Button } from "@nextui-org/react";
 import SchemaHeader from "@/components/Schema/SchemaHeader";
 import { SnackbarProvider } from "notistack";
+import { ReactFlowProvider } from "reactflow";
 
 const layout: React.FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <Providers>
-      <LayoutContent>{children}</LayoutContent>
+      <LayoutContent>
+        {children}
+      </LayoutContent>
     </Providers>
   );
 };
@@ -37,19 +40,21 @@ const LayoutContent: React.FC<{ children: ReactNode }> = ({ children }) => {
         info: "ℹ️",
       }}
     >
-      <SchemaHeader></SchemaHeader>
-      <div className="flex w-full h-[100vh]">
-        {!sidebaropen && (
-          <Button
-            onClick={handleSidebar}
-            className="absolute left-[1%] top-[16%] rounded-[4px] w-6 gap-0 p-0 min-w-10 z-[99999999999]"
-          >
-            <i className="fa-solid fa-chevron-right"></i>
-          </Button>
-        )}
-        {sidebaropen && <SchemaSidebar />}
-        {children}
-      </div>
+      <ReactFlowProvider>
+        <SchemaHeader></SchemaHeader>
+        <div className="flex w-full h-[100vh]">
+          {!sidebaropen && (
+            <Button
+              onClick={handleSidebar}
+              className="absolute left-[1%] top-[16%] rounded-[4px] w-6 gap-0 p-0 min-w-10 z-[99999999999]"
+            >
+              <i className="fa-solid fa-chevron-right"></i>
+            </Button>
+          )}
+          {sidebaropen && <SchemaSidebar />}
+          {children}
+        </div>
+      </ReactFlowProvider>
     </SnackbarProvider>
   );
 };

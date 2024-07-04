@@ -5,10 +5,22 @@ export type SchemainitialTypes = {
   tables: Table[];
   isShare: boolean;
   sidebarOpen: boolean;
+  IsGuestUser: boolean;
+  clearAll: boolean,
+  guestUserState: {
+    nodes: any[];
+    edges: any[];
+  };
 };
 const initialState: SchemainitialTypes = {
   tables: [],
   isShare: false,
+  IsGuestUser: false,
+  clearAll: false,
+  guestUserState: {
+    nodes: [],
+    edges: [],
+  },
   sidebarOpen: true,
 };
 const schemaSlice = createSlice({
@@ -55,10 +67,10 @@ const schemaSlice = createSlice({
       const updatedState = state.tables.map((elem) =>
         elem.tableIndex === action.payload.tableIndex
           ? {
-              ...elem,
-              isEditing: action.payload.fromOutside ? true : false,
-              columns: [...elem.columns, action.payload.column],
-            }
+            ...elem,
+            isEditing: action.payload.fromOutside ? true : false,
+            columns: [...elem.columns, action.payload.column],
+          }
           : { ...elem }
       );
       state.tables = updatedState;
@@ -75,10 +87,10 @@ const schemaSlice = createSlice({
       state.tables = state.tables.map((elem) =>
         elem.tableIndex === action.payload.tableindex
           ? {
-              ...elem,
-              isEditing: action.payload.isEdit,
-              isCommentOpen: action.payload.isEdit,
-            }
+            ...elem,
+            isEditing: action.payload.isEdit,
+            isCommentOpen: action.payload.isEdit,
+          }
           : elem
       );
     },
@@ -130,10 +142,10 @@ const schemaSlice = createSlice({
       const updatedState = state.tables.map((elem) =>
         elem.tableIndex === action.payload.tableIndex
           ? {
-              ...elem,
-              isEditing: true,
-              isCommentOpen: action.payload.isCommentOpen,
-            }
+            ...elem,
+            isEditing: true,
+            isCommentOpen: action.payload.isCommentOpen,
+          }
           : elem
       );
       state.tables = updatedState;
@@ -145,9 +157,9 @@ const schemaSlice = createSlice({
       const updatedState = state.tables.map((elem) =>
         elem.tableIndex === action.payload.tableIndex
           ? {
-              ...elem,
-              tableComment: action.payload.comment,
-            }
+            ...elem,
+            tableComment: action.payload.comment,
+          }
           : elem
       );
       state.tables = updatedState;
@@ -157,6 +169,9 @@ const schemaSlice = createSlice({
     },
     setIsSharestate: (state, action: PayloadAction<boolean>) => {
       state.isShare = action.payload;
+    },
+    setIsGuestUser: (state, action: PayloadAction<boolean>) => {
+      state.IsGuestUser = action.payload;
     },
     setcolumnEditing: (
       state,
@@ -178,6 +193,18 @@ const schemaSlice = createSlice({
       });
       state.tables = updatedState;
     },
+    setGuestUserState: (
+      state,
+      action: PayloadAction<{ nodes: any; edges: any }>
+    ) => {
+      state.guestUserState = action.payload;
+    },
+    setClearAll: (
+      state,
+      action: PayloadAction<boolean>
+    ) => {
+      state.clearAll = action.payload;
+    },
   },
 });
 export const {
@@ -190,12 +217,15 @@ export const {
   addCommentOpenAction,
   sidebarOpen,
   addTablecommentAction,
+  setIsGuestUser,
   InsertTable,
   setcolumnEditing,
   updateSaveTable,
   setIsSharestate,
   addColumnsAction,
   setEditTable,
+  setClearAll,
+  setGuestUserState,
 } = schemaSlice.actions;
 
 export const scheamReducer = schemaSlice.reducer;

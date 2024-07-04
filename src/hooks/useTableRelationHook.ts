@@ -3,7 +3,7 @@ import { columnrelationtype } from "@/types";
 import { Edge, MarkerType, useReactFlow } from "reactflow";
 
 const useTableRelationHook = () => {
-  const { getEdges, setEdges } = useReactFlow();
+  const { getEdges, setEdges, } = useReactFlow();
 
   const updateRelationShipType = (
     relation: Edge,
@@ -54,10 +54,10 @@ const useTableRelationHook = () => {
         elem.id !== relation.id
           ? elem
           : {
-              ...elem,
-              data: { relation: relationType },
-              ...temp,
-            }
+            ...elem,
+            data: { relation: relationType },
+            ...temp,
+          }
       )
     );
   };

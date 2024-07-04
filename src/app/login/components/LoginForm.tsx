@@ -153,16 +153,27 @@ const LoginForm = () => {
   };
   return (
     <div className="mx-auto w-full max-w-sm lg:w-[24rem]">
-      <Link prefetch={false} href="/">
-        <div className="flex shrink-0 items-center h-16 w-auto">
-          <Image
-            src="images/schemalogo.svg"
-            alt="logo"
-            width="64"
-            height="64"
-          />
-        </div>
-      </Link>
+      <div className="w-full flex justify-between items-center">
+        <Link prefetch={false} href="/">
+          <div className="flex shrink-0 items-center h-16 w-auto">
+            <Image
+              src="images/schemalogo.svg"
+              alt="logo"
+              width="64"
+              height="64"
+            />
+          </div>
+        </Link>
+        <Link
+          href="/schema/guesteditor"
+          onClick={() => sessionStorage.setItem("guestuser", "true")}
+          prefetch={false}
+        >
+          <p className="text-xl text-gray-800">
+            Try Guest mode <i className="fa-solid fa-arrow-trend-up"></i>
+          </p>
+        </Link>
+      </div>
       <h2 className="mt-8 text-3xl font-extrabold text-gray-800">
         {formType === "login" ? "Sign in to your account" : "Welcome!"}
       </h2>

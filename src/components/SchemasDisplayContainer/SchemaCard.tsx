@@ -38,7 +38,7 @@ const SchemaCard: React.FC<{ schema: SchemaType; key: string }> = ({
         <div className="relative block h-48 shrink-0 bg-gray-200">
           <img
             className="h-48 w-full object-cover"
-            src="https://drawsql-media.s3-us-east-2.amazonaws.com/screenshots/5792557/conversions/1712579057-352068-thumbnail.jpg"
+            src="https://drawsql-media.s3-us-east-2.amazonaws.com/screenshots/6444557/conversions/1714918853-352068-thumbnail.jpg"
             alt=""
           />
         </div>
