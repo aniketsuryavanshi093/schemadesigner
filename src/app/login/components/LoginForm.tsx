@@ -13,6 +13,7 @@ import {
 import { Button, Spinner } from "@nextui-org/react";
 import Link from "next/link";
 import Image from "next/image";
+import { deleteCookie, setCookie } from "@/utils";
 
 const LoginForm = () => {
   const [isPending, startTransition] = useTransition();
@@ -26,15 +27,15 @@ const LoginForm = () => {
   const initialValue: FormSignupvalueType =
     formType === "login"
       ? {
-          email: "",
-          password: "",
-        }
+        email: "",
+        password: "",
+      }
       : {
-          email: "",
-          password: "",
-          name: "",
-          cpassword: "",
-        };
+        email: "",
+        password: "",
+        name: "",
+        cpassword: "",
+      };
   const handleServerAction = async (
     values: FormSignupvalueType | null,
     type: string
@@ -70,6 +71,7 @@ const LoginForm = () => {
             password: "",
           })
             .then((data: any) => {
+              deleteCookie("guestuser")
               if (data?.error) {
                 setError({ msg: data.error, type: "cred" });
                 setLoading(false);
@@ -95,6 +97,7 @@ const LoginForm = () => {
             password: values?.password,
           })
             .then((data: any) => {
+              deleteCookie("guestuser")
               if (data?.error) {
                 setError({ msg: data.error, type: "cred" });
                 setLoading(false);
@@ -118,6 +121,7 @@ const LoginForm = () => {
                 setError({ msg: data.error, type: "cred" });
                 setLoading(false);
               } else {
+                deleteCookie("guestuser")
                 window.location.replace("/dashboard");
               }
             })
@@ -133,6 +137,7 @@ const LoginForm = () => {
                 setLoading(false);
                 setError({ msg: data.error, type: "cred" });
               } else {
+                deleteCookie("guestuser")
                 window.location.replace("/dashboard");
               }
             })
@@ -166,7 +171,7 @@ const LoginForm = () => {
         </Link>
         <Link
           href="/schema/guesteditor"
-          onClick={() => sessionStorage.setItem("guestuser", "true")}
+          onClick={() => setCookie("guestuser", "true", 7)}
           prefetch={false}
         >
           <p className="text-xl text-gray-800">
