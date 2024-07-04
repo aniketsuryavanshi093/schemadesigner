@@ -1,3 +1,4 @@
+"use client"
 import { tablecolors } from "@/Constants";
 
 export const getRandomColor = (usedcolors: string[]): string | undefined => {
