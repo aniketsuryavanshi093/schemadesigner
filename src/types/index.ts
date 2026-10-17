@@ -79,3 +79,28 @@ export type UserType = {
   email: string;
   updatedAt: string;
 };
+
+// AI Schema Generation Types
+export interface AISchemaRequest {
+  prompt: string;
+  userId?: string;
+}
+
+export interface AISchemaResponse {
+  success: boolean;
+  data?: {
+    tables: Table[];
+    relations: relationtype[];
+    schemaTitle: string;
+    description: string;
+  };
+  error?: string;
+  message?: string;
+}
+
+export interface APIError {
+  success: false;
+  error: string;
+  statusCode: number;
+  timestamp: string;
+}

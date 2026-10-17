@@ -11,8 +11,8 @@ import "./dashboard.css";
 const MyDaigram = () => {
   const { status } = useSession();
   const [filtervalue, setfiltervalue] = React.useState("LastCreatedAt");
-  const { userSchema, isLoading } = useGetUserDaigrams(filtervalue)
-  const schemas = userSchema?.data?.data[0]?.schemas as SchemaType[];
+  const { userSchema, isLoading } = useGetUserDaigrams(filtervalue);
+  const schemas = userSchema?.data?.data?.[0]?.schemas || ([] as SchemaType[]);
   return (
     <SnackbarProvider
       anchorOrigin={{
@@ -27,7 +27,10 @@ const MyDaigram = () => {
       }}
     >
       <div>
-        <Commonheader filterChanged={(e) => setfiltervalue(e)} title="My Daigrams" />
+        <Commonheader
+          filterChanged={(e) => setfiltervalue(e)}
+          title="My Daigrams"
+        />
         <SchemaDisplayContainer
           Schemas={schemas}
           isloading={isLoading || status === "loading"}

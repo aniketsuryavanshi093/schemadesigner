@@ -23,6 +23,7 @@ import "reactflow/dist/style.css";
 import Arrow, { IclickPosition } from "../Arrows/Arrows";
 import TableBox from "../Table/TableBox";
 import useSchemaHook from "./useSchemaHook";
+import AiSchemaPopup from "./AiSchemaPopup";
 
 const nodeTypes = { tableBox: TableBox };
 const rfStyle = {
@@ -30,16 +31,16 @@ const rfStyle = {
 };
 const SchemaComponent: React.FC<{ isShare?: boolean }> = ({ isShare }) => {
   const [isExecuted, setIsExecuted] = useState(false);
-  const [isNodesChecked, setisNodesChecked] =
-    useState(false);
+  const [isNodesChecked, setisNodesChecked] = useState(false);
   const { tables, IsGuestUser, guestUserState, clearAll } = useAppSelector(
-    (state) => state.schemareducer
+    (state) => state.schemareducer,
   );
   useEffect(() => {
     return () => {
-      executeDestroyTask()
-    }
-  }, [])
+      debugger;
+      executeDestroyTask();
+    };
+  }, []);
 
   const {
     sendDataToServer,
@@ -56,11 +57,11 @@ const SchemaComponent: React.FC<{ isShare?: boolean }> = ({ isShare }) => {
   const { data } = useSession();
   useEffect(() => {
     if (clearAll) {
-      setEdges([])
-      setNodes([])
-      dispatch(setClearAll(false))
+      setEdges([]);
+      setNodes([]);
+      dispatch(setClearAll(false));
     }
-  }, [clearAll])
+  }, [clearAll]);
 
   const { id } = useParams();
   const { data: schemaDetails, isLoading } = useQuery({
@@ -72,7 +73,7 @@ const SchemaComponent: React.FC<{ isShare?: boolean }> = ({ isShare }) => {
   useEffect(() => {
     if (IsGuestUser) {
       if (nodes?.length) {
-        setNodes(nodes)
+        setNodes(nodes);
       }
     }
   }, [nodes, edges]);
@@ -87,7 +88,7 @@ const SchemaComponent: React.FC<{ isShare?: boolean }> = ({ isShare }) => {
         });
         dispatch(InsertTable(temp));
       }
-      setisNodesChecked(true)
+      setisNodesChecked(true);
     }
   }, [IsGuestUser]);
 
@@ -98,7 +99,7 @@ const SchemaComponent: React.FC<{ isShare?: boolean }> = ({ isShare }) => {
       schemaDetails.data.data.Schema.tablesdata
     ) {
       const data = JSON.parse(
-        schemaDetails?.data?.data?.Schema?.tablesdata || []
+        schemaDetails?.data?.data?.Schema?.tablesdata || [],
       ) as Table[];
       const temp: Table[] = data.map((elem: any) => {
         return elem?.data?.value;
@@ -107,10 +108,10 @@ const SchemaComponent: React.FC<{ isShare?: boolean }> = ({ isShare }) => {
       setNodes(data);
       setEdges(
         JSON.parse(
-          schemaDetails?.data?.data?.Schema?.tablesrelations || []
-        ) as Edge[]
+          schemaDetails?.data?.data?.Schema?.tablesrelations || [],
+        ) as Edge[],
       );
-      setisNodesChecked(true)
+      setisNodesChecked(true);
     }
   }, [schemaDetails?.data?.data?.Schema]);
 
@@ -140,18 +141,18 @@ const SchemaComponent: React.FC<{ isShare?: boolean }> = ({ isShare }) => {
               stroke: "#a0aec0",
             },
           },
-          eds
+          eds,
         );
       });
     },
-    [setEdges]
+    [setEdges],
   );
   const executeDestroyTask = () => {
-    setNodes([])
-    setEdges([])
-    dispatch(InsertTable([]))
-    updateGuestUserData()
-  }
+    setNodes([]);
+    setEdges([]);
+    dispatch(InsertTable([]));
+    updateGuestUserData();
+  };
   useEffect(() => {
     if (tables.length > 0 && isNodesChecked) {
       const tempNodes: Node[] = [];
@@ -168,7 +169,7 @@ const SchemaComponent: React.FC<{ isShare?: boolean }> = ({ isShare }) => {
         });
       });
       setNodes(tempNodes);
-      updateGuestUserData(tempNodes)
+      updateGuestUserData(tempNodes);
     }
   }, [tables, isNodesChecked]);
   useEffect(() => {
@@ -177,7 +178,7 @@ const SchemaComponent: React.FC<{ isShare?: boolean }> = ({ isShare }) => {
         console.log(event);
 
         if (!isExecuted) {
-          executeDestroyTask()
+          executeDestroyTask();
           sendDataToServer();
           setIsExecuted(isExecuted);
           event.preventDefault();
@@ -205,11 +206,13 @@ const SchemaComponent: React.FC<{ isShare?: boolean }> = ({ isShare }) => {
 
       return () => {
         window.removeEventListener("beforeunload", handleBeforeUnload);
-        document.removeEventListener("visibilitychange", handleVisibilityChange);
+        document.removeEventListener(
+          "visibilitychange",
+          handleVisibilityChange,
+        );
         window.removeEventListener("pagehide", handlePageHide);
       };
     }
-
   }, [id, data?.user?.authToken, nodes, edges, IsGuestUser]);
 
   const handleEdgeClick = (event: React.MouseEvent, edge: Edge) => {
@@ -224,9 +227,9 @@ const SchemaComponent: React.FC<{ isShare?: boolean }> = ({ isShare }) => {
     });
   };
   const handleEdgesChanges = (e: any) => {
-    onEdgesChange(e)
-    updateGuestUserData()
-  }
+    onEdgesChange(e);
+    updateGuestUserData();
+  };
   console.log(nodes, getNodes(), edges);
 
   return (
@@ -235,14 +238,14 @@ const SchemaComponent: React.FC<{ isShare?: boolean }> = ({ isShare }) => {
         nodes={isLoading ? [] : nodes}
         onNodeDragStop={(e) => {
           // onNodesChange(getNodes());
-          setNodes(getNodes())
+          setNodes(getNodes());
           if (IsGuestUser) {
-            updateGuestUserData()
+            updateGuestUserData();
           }
         }}
         edges={isLoading ? [] : edges}
         onNodesChange={(e) => {
-          onNodesChange(e)
+          onNodesChange(e);
         }}
         onEdgesChange={handleEdgesChanges}
         onConnect={onConnect}
@@ -258,6 +261,7 @@ const SchemaComponent: React.FC<{ isShare?: boolean }> = ({ isShare }) => {
         clickPosition={clickPosition}
         setClickPosition={setClickPosition}
       />
+      <AiSchemaPopup />
     </>
   );
 };
