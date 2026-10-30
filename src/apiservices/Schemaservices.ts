@@ -6,7 +6,7 @@ export const getSchemaDetailsAction = async (val: {
   authToken: string;
 }) => {
   return axiosInterceptorInstance.get(
-    `/schema/get/${val.id}`,
-    createHeader(val.authToken)
+    `/schema/get/${val.id}`
+    // createHeader(val.authToken)
   );
 };

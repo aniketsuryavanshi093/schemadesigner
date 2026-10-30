@@ -22,7 +22,7 @@ const Dashboardlayout: React.FC<PageProps> = ({ children }) => {
 };
 
 const LayoutContent: React.FC<PageProps> = ({ children }) => {
-  const { data } = useSession();
+  const { data, status } = useSession();
 
   const { data: userData, isLoading } = useQuery({
     queryKey: ["userDetails"],
@@ -36,7 +36,10 @@ const LayoutContent: React.FC<PageProps> = ({ children }) => {
 
   return (
     <div className="w-full  min-h-screen bg-gray-100">
-      <DashboardHeader user={userData?.data} isLoading={isLoading} />
+      <DashboardHeader
+        user={userData?.data}
+        isLoading={isLoading || status === "loading"}
+      />
       <section className="-mt-32 relative">
         <div className="mx-auto max-w-7xl px-4 pb-6 sm:px-6 lg:px-8 lg:pb-16">
           <div className="overflow-hidden rounded-lg bg-white shadow">

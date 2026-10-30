@@ -1,21 +1,18 @@
 import * as React from "react";
-import Xarrow from "react-xarrows";
 import ArrowRelation from "./ArrowRelation";
-import { relationtype } from "@/types";
+import { Edge } from "reactflow";
 
 export interface IclickPosition {
   open: boolean;
   x: number;
   y: number;
+  edge: Edge | null;
 }
 
-const Arrow: React.FC<{ relation: relationtype }> = ({ relation }) => {
-  const [hoveredState, setHoveredState] = React.useState(false);
-  const [clickPosition, setClickPosition] = React.useState<IclickPosition>({
-    open: false,
-    x: 0,
-    y: 0,
-  });
+const Arrow: React.FC<{
+  clickPosition: IclickPosition;
+  setClickPosition: React.Dispatch<React.SetStateAction<IclickPosition>>;
+}> = ({ clickPosition, setClickPosition }) => {
   const ref = React.useRef<HTMLDivElement>(null);
 
   const handleClickOutside = (event: React.MouseEvent) => {
@@ -24,6 +21,7 @@ const Arrow: React.FC<{ relation: relationtype }> = ({ relation }) => {
         open: false,
         x: 0,
         y: 0,
+        edge: null,
       });
     }
   };
@@ -47,50 +45,10 @@ const Arrow: React.FC<{ relation: relationtype }> = ({ relation }) => {
     };
   }, []);
   return (
-    <div
-      ref={ref}
-      style={{
-        cursor: "pointer",
-      }}
-      onMouseEnter={(e) => {
-        e.preventDefault();
-        setHoveredState(true);
-        console.log(relation, "over");
-      }}
-      onMouseLeave={(e) => {
-        setHoveredState(false);
-      }}
-      onClick={(e) => {
-        setClickPosition({ open: true, x: e.clientX, y: e.clientY });
-      }}
-    >
-      <Xarrow
-        headShape={"circle"}
-        tailShape={"circle"}
-        arrowTailProps={{
-          stroke: "#9BA1A6",
-          strokeWidth: ".2",
-          fill: "#1A1D1E",
-          fillOpacity: "0.1",
-        }}
-        arrowHeadProps={{
-          stroke: "#9BA1A6",
-          strokeWidth: ".8",
-          fill: "#1A1D1E",
-          fillOpacity: "0.1",
-        }}
-        headSize={3}
-        tailSize={3}
-        path={"smooth"}
-        showTail={true}
-        color={hoveredState ? "purple" : "#9BA1A6"}
-        start={relation.head}
-        end={relation.tail}
-        strokeWidth={2}
-      />
+    <div ref={ref}>
       {clickPosition.open && (
         <ArrowRelation
-          relation={relation}
+          relation={clickPosition.edge!}
           setClickPosition={setClickPosition}
           clickPosition={clickPosition}
         />

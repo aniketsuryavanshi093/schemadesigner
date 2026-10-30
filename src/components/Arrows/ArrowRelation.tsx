@@ -1,13 +1,15 @@
 import React from "react";
 import { IclickPosition } from "./Arrows";
 import useTableRelationHook from "@/hooks/useTableRelationHook";
-import { columnrelationtype, relationtype } from "@/types";
+import { columnrelationtype } from "@/types";
+import { Edge } from "reactflow";
 
 const ArrowRelation: React.FC<{
   clickPosition: IclickPosition;
-  relation: relationtype;
+  relation: Edge;
   setClickPosition: React.Dispatch<React.SetStateAction<IclickPosition>>;
 }> = ({ clickPosition, setClickPosition, relation }) => {
+  let columnrelation = relation.data?.relation as columnrelationtype;
   const [editingrelatioon, setEditingRelation] = React.useState(false);
   const { updateRelationShipType, removeRelation } = useTableRelationHook();
   const relationShipString = (nmae: columnrelationtype) => {
@@ -28,13 +30,14 @@ const ArrowRelation: React.FC<{
     return temp;
   };
   const handleUpdateRelation = (elem: { name: string; value: string }) => {
-    if (elem.value !== relation.relation) {
-      updateRelationShipType(relation, elem.value as columnrelationtype);
+    if (elem.value !== columnrelation) {
       setClickPosition({
         open: false,
         x: 0,
         y: 0,
+        edge: null,
       });
+      updateRelationShipType(relation, elem.value as columnrelationtype);
       setEditingRelation(false);
     }
   };
@@ -43,6 +46,7 @@ const ArrowRelation: React.FC<{
       open: false,
       x: 0,
       y: 0,
+      edge: null,
     });
     removeRelation(relation);
   };
@@ -83,7 +87,7 @@ const ArrowRelation: React.FC<{
         >
           <div className="flex w-full justify-between items-center">
             <p className="font-semibold text-[14px] capitalize text-indigo-500 text-nowrap whitespace-nowrap me-2">
-              {relationShipString(relation.relation)}
+              {relationShipString(columnrelation)}
             </p>
             <div className="svg-div  justify-center items-center  hidden text-gray-500 group-hover:flex">
               <i className="fa-solid fa-pen text-[14px]"></i>
@@ -98,7 +102,7 @@ const ArrowRelation: React.FC<{
                 onClick={() => handleUpdateRelation(elem)}
                 key={elem.name}
                 className={` whitespace-nowrap rounded px-2 py-2 capitalize ${
-                  relation.relation === elem.value && "bg-teal-500"
+                  columnrelation === elem.value && "bg-teal-500"
                 } hover:bg-teal-500`}
               >
                 {elem.name}

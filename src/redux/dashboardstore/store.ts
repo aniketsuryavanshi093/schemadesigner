@@ -33,20 +33,20 @@ const rootReducer = combineReducers({
   relationreducer: relationReducer,
 });
 
-// const persistedState = persistReducer<RootState, any>(
-//   persistConfig,
-//   rootReducer
-// );
+const persistedState = persistReducer<RootState, any>(
+  persistConfig,
+  rootReducer
+);
 
 export const store = configureStore({
-  reducer: rootReducer,
+  reducer: persistedState,
   devTools: process.env.NODE_ENV !== "production",
-  // middleware: (getDefaultMiddleware) =>
-  //   getDefaultMiddleware({
-  //     serializableCheck: {
-  //       ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-  //     },
-  //   }),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
 });
 
 export type RootState = {

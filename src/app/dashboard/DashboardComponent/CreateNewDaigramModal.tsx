@@ -6,7 +6,7 @@ import { Button } from "@nextui-org/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Form, Formik } from "formik";
 import React, { useTransition } from "react";
-import { Spinner } from "reactstrap";
+import { Spinner } from "@nextui-org/react";
 
 const CreateNewDaigramModal: React.FC<{
   isOpen: boolean;

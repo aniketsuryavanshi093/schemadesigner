@@ -1,85 +1,32 @@
-import { useCallback, useRef, useState } from "react";
-import Draggable, { DraggableEvent } from "react-draggable";
-import "./tablebox.scss";
+import { useCallback } from "react";
 import { Table } from "@/types";
 import useTableHooks from "@/hooks/useTableHooks";
-import TableColumns, { ColumnComment } from "./TableColumns";
 import { concatString } from "@/utils";
-import useTableRelationHook from "@/hooks/useTableRelationHook";
+import TableColumns, { ColumnComment } from "./TableColumns";
+import "./tablebox.scss";
 
-const TableBox: React.FC<{
-  table: Table;
-  boxId: string;
-}> = ({ boxId, table }) => {
-  const dragRef = useRef();
-  const boxRef = useRef();
-  const { updateAllRelation } = useTableRelationHook();
+const TableBox: React.FC<any> = (props) => {
+  const table: Table = props.data?.value as Table;
   const { setEditTablehelper, updateSaveTablehelper } = useTableHooks();
-  const [position, setPosition] = useState<{ x: number; y: number }>({
-    x: table?.tablePosition?.x || 0,
-    y: table?.tablePosition?.y || 0,
-  });
-  const handleDragStop = (event: DraggableEvent, data: any) => {
-    if (event.type === "mouseup" || event.type === "touchend") {
-      setTimeout(() => {
-        setIsDragging(false);
-      }, 100);
-    }
-    const newPosition = { x: data.x, y: data.y };
-    setPosition(newPosition);
-    updateSaveTablehelper({
-      ...table,
-      tablePosition: newPosition,
-    });
-  };
-  const [isDragging, setIsDragging] = useState(false);
-
   const handleEdit = useCallback(() => {
     setEditTablehelper(table);
   }, [table, setEditTablehelper]);
-  const eventControl = (event: DraggableEvent) => {
-    if (event.type === "mousemove" || event.type === "touchmove") {
-      setIsDragging(true);
-      handleChanges();
-    }
-    if (event.type === "mouseup" || event.type === "touchend") {
-      setTimeout(() => {
-        setIsDragging(false);
-      }, 100);
-    }
-  };
-  let tempInterval: any;
-  const handleChanges = useCallback(() => {
-    clearTimeout(tempInterval);
-    tempInterval = setTimeout(() => {
-      updateAllRelation();
-    }, 100);
-  }, [tempInterval]);
   return (
-    <Draggable
-      ref={dragRef}
-      onDrag={eventControl}
-      position={position}
-      onStop={handleDragStop}
-    >
+    <>
       <div
-        id={boxId}
-        className={`${boxId}  tablebox ${
-          table.isEditing && "selectedbox"
-        } shadow-lg hover:shadow-xl  absolute border-t-4 `}
-        ref={boxRef}
+        className={`  tablebox
+        ${table.isEditing && "selectedbox"}
+       shadow-lg hover:shadow-xl border-t-4 `}
         style={{ borderTopColor: table.tableColor }}
-        onDragOver={(e) => e.preventDefault()}
-        onClick={() => !isDragging && handleEdit()}
-        onTouchEnd={() => !isDragging && handleEdit()}
+        onClick={() => handleEdit()}
       >
         <div
-          className={`${boxId} flex justify-center flex-col items-center hover:bg-[#ebf4ff] boxtitlewrapper transition-all  py-1 w-full hover`}
+          className={` flex justify-center flex-col items-center hover:bg-[#ebf4ff] boxtitlewrapper transition-all  py-1 w-full hover`}
         >
           <p
-            className={` ${
+            className={`  text-center    ${
               table.isEditing && "selectedboxtitle"
-            }  text-center  font-medium text-sm text-gray-700 ${boxId}`}
+            } font-medium text-sm text-gray-700 `}
           >
             {table.tableName}
           </p>
@@ -93,16 +40,9 @@ const TableBox: React.FC<{
             </p>
           )}
         </div>
-        <TableColumns
-          boxId={boxId}
-          isDragging={isDragging}
-          table={table}
-          dragRef={dragRef}
-          boxRef={boxRef}
-        />
-        {/* <ConnectPointsWrapper {...{ boxId, handler, dragRef, boxRef }} /> */}
+        <TableColumns table={table} />
       </div>
-    </Draggable>
+    </>
   );
 };
 

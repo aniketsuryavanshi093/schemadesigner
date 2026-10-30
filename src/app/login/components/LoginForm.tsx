@@ -10,7 +10,10 @@ import {
   loginvalidations,
   signupvalidations,
 } from "@/utils/validations/validation";
-import { Spinner } from "reactstrap";
+import { Button, Spinner } from "@nextui-org/react";
+import Link from "next/link";
+import Image from "next/image";
+import { deleteCookie, setCookie } from "@/utils";
 
 const LoginForm = () => {
   const [isPending, startTransition] = useTransition();
@@ -68,6 +71,7 @@ const LoginForm = () => {
             password: "",
           })
             .then((data: any) => {
+              deleteCookie("guestuser")
               if (data?.error) {
                 setError({ msg: data.error, type: "cred" });
                 setLoading(false);
@@ -93,11 +97,11 @@ const LoginForm = () => {
             password: values?.password,
           })
             .then((data: any) => {
+              deleteCookie("guestuser")
               if (data?.error) {
                 setError({ msg: data.error, type: "cred" });
                 setLoading(false);
               } else {
-                console.log(data);
                 window.location.replace("/dashboard");
               }
             })
@@ -117,6 +121,7 @@ const LoginForm = () => {
                 setError({ msg: data.error, type: "cred" });
                 setLoading(false);
               } else {
+                deleteCookie("guestuser")
                 window.location.replace("/dashboard");
               }
             })
@@ -132,8 +137,7 @@ const LoginForm = () => {
                 setLoading(false);
                 setError({ msg: data.error, type: "cred" });
               } else {
-                console.log(data);
-
+                deleteCookie("guestuser")
                 window.location.replace("/dashboard");
               }
             })
@@ -153,15 +157,41 @@ const LoginForm = () => {
     startTransition(() => handleServerAction(null, type));
   };
   return (
-    <div className="form-container">
-      <p className="title">{formType === "login" ? "Login" : "SignUp"}</p>
+    <div className="mx-auto w-full max-w-sm lg:w-[24rem]">
+      <div className="w-full flex justify-between items-center">
+        <Link prefetch={false} href="/">
+          <div className="flex shrink-0 items-center h-16 w-auto">
+            <Image
+              src="images/schemalogo.svg"
+              alt="logo"
+              width="64"
+              height="64"
+            />
+          </div>
+        </Link>
+        <Link
+          href="/schema/guesteditor"
+          onClick={() => setCookie("guestuser", "true", 7)}
+          prefetch={false}
+        >
+          <p className="text-xl text-gray-800">
+            Try Guest mode <i className="fa-solid fa-arrow-trend-up"></i>
+          </p>
+        </Link>
+      </div>
+      <h2 className="mt-8 text-3xl font-extrabold text-gray-800">
+        {formType === "login" ? "Sign in to your account" : "Welcome!"}
+      </h2>
       {ErrorInfo.type === "cred" && (
-        <p className="error-msg text-red-800 text-sm mb-0">{ErrorInfo.msg}</p>
+        <p className="error-msg text-red-800 text-start text-sm mb-0">
+          {ErrorInfo.msg}
+        </p>
       )}
       <Formik
         initialValues={initialValue}
         validationSchema={validation}
         onSubmit={(value: FormSignupvalueType) => {
+          setLoading(true);
           startTransition(() => handleServerAction(value, "credentials"));
         }}
       >
@@ -217,15 +247,15 @@ const LoginForm = () => {
                 />
               </div>
             )}
-            <button type="submit" className="sign">
-              {isPending || Loading ? (
+            <Button variant="solid" type="submit" className="sign">
+              {Loading ? (
                 <Spinner size="sm" />
               ) : formType === "login" ? (
                 "Sign in"
               ) : (
                 "SignUp"
               )}
-            </button>
+            </Button>
           </Form>
         )}
       </Formik>
@@ -265,10 +295,10 @@ const LoginForm = () => {
           </svg>
         </button>
       </div>
-      <p className="signup">
+      <p className="signup text-sm text-gray-900">
         {formType === "login" ? "Dont have an account?" : "Already a member?"}
         <button
-          className="cursor-pointer border-none bg-transparent text-white ms-2"
+          className="cursor-pointer border-none bg-transparent text-indigo-500 ms-2"
           onClick={() => {
             setError({ msg: "", type: "" });
             setFormType((prev) => (prev === "login" ? "signup" : "login"));
